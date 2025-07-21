@@ -15,7 +15,7 @@ function PreFooter() {
         <div className="md:px-3 relative">
           <Image
             style={{ filter: "grayscale(100%)" }}
-            className="absolute md:-left-[30px] md:-top-[10px] -top-[70px] -left-[27px] md:w-fit md:h-fit w-[300px] h-[65px]"
+            className="absolute 2xl:-left-[27px] xl:-left-[20px] xl:-top-[10px] md:-top-[2px] -top-[70px] -left-[0px] md:w-fit md:h-fit w-[300px] h-[65px]"
             src="/images/logo.png"
             alt=""
             width={400}
