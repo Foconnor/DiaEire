@@ -1,14 +1,11 @@
 "use client";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { useState } from "react";
 
 function PreFooter() {
-  const [isShowing, setIsShowing] = useState(false);
-  const [isShowingTwo, setIsShowingTwo] = useState(false);
-  const [isShowingThree, setIsShowingThree] = useState(false);
-  const [isShowingFour, setIsShowingFour] = useState(false);
-  const [isShowingSix, setIsShowingSix] = useState(false);
-  const [isShowingSeven, setIsShowingSeven] = useState(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   return (
     <div className="md:border-y-[1px] border-[var(--line)] py-[30px] mt-[70px]">
       <div className="grid md:grid-cols-6 grid-cols-1 max-w-[1200px] w-[95%] m-auto">
@@ -25,24 +22,39 @@ function PreFooter() {
         <div className="md:px-3">
           <div
             className="flex flex-col border-y-[1px] border-[var(--line)] py-2 md:py-0 md:border-none mt-5  md:mt-0 cursor-pointer md:cursor-default"
-            onClick={() => setIsShowing((prev) => !prev)}
+            onClick={() => setOpenIndex(openIndex === 0 ? null : 0)}
           >
-            <p className="link-heading">Campaign</p>
+            <div className="flex items-center justify-between">
+              <p className="link-heading">Campaign</p>
+              <FontAwesomeIcon
+                className={`text-[var(--grey-300)] md:!hidden ${
+                  openIndex === 2 ? "rotate-180 " : ""
+                }`}
+                icon={faChevronDown}
+                size="sm"
+              />
+            </div>
             <a
               href=""
-              className={`links  md:block ${isShowing ? "block" : "hidden"}`}
+              className={`links  md:block ${
+                openIndex === 0 ? "block" : "hidden"
+              }`}
             >
               Volunteer
             </a>
             <a
               href=""
-              className={`links  md:block ${isShowing ? "block" : "hidden"}`}
+              className={`links  md:block ${
+                openIndex === 0 ? "block" : "hidden"
+              }`}
             >
               Learn about campaigning
             </a>
             <a
               href=""
-              className={`links  md:block ${isShowing ? "block" : "hidden"}`}
+              className={`links  md:block ${
+                openIndex === 0 ? "block" : "hidden"
+              }`}
             >
               Fund our campaign
             </a>
@@ -51,25 +63,45 @@ function PreFooter() {
         <div className="md:px-3">
           <div
             className="flex flex-col border-b-[1px] border-[var(--line)] py-2 md:py-0 md:border-none cursor-pointer md:cursor-default"
-            onClick={() => setIsShowingTwo((prev) => !prev)}
+            onClick={() => setOpenIndex(openIndex === 1 ? null : 1)}
           >
-            <p className="link-heading">People</p>
+            <div className="flex items-center justify-between">
+              <p className="link-heading">People</p>
+              <FontAwesomeIcon
+                className={`text-[var(--grey-300)] md:!hidden ${
+                  openIndex === 2 ? "rotate-180 " : ""
+                }`}
+                icon={faChevronDown}
+                size="sm"
+              />
+            </div>
             <a
               href=""
-              className={`links  md:block ${isShowingTwo ? "block" : "hidden"}`}
+              className={`links  md:block ${
+                openIndex === 1 ? "block" : "hidden"
+              }`}
             >
               Meet the team
             </a>
           </div>
           <div
             className="flex flex-col border-b-[1px] border-[var(--line)] py-2 md:py-0 md:border-none cursor-pointer md:cursor-default md:mt-6 mt-0"
-            onClick={() => setIsShowingThree((prev) => !prev)}
+            onClick={() => setOpenIndex(openIndex === 2 ? null : 2)}
           >
-            <p className="link-heading">Updates</p>
+            <div className="flex items-center justify-between">
+              <p className="link-heading">Updates</p>
+              <FontAwesomeIcon
+                className={`text-[var(--grey-300)] md:!hidden ${
+                  openIndex === 2 ? "rotate-180 " : ""
+                }`}
+                icon={faChevronDown}
+                size="sm"
+              />
+            </div>
             <a
               href=""
               className={`links  md:block ${
-                isShowingThree ? "block" : "hidden"
+                openIndex === 2 ? "block" : "hidden"
               }`}
             >
               Latest from our campaign
@@ -77,7 +109,7 @@ function PreFooter() {
             <a
               href=""
               className={`links  md:block ${
-                isShowingThree ? "block" : "hidden"
+                openIndex === 2 ? "block" : "hidden"
               }`}
             >
               Members updates
@@ -85,7 +117,7 @@ function PreFooter() {
             <a
               href=""
               className={`links  md:block ${
-                isShowingThree ? "block" : "hidden"
+                openIndex === 2 ? "block" : "hidden"
               }`}
             >
               Press releases
@@ -95,13 +127,22 @@ function PreFooter() {
         <div className="md:px-3">
           <div
             className="flex flex-col border-b-[1px] border-[var(--line)] py-2 md:py-0 md:border-none cursor-pointer md:cursor-default"
-            onClick={() => setIsShowingFour((prev) => !prev)}
+            onClick={() => setOpenIndex(openIndex === 3 ? null : 3)}
           >
-            <p className="link-heading">About Us</p>
+            <div className="flex items-center justify-between">
+              <p className="link-heading">About Us</p>
+              <FontAwesomeIcon
+                className={`text-[var(--grey-300)] md:!hidden ${
+                  openIndex === 2 ? "rotate-180 " : ""
+                }`}
+                icon={faChevronDown}
+                size="sm"
+              />
+            </div>
             <a
               href=""
               className={`links  md:block ${
-                isShowingFour ? "block" : "hidden"
+                openIndex === 3 ? "block" : "hidden"
               }`}
             >
               How we work
@@ -109,7 +150,7 @@ function PreFooter() {
             <a
               href=""
               className={`links  md:block ${
-                isShowingFour ? "block" : "hidden"
+                openIndex === 3 ? "block" : "hidden"
               }`}
             >
               Groups
@@ -119,12 +160,23 @@ function PreFooter() {
         <div className="md:px-3">
           <div
             className="flex flex-col border-b-[1px] border-[var(--line)] py-2 md:py-0 md:border-none cursor-pointer md:cursor-default"
-            onClick={() => setIsShowingSix((prev) => !prev)}
+            onClick={() => setOpenIndex(openIndex === 4 ? null : 4)}
           >
-            <p className="link-heading">Events</p>
+            <div className="flex items-center justify-between">
+              <p className="link-heading">Events</p>
+              <FontAwesomeIcon
+                className={`text-[var(--grey-300)] md:!hidden ${
+                  openIndex === 2 ? "rotate-180 " : ""
+                }`}
+                icon={faChevronDown}
+                size="sm"
+              />
+            </div>
             <a
               href=""
-              className={`links  md:block ${isShowingSix ? "block" : "hidden"}`}
+              className={`links  md:block ${
+                openIndex === 4 ? "block" : "hidden"
+              }`}
             >
               Events 2025
             </a>
@@ -133,13 +185,22 @@ function PreFooter() {
         <div className="md:px-3">
           <div
             className="flex flex-col border-b-[1px] border-[var(--line)] py-2 md:py-0 md:border-none cursor-pointer md:cursor-default"
-            onClick={() => setIsShowingSeven((prev) => !prev)}
+            onClick={() => setOpenIndex(openIndex === 5 ? null : 5)}
           >
-            <p className="link-heading">Others</p>
+            <div className="flex items-center justify-between">
+              <p className="link-heading">Others</p>
+              <FontAwesomeIcon
+                className={`text-[var(--grey-300)] md:!hidden ${
+                  openIndex === 2 ? "rotate-180 " : ""
+                }`}
+                icon={faChevronDown}
+                size="sm"
+              />
+            </div>
             <a
               href=""
               className={`links  md:block ${
-                isShowingSeven ? "block" : "hidden"
+                openIndex === 5 ? "block" : "hidden"
               }`}
             >
               Shop
