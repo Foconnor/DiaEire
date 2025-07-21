@@ -16,7 +16,7 @@ function Labour() {
       keys: "Join Dia le hÉireann",
       title: "Join Dia le hÉireann",
       des: "Dia le hÉireann is made up of hundreds of thousands of members, coming together to get Ireland&apos;s future back. By joining, you can get involved with your local party, campaign with us on the issues you care about and make sure your voice is heard.",
-      link: "/",
+      link: "/join",
       linkName: "I want to join",
       img: JoinLabour,
     },

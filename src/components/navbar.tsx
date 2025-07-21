@@ -33,7 +33,7 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
       </div>
       {buttons && (
         <div className="wrapper flex py-3 items-center gap-9 text-[14.4px] text-[var(--link)] font-semibold">
-          <Link href="/" className="hover:text-[var(--btn-black)]">
+          <Link href="/join" className="hover:text-[var(--btn-black)]">
             Join Dia le hÉireann
           </Link>
           <Link href="/" className="hover:text-[var(--btn-black)]">
