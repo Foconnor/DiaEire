@@ -4,11 +4,9 @@ import React, { useState } from "react";
 
 function PreFooter() {
   const [isShowing, setIsShowing] = useState(false);
-  const [isShowingOne, setIsShowingOne] = useState(false);
   const [isShowingTwo, setIsShowingTwo] = useState(false);
   const [isShowingThree, setIsShowingThree] = useState(false);
   const [isShowingFour, setIsShowingFour] = useState(false);
-  const [isShowingFive, setIsShowingFive] = useState(false);
   const [isShowingSix, setIsShowingSix] = useState(false);
   const [isShowingSeven, setIsShowingSeven] = useState(false);
   return (

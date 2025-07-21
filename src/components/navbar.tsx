@@ -8,7 +8,7 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
     <div>
       <div className="border-b-[1px] border-[var(--line)] md:py-2 py-7">
         <div className="wrapper flex justify-between items-center relative">
-          <a href="/">
+          <Link href="/">
             <Image
               className="md:w-fit md:h-fit w-[160px]"
               src="/images/logo.png"
@@ -16,7 +16,7 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
               width={350}
               height={350}
             />
-          </a>
+          </Link>
           <div className="flex gap-3">
             {buttons && (
               <>
