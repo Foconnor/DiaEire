@@ -142,7 +142,7 @@ function Membership() {
           and were fighting hard to stop the far right.
         </p>
         <p className="text-[var(--grey-300)] mt-[10px]">
-          Ever since then, I've got the campaigning bug and I haven’t looked
+          Ever since then, I&apos;ve got the campaigning bug and I haven’t looked
           back. Being a Labour member is about being part of a team of hundreds
           of thousands, all working together to build a better society and
           country.”
