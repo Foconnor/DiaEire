@@ -5,7 +5,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 
 type ButtonProps = {
-  content: string;
+  content: string | React.ReactNode;
   className?: string;
   IconSize?: number;
   link?: string;

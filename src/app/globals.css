@@ -30,7 +30,6 @@ body {
 .fund-bg,
 .join-bg,
 .membership-bg {
-  background-image: url(https://images.ireland.com/media/Images/magazine/culture/august-in-ireland/3b38a606abe3456a81c5f81bdc9d64c8.webp);
   width: 100vw;
   height: calc(100vh - 144px);
   background-position: center;
@@ -69,7 +68,6 @@ body {
 }
 
 .fund-bg {
-  background-image: url(https://th-thumbnailer.cdn-si-edu.com/9hc_nFxRSSC8s4G-GpeZA_PBpWk=/960x439/https://tf-cmsv2-journeys-media.s3.amazonaws.com/filer/b5/d8/b5d8e406-fd93-4b83-8575-82996413dbbd/ire_cliffsofmoher_ist_000039133428_large_ccforweb.jpg);
   width: 100%;
   height: 480px !important;
   border-radius: 12px;

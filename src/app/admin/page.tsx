@@ -4,6 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
+import Navbar from "@/components/navbar";
+import HeroEdit from "@/sections/admin/heroEdit";
+import LabourEdit from "@/sections/admin/labourEdit";
+import FundEdit from "@/sections/admin/fundEdit";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -24,8 +28,12 @@ export default function DashboardPage() {
   if (loading) return <div className="text-center mt-10">Loading...</div>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Welcome to the Dashboard</h1>
+    <div>
+      <Navbar buttons={false} />
+      <h2 className="text-4xl text-center mt-10">Landing Page</h2>
+      <HeroEdit />
+      <LabourEdit />
+      <FundEdit />
     </div>
   );
 }
