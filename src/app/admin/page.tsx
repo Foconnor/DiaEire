@@ -8,6 +8,7 @@ import Navbar from "@/components/navbar";
 import HeroEdit from "@/sections/admin/heroEdit";
 import LabourEdit from "@/sections/admin/labourEdit";
 import FundEdit from "@/sections/admin/fundEdit";
+import NavbarEdit from "@/components/admin/navbarEdit";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -30,6 +31,8 @@ export default function DashboardPage() {
   return (
     <div>
       <Navbar buttons={false} />
+      <h2 className="text-4xl text-center mt-10">Navbar</h2>
+      <NavbarEdit />
       <h2 className="text-4xl text-center mt-10">Landing Page</h2>
       <HeroEdit />
       <LabourEdit />
