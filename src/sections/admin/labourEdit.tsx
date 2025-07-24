@@ -153,7 +153,7 @@ function LabourEdit() {
           activeSliderId
         );
         await updateDoc(sliderDocRef, {
-          keys: key.trim(),
+          key: key.trim(),
           title: title.trim(),
           des: des.trim(),
           buttonText: buttonText.trim(),
@@ -161,7 +161,6 @@ function LabourEdit() {
         });
         toast.success("Slider updated!");
         setIsSliderModalOpen(false);
-        // Refresh sliders
         const sliderColRef = collection(
           db,
           "landingPage",
