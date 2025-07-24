@@ -29,7 +29,7 @@ const LoginForm = () => {
 
       toast.success("Logged in successfully!");
       router.push("/admin");
-    } catch (err: any) {
+    } catch (err : any) {
       const errorCode = err?.code || err?.error?.code || "";
 
       if (
