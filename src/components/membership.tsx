@@ -1,17 +1,36 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
+
+interface Dropdown {
+  id: string;
+  title: string;
+  points: { text: string }[];
+}
 
 function Membership() {
   const [email, setEmail] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("Loading...");
+  const [subTitle, setSubTitle] = useState("Loading...");
+  const [pointOne, setPointOne] = useState("Loading...");
+  const [pointTwo, setPointTwo] = useState("Loading...");
+  const [pointThree, setPointThree] = useState("Loading...");
+  const [paraOne, setParaOne] = useState("Loading...");
+  const [paraTwo, setParaTwo] = useState("Loading...");
+  const [paraThree, setParaThree] = useState("Loading...");
+  const [paraFour, setParaFour] = useState("Loading...");
+  const [name, setName] = useState("Loading...");
+  const [buttonText, setButtonText] = useState("Loading...");
+  const [image, setImage] = useState("");
+  const [dropdowns, setDropdowns] = useState<Dropdown[]>([]);
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -50,81 +69,100 @@ function Membership() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const Reasons = [
     {
-      point:
-        "As a member, you’ll join hundreds of thousands of people who are dedicated to building a fairer Britain.",
+      point: pointOne,
     },
     {
-      point:
-        "We’ll provide you with all the tools and resources to get involved in exciting events and campaign days, shape policy and meet like-minded people.",
+      point: pointTwo,
     },
     {
-      point:
-        "And one day you could even stand for election as an official Labour Party candidate yourself!",
+      point: pointThree,
     },
   ];
 
-  const DropDown = [
-    {
-      title: "What can i do if i join",
-      points: [
-        {
-          text: "As a Labour member, you’ll be alongside hundreds of thousands of people across Britain, dedicated to putting the country first.",
-        },
-        {
-          text: "We’ll provide you with all the tools and resources to get involved in events and campaign days, to help elect Labour candidates.",
-        },
-        {
-          text: "And if you want to, one day, you can even stand for election as an official Labour Party candidate yourself.",
-        },
-      ],
-    },
-    {
-      title: "Am I eligible to join?",
-      points: [
-        {
-          text: "If you’re 14 or over, not a member of another political party, and are a British citizen or have lived in the UK for a year or more, then absolutely; come on in. We need your passion, your experience and your voice.",
-        },
-      ],
-    },
-    {
-      title: "Where is my money going?",
-      points: [
-        {
-          text: "We’re built on the contributions of our many dedicated members. Your membership fees pay for the posters, leaflets, rallies and events that you see up and down the country. Every penny is put to good use. Without our members’ contributions, we simply wouldn’t be able to run the Labour Party.",
-        },
-      ],
-    },
-    {
-      title: "What happens after I join?",
-      points: [
-        {
-          text: "Keep an eye out for a membership pack in the post. Your membership card is in there – along with a whole host of useful information about what you can get involved in. As soon as that arrives, you’ll be a card-carrying member of the Labour Party.",
-        },
-      ],
-    },
-    {
-      title: "What can I do as a member?",
-      points: [
-        {
-          text: "You’ll have a say in our policies and vote in internal elections. We’ll provide you with all the tools and resources to get involved in events, campaign days and rallies and introduce you to a huge movement of other like-minded members.",
-        },
-        {
-          text: "By joining, you’ll also become a part of your local Labour Party, who will be in touch with ways you can get involved with loads of different campaigns and events near you. You can get involved in everything from policy making to campaigning to social events right away.",
-        },
-      ],
-    },
-  ];
+ useEffect(() => {
+    const fetchDropdowns = async () => {
+      try {
+        const dropdownColRef = collection(
+          db,
+          "membershipPage",
+          "membershipPageContent",
+          "Dropdown"
+        );
+        const querySnapshot = await getDocs(dropdownColRef);
+        const dropdownArr = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as { title: string; points: { text: string }[] }),
+        }));
+        setDropdowns(dropdownArr);
+      } catch (error) {
+        toast.error("Error fetching dropdowns");
+        console.error("Error fetching dropdowns:", error);
+      }
+    };
+    fetchDropdowns();
+  }, []);
+
+  useEffect(() => {
+    const getSectionData = async () => {
+      try {
+        const docRef = doc(db, "joinPage", "joinPageContent");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setParaThree(data.paraOne || "");
+          setParaFour(data.paraTwo || "");
+        } else {
+          toast.error("No such document!");
+        }
+      } catch (error) {
+        toast.error("Error fetching join page data");
+        console.error("Error fetching join page data:", error);
+      }
+    };
+    getSectionData();
+  }, []);
+
+   useEffect(() => {
+    const getSectionData = async () => {
+      try {
+        const docRef = doc(db, "membershipPage", "membershipPageContent");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setImage(data.image || "");
+          setTitle(data.title || "");
+          setSubTitle(data.subTitle || "");
+          setPointOne(data.pointOne || "");
+          setPointTwo(data.pointTwo || "");
+          setPointThree(data.pointThree || "");
+          setParaOne(data.paraOne || "");
+          setParaTwo(data.paraTwo || "");
+          setName(data.name || "");
+          setButtonText(data.buttonText || "");
+        } else {
+          toast.error("No such document!");
+        }
+      } catch (error) {
+        toast.error("Error fetching membership page data");
+        console.error("Error fetching membership page data:", error);
+      }
+    };
+    getSectionData();
+  }, []);
+
   return (
     <div className="max-w-[600px] mx-auto bg-[var(--grey)] my-5 rounded-lg">
-      <div className="membership-bg relative">
+      <div className="membership-bg  relative" style={{ backgroundImage: `url(${image})` }}>
         <h2 className="p-5 text-[var(--background)] absolute bottom-0 left-0 z-10 text-[32px] leading-tight font-bold">
-          What is Dia le hÉireann membership?
+          {title}
         </h2>
       </div>
 
       <div className="px-5 mt-6">
         <p className="font-bold text-lg">
-          What you need to know about joining the Dia le hÉireann Party
+          {subTitle}
         </p>
         <ul className="px-5 mt-5 mb-[10px]">
           {Reasons.map((item, index) => (
@@ -134,21 +172,13 @@ function Membership() {
           ))}
         </ul>
         <p className="text-[var(--grey-300)]">
-          <b>
-            “I joined the Labour Party after the BNP won council seats in the
-            area I grew up and lived in.
-          </b>{" "}
-          I found a community of members and councillors who shared my values
-          and were fighting hard to stop the far right.
+          {paraOne}
         </p>
         <p className="text-[var(--grey-300)] mt-[10px]">
-          Ever since then, I&apos;ve got the campaigning bug and I haven’t looked
-          back. Being a Labour member is about being part of a team of hundreds
-          of thousands, all working together to build a better society and
-          country.”
+          {paraTwo}
         </p>
         <p className="font-bold text-[var(--grey-300)] mt-[10px]">
-          Hollie Ridley, General Secretary
+          {name}
         </p>
         <button
           onClick={() => {
@@ -156,10 +186,10 @@ function Membership() {
           }}
           className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer"
         >
-          Join today!
+          {buttonText}
         </button>
         <div className="my-10">
-          {DropDown.map((item, index) => (
+          {dropdowns?.map((item, index) => (
             <div key={index} className="border-b-[1px] border-[var(--line)]">
               <div
                 className="px-4 py-5 flex items-center justify-between cursor-pointer"
@@ -229,21 +259,10 @@ function Membership() {
             </button>
           </form>
           <p className="mt-6 text-sm text-[var(--grey-300)]">
-            Read more about how we use your data in our{" "}
-            <Link href="" className="underline">
-              Privacy Notice.
-            </Link>{" "}
-            You can unsubscribe at any time.
+            {paraThree}
           </p>
           <p className="mt-6 text-sm text-[var(--grey-300)]">
-            Payments securely processed by GoCardless. GoCardless Ltd (company
-            registration number 07495895) is authorised by the Financial Conduct
-            Authority under the Payment Services Regulations 2017, registration
-            number 597190, for the provision of payment services. GoCardless
-            uses personal data as described in their{" "}
-            <Link href="" className="underline">
-              Privacy Notice.
-            </Link>
+            {paraFour}
           </p>
         </div>
       </div>
