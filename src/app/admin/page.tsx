@@ -9,6 +9,7 @@ import HeroEdit from "@/sections/admin/heroEdit";
 import LabourEdit from "@/sections/admin/labourEdit";
 import FundEdit from "@/sections/admin/fundEdit";
 import NavbarEdit from "@/components/admin/navbarEdit";
+import JoinEdit from "@/components/admin/joinEdit";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -37,6 +38,8 @@ export default function DashboardPage() {
       <HeroEdit />
       <LabourEdit />
       <FundEdit />
+      <h2 className="text-4xl text-center mt-10">Join Page</h2>
+      <JoinEdit />
     </div>
   );
 }

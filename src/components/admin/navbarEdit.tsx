@@ -93,8 +93,7 @@ function NavbarEdit() {
       </div>
       {loading ? (
         <div className="py-10">
-          <div className="h-6 w-1/2 bg-gray-200 rounded mb-4 animate-pulse"></div>
-          <div className="h-4 w-1/3 bg-gray-200 rounded mb-4 animate-pulse"></div>
+          <div className="h-6 text-center rounded mb-4 animate-pulse">Loading...</div>
         </div>
       ) : (
         <>
