@@ -90,7 +90,7 @@ function HeroEdit() {
             <p className="text-[var(--primary)]">Button Text :</p>
             <p>{heroButtonText}</p>
           </div>
-          <div className="flex items-start gap-1 mt-4">
+          <div className="flex items-start justify-between gap-1 mt-4">
             <p className="text-[var(--primary)]">Background Image :</p>
             {heroImage ? (
               <img

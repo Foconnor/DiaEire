@@ -223,7 +223,7 @@ function LabourEdit() {
             <p className="text-[var(--primary)] whitespace-nowrap">
               Slider para :
             </p>
-            <p>{item.des}</p>
+            <p className="wrap-break-word">{item.des}</p>
           </div>
           <div className="grid grid-cols-2 mt-4">
             <p className="text-[var(--primary)]">Slider Button :</p>

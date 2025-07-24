@@ -1,50 +1,79 @@
 "use client";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import JoinLabour from "@/../public/images/ireland.jpg";
 import Link from "next/link";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
+import toast from "react-hot-toast";
+
+interface Slider {
+  id: string;
+  key: string;
+  title: string;
+  des: string;
+  link: string;
+  buttonText: string;
+  image: string;
+}
 
 function Labour() {
   const [isActive, setActive] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [sectionTitle, setSectionTitle] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const Items = [
-    {
-      keys: "Join Dia le hÉireann",
-      title: "Join Dia le hÉireann",
-      des: "Dia le hÉireann is made up of hundreds of thousands of members, coming together to get Ireland's future back. By joining, you can get involved with your local party, campaign with us on the issues you care about and make sure your voice is heard.",
-      link: "/join",
-      linkName: "I want to join",
-      img: JoinLabour,
-    },
-    {
-      keys: "Head from Dia le hÉireann",
-      title: "Hear from us",
-      des: "Dia le hÉireann is made up of hundreds of thousands of members, coming together to get Ireland's future back. By joining, you can get involved with your local party, campaign with us on the issues you care about and make sure your voice is heard.",
-      link: "/",
-      linkName: "Sign me up",
-      img: JoinLabour,
-    },
-    {
-      keys: "Read our missions",
-      title: "Read our missions",
-      des: "Dia le hÉireann is made up of hundreds of thousands of members, coming together to get Ireland's future back. By joining, you can get involved with your local party, campaign with us on the issues you care about and make sure your voice is heard.",
-      link: "/",
-      linkName: "I'll read more",
-      img: JoinLabour,
-    },
-    {
-      keys: "Read our Plan for Change",
-      title: "Read our Plan for Change",
-      des: "Dia le hÉireann is made up of hundreds of thousands of members, coming together to get Ireland's future back. By joining, you can get involved with your local party, campaign with us on the issues you care about and make sure your voice is heard.",
-      link: "/",
-      linkName: "I'll read the plan",
-      img: JoinLabour,
-    },
-  ];
+  const [Items, setItems] = useState([] as Slider[]);
+
+    useEffect(() => {
+    const getSliders = async () => {
+      setLoading(true);
+      try {
+        const sliderColRef = collection(
+          db,
+          "landingPage",
+          "landingPageLabour",
+          "slider"
+        );
+        const querySnapshot = await getDocs(sliderColRef);
+        const slidersArr = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Slider[];
+        setItems(slidersArr);
+      } catch (error) {
+        toast.error("Error fetching sliders");
+        console.error("Error fetching sliders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getSliders();
+  }, []);
+
+    useEffect(() => {
+    const getSectionData = async () => {
+      setLoading(true);
+      try {
+        const docRef = doc(db, "landingPage", "landingPageLabour");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setSectionTitle(data.sectionTitle || "");
+        } else {
+          toast.error("No such document!");
+        }
+      } catch (error) {
+        toast.error("Error fetching section data");
+        console.error("Error fetching section data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getSectionData();
+  }, []);
 
   useEffect(() => {
     if (scrollContainerRef.current && itemRefs.current[isActive]) {
@@ -77,7 +106,7 @@ function Labour() {
   return (
     <div className="wrapper !mt-[80px] !mb-[60px]">
       <h2 className="text-[calc(1.305rem_+_.55vw)]">
-        Want to get involved? Here&apos;s what you can do
+        {sectionTitle}
       </h2>
       <div className="flex gap-4 items-center mt-[calc(1.35rem_+_1vw)] flex-wrap">
         {Items.map((item, index) => (
@@ -90,7 +119,7 @@ function Labour() {
                 : "bg-[var(--grey)] text-black"
             }`}
           >
-            {item.keys}
+            {item.key}
           </button>
         ))}
       </div>
@@ -111,18 +140,18 @@ function Labour() {
               <h3 className="text-[calc(1.305rem_+_.55vw)] md:mt-0 mt-5">
                 {item.title}
               </h3>
-              <p className="mt-3">{item.des}</p>
+              <p className="mt-3 wrap-break-word">{item.des}</p>
               <Link
-                href={item.link}
+                href={item?.link}
                 className="text-[var(--primary)] hover:text-[var(--btn-hover-bg)] text-[1.35rem] flex items-center gap-3 absolute bottom-0"
               >
-                {item.linkName}{" "}
+                {item.buttonText}{" "}
                 <FontAwesomeIcon icon={faArrowRight} width={18} />
               </Link>
             </div>
             <div>
-              <Image
-                src={item.img}
+              <img
+                src={item.image}
                 alt={`${item.title} image`}
                 width={1000}
                 height={1000}
