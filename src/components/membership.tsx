@@ -7,6 +7,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
+import MembershipForm from "./membershipForm";
 
 interface Dropdown {
   id: string;
@@ -31,6 +32,7 @@ function Membership() {
   const [buttonText, setButtonText] = useState("Loading...");
   const [image, setImage] = useState("");
   const [dropdowns, setDropdowns] = useState<Dropdown[]>([]);
+  const [isModelOpen, setIsModelOpen] = useState(true);
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -79,7 +81,7 @@ function Membership() {
     },
   ];
 
- useEffect(() => {
+  useEffect(() => {
     const fetchDropdowns = async () => {
       try {
         const dropdownColRef = collection(
@@ -123,7 +125,7 @@ function Membership() {
     getSectionData();
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     const getSectionData = async () => {
       try {
         const docRef = doc(db, "membershipPage", "membershipPageContent");
@@ -154,118 +156,118 @@ function Membership() {
 
   return (
     <div className="max-w-[600px] mx-auto bg-[var(--grey)] my-5 rounded-lg">
-      <div className="membership-bg  relative" style={{ backgroundImage: `url(${image})` }}>
-        <h2 className="p-5 text-[var(--background)] absolute bottom-0 left-0 z-10 text-[32px] leading-tight font-bold">
-          {title}
-        </h2>
-      </div>
+      {isModelOpen ? (
+        <MembershipForm/>
+      ) : (
+        <>
+          <div
+            className="membership-bg  relative"
+            style={{ backgroundImage: `url(${image})` }}
+          >
+            <h2 className="p-5 text-[var(--background)] absolute bottom-0 left-0 z-10 text-[32px] leading-tight font-bold">
+              {title}
+            </h2>
+          </div>
 
-      <div className="px-5 mt-6">
-        <p className="font-bold text-lg">
-          {subTitle}
-        </p>
-        <ul className="px-5 mt-5 mb-[10px]">
-          {Reasons.map((item, index) => (
-            <li key={index} className="list-disc text-[var(--grey-300)]">
-              {item.point}
-            </li>
-          ))}
-        </ul>
-        <p className="text-[var(--grey-300)]">
-          {paraOne}
-        </p>
-        <p className="text-[var(--grey-300)] mt-[10px]">
-          {paraTwo}
-        </p>
-        <p className="font-bold text-[var(--grey-300)] mt-[10px]">
-          {name}
-        </p>
-        <button
-          onClick={() => {
-            router.push("/join");
-          }}
-          className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer"
-        >
-          {buttonText}
-        </button>
-        <div className="my-10">
-          {dropdowns?.map((item, index) => (
-            <div key={index} className="border-b-[1px] border-[var(--line)]">
-              <div
-                className="px-4 py-5 flex items-center justify-between cursor-pointer"
-                onClick={() => {
-                  setOpenIndex(openIndex === index ? null : index);
-                }}
-              >
-                <p>{item.title}</p>
-                <FontAwesomeIcon
-                  className={openIndex === index ? "rotate-180" : ""}
-                  icon={faChevronDown}
-                />
-              </div>
-              <div
-                className={`px-4 pb-5 flex-col gap-[10px] ${
-                  openIndex === index ? "flex" : "hidden"
-                }`}
-              >
-                {item.points.map((item, index) => (
-                  <p key={index} className="text-[var(--grey-300)]">
-                    {item.text}
-                  </p>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="p-4 pb-10">
-          <form onSubmit={handleSubmit} noValidate>
-            <input
-              className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)]"
-              type="email"
-              placeholder="Enter your email"
-              name="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              aria-required="true"
-              aria-invalid={false}
-              disabled={loading}
-            />
-            <div className="mt-5 flex items-center gap-2">
-              <input
-                checked={isChecked}
-                type="checkbox"
-                name="checkbox"
-                id="checkbox"
-                onChange={(e) => setIsChecked(e.target.checked)}
-                className="w-4 h-4 cursor-pointer"
-                disabled={loading}
-              />
-              <label
-                htmlFor="checkbox"
-                className="text-[var(--grey-300)] cursor-pointer"
-              >
-                Are you an existing First Ireland member?
-              </label>
-            </div>
+          <div className="px-5 mt-6">
+            <p className="font-bold text-lg">{subTitle}</p>
+            <ul className="px-5 mt-5 mb-[10px]">
+              {Reasons.map((item, index) => (
+                <li key={index} className="list-disc text-[var(--grey-300)]">
+                  {item.point}
+                </li>
+              ))}
+            </ul>
+            <p className="text-[var(--grey-300)]">{paraOne}</p>
+            <p className="text-[var(--grey-300)] mt-[10px]">{paraTwo}</p>
+            <p className="font-bold text-[var(--grey-300)] mt-[10px]">{name}</p>
             <button
-              type="submit"
-              className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-              disabled={loading}
-              aria-busy={loading}
+              onClick={() => {
+                router.push("/join");
+              }}
+              className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer"
             >
-              {loading ? "Submitting..." : "Get started"}
+              {buttonText}
             </button>
-          </form>
-          <p className="mt-6 text-sm text-[var(--grey-300)]">
-            {paraThree}
-          </p>
-          <p className="mt-6 text-sm text-[var(--grey-300)]">
-            {paraFour}
-          </p>
-        </div>
-      </div>
+            <div className="my-10">
+              {dropdowns?.map((item, index) => (
+                <div
+                  key={index}
+                  className="border-b-[1px] border-[var(--line)]"
+                >
+                  <div
+                    className="px-4 py-5 flex items-center justify-between cursor-pointer"
+                    onClick={() => {
+                      setOpenIndex(openIndex === index ? null : index);
+                    }}
+                  >
+                    <p>{item.title}</p>
+                    <FontAwesomeIcon
+                      className={openIndex === index ? "rotate-180" : ""}
+                      icon={faChevronDown}
+                    />
+                  </div>
+                  <div
+                    className={`px-4 pb-5 flex-col gap-[10px] ${
+                      openIndex === index ? "flex" : "hidden"
+                    }`}
+                  >
+                    {item.points.map((item, index) => (
+                      <p key={index} className="text-[var(--grey-300)]">
+                        {item.text}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 pb-10">
+              <form onSubmit={handleSubmit} noValidate>
+                <input
+                  className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)]"
+                  type="email"
+                  placeholder="Enter your email"
+                  name="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  aria-required="true"
+                  aria-invalid={false}
+                  disabled={loading}
+                />
+                <div className="mt-5 flex items-center gap-2">
+                  <input
+                    checked={isChecked}
+                    type="checkbox"
+                    name="checkbox"
+                    id="checkbox"
+                    onChange={(e) => setIsChecked(e.target.checked)}
+                    className="w-4 h-4 cursor-pointer"
+                    disabled={loading}
+                  />
+                  <label
+                    htmlFor="checkbox"
+                    className="text-[var(--grey-300)] cursor-pointer"
+                  >
+                    Are you an existing First Ireland member?
+                  </label>
+                </div>
+                <button
+                  type="submit"
+                  className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  disabled={loading}
+                  aria-busy={loading}
+                >
+                  {loading ? "Submitting..." : "Get started"}
+                </button>
+              </form>
+              <p className="mt-6 text-sm text-[var(--grey-300)]">{paraThree}</p>
+              <p className="mt-6 text-sm text-[var(--grey-300)]">{paraFour}</p>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
