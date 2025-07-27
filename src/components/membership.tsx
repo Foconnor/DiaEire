@@ -32,7 +32,7 @@ function Membership() {
   const [buttonText, setButtonText] = useState("Loading...");
   const [image, setImage] = useState("");
   const [dropdowns, setDropdowns] = useState<Dropdown[]>([]);
-  const [isModelOpen, setIsModelOpen] = useState(true);
+  const [isModelOpen, setIsModelOpen] = useState(false);
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -49,23 +49,8 @@ function Membership() {
       return;
     }
     setLoading(true);
-    try {
-      await addDoc(collection(db, "members"), {
-        email: email.trim(),
-        isExistingMember: isChecked,
-        createdAt: new Date().toISOString(),
-      });
-      toast.success("Thank you for joining! We've received your submission.");
-      setEmail("");
-      setIsChecked(false);
-    } catch (e) {
-      toast.error(
-        "There was an error submitting your request. Please try again later."
-      );
-      console.error("Error adding document: ", e);
-    } finally {
-      setLoading(false);
-    }
+    setIsModelOpen(true);
+    setLoading(false);
   };
   const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -157,7 +142,7 @@ function Membership() {
   return (
     <div className="max-w-[600px] mx-auto bg-[var(--grey)] my-5 rounded-lg">
       {isModelOpen ? (
-        <MembershipForm/>
+        <MembershipForm />
       ) : (
         <>
           <div
