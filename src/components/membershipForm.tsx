@@ -13,6 +13,7 @@ function MembershipForm() {
   const [membershipAmount, setMembershipAmount] = useState(5);
   const [extraDonation, setExtraDonation] = useState(0);
   const [activeDonationValue, setActiveDonationValue] = useState(0);
+  const [isCurrentlyMember, setIsCurrentlyMember] = useState(false);
   const router = useRouter();
 
   const extraMoney = [
@@ -22,6 +23,29 @@ function MembershipForm() {
     { value: 5 },
     { value: 3 },
     { value: 0 },
+  ];
+
+  const partyName = [
+    {
+      name: "Fianna Fail",
+      value: "fiannaFail",
+    },
+    {
+      name: "Fianna Gael",
+      value: "fiannaGael",
+    },
+    {
+      name: "Sinn Fein",
+      value: "sinnFein",
+    },
+    {
+      name: "Aontu",
+      value: "aontu",
+    },
+    {
+      name: "Other",
+      value: "other",
+    },
   ];
 
   const handleSubmit = (e: any) => {
@@ -268,6 +292,57 @@ function MembershipForm() {
               membership,to check eligibility to participate in young labour,and
               to fulfil our safeguarding obligations.
             </p>
+            <div className="flex flex-col gap-y-2.5">
+              <label
+                className="text-sm font-semibold block text black"
+                htmlFor="firstName"
+              >
+                Are you current member of any political party?
+              </label>
+              <div className="flex items-center gap-x-2">
+                <input
+                  type="radio"
+                  id="yes"
+                  name="currentMember"
+                  value="true"
+                  onChange={(e) =>
+                    setIsCurrentlyMember(e.target.value === "true")
+                  }
+                />
+                <label htmlFor="yes">Yes</label>
+
+                <input
+                  type="radio"
+                  id="no"
+                  name="currentMember"
+                  value="false"
+                  onChange={(e) =>
+                    setIsCurrentlyMember(e.target.value === "true")
+                  }
+                />
+                <label htmlFor="no">No</label>
+              </div>
+            </div>
+            {isCurrentlyMember && (
+              <div className="flex flex-col gap-y-2.5">
+                <select
+                  id="title"
+                  name="title"
+                  className="w-full bg-[var(--background)] rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)]"
+                  required
+                  defaultValue={"select"}
+                >
+                  <option value="select" disabled>
+                    Select previous party
+                  </option>
+                  {partyName.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <button
               type="submit"
               className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
