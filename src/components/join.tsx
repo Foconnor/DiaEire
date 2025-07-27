@@ -63,8 +63,10 @@ function Join() {
       return;
     }
     setLoading(true);
-    setIsModelOpen(true);
-    setLoading(false);
+    setTimeout(() => {
+      setIsModelOpen(true);
+      setLoading(false);
+    }, 2000);
   };
 
   return (

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function MembershipForm() {
@@ -12,6 +13,7 @@ function MembershipForm() {
   const [membershipAmount, setMembershipAmount] = useState(5);
   const [extraDonation, setExtraDonation] = useState(0);
   const [activeDonationValue, setActiveDonationValue] = useState(0);
+  const router = useRouter();
 
   const extraMoney = [
     { value: 50 },
@@ -35,6 +37,7 @@ function MembershipForm() {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
+      router.back();
       setLoading(false);
     }, 2000);
   };

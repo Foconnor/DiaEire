@@ -49,8 +49,10 @@ function Membership() {
       return;
     }
     setLoading(true);
-    setIsModelOpen(true);
-    setLoading(false);
+    setTimeout(() => {
+      setIsModelOpen(true);
+      setLoading(false);
+    }, 2000);
   };
   const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
