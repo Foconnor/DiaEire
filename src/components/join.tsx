@@ -72,7 +72,7 @@ function Join() {
   return (
     <div className="max-w-[600px] mx-auto bg-[var(--grey)] my-5 rounded-lg">
       {isModelOpen ? (
-        <MembershipForm />
+        <MembershipForm email={email} isChecked={isChecked} />
       ) : (
         <>
           <div
