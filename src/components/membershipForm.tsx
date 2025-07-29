@@ -162,7 +162,7 @@ function MembershipForm({ email, isChecked }: Props) {
   }));
 
   return (
-    <div className="min-h-[calc(100vh_-_170px)] relative">
+    <div className="md:min-h-[calc(100vh_-_170px)] relative min-h-[calc(100vh_+_60px)]">
       {step !== 0 && (
         <p
           className="absolute left-5 top-5 text-sm cursor-pointer"
@@ -171,7 +171,7 @@ function MembershipForm({ email, isChecked }: Props) {
           ← Back
         </p>
       )}
-      <div className="px-20 pb-10 pt-14 flex justify-center items-center w-full">
+      <div className="md:px-20 px-10 pb-10 pt-14 flex justify-center items-center w-full">
         <div className="bg-white rounded-full h-2 w-full overflow-hidden">
           <div
             className="w-20 h-full bg-[var(--primary)] transition-all duration-300 ease-in-out"
@@ -469,7 +469,7 @@ function MembershipForm({ email, isChecked }: Props) {
                   defaultValue={"select"}
                 >
                   <option value="select" disabled>
-                    Select previous party
+                    Select political party
                   </option>
                   {previousParty ? (
                     previousParty.map((item, index) => (
@@ -634,7 +634,7 @@ function MembershipForm({ email, isChecked }: Props) {
           </form>
         </div>
       ) : step === 3 ? (
-        <div className="px-5 relative min-h-[500px]">
+        <div className="px-5">
           <h2 className="font-bold text-center text-lg">{title}</h2>
           <p className="mt-4 text-center text-[var(--grey-300)] text-sm ">
             {formData.firstName}, {paraThree}
@@ -709,7 +709,7 @@ function MembershipForm({ email, isChecked }: Props) {
               Year
             </div>
           </div>
-          <div className="md:bg-[#F0EAEA] w-full sm:max-w-[500px] mx-auto my-4 p-4 rounded-lg flex justify-between">
+          <div className="md:bg-[#F0EAEA] w-full sm:max-w-[500px] mx-auto my-4 md:p-4 rounded-lg flex justify-between">
             <div className="flex flex-col items-start">
               <p>Standard rate</p>
               <p>Donation boost</p>
@@ -730,7 +730,7 @@ function MembershipForm({ email, isChecked }: Props) {
               </p>
             </div>
           </div>
-          <div className="px-14 mt-10">
+          <div className="md:px-14 mt-10">
             <form onSubmit={handleSubmitLastStep}>
               <div className="flex flex-col gap-y-2.5">
                 <label className="text-sm font-semibold" htmlFor="accountName">
