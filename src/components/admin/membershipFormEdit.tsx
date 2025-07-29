@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 function MembershipFormEdit() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [membershipAmount, setMembershipAmount] = useState<number>();
+  const [para, setPara] = useState("");
   const [extraDonation, setExtraDonation] = useState<number[]>([]);
   const [previousParty, setPreviousParty] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ function MembershipFormEdit() {
           setPreviousParty(
             Array.isArray(data.previousParty) ? data.previousParty : []
           );
+          setPara(data.para || "");
         } else {
           toast.error("No such document!");
         }
@@ -64,7 +66,8 @@ function MembershipFormEdit() {
       popularExtraDonation === undefined ||
       isNaN(popularExtraDonation) ||
       extraDonation.some((d) => isNaN(d)) ||
-      previousParty.some((p) => p.trim() === "")
+      previousParty.some((p) => p.trim() === "") ||
+      !para.trim()
     ) {
       toast.error("Please fill out all required fields correctly.");
       return;
@@ -78,6 +81,7 @@ function MembershipFormEdit() {
         popularExtraDonation,
         extraDonation,
         previousParty,
+        para,
       });
       toast.success("Form content updated!");
       setIsModalOpen(false);
@@ -122,6 +126,10 @@ function MembershipFormEdit() {
           <div className="grid grid-cols-2  gap-1 mt-4">
             <p className="text-[var(--primary)]">Popular Extra Donation :</p>
             <p>€{popularExtraDonation}</p>
+          </div>
+          <div className="grid grid-cols-2  gap-1 mt-4">
+            <p className="text-[var(--primary)]">Para :</p>
+            <p>{para}</p>
           </div>
           <div className="grid grid-cols-2 gap-1 mt-4">
             <p className="text-[var(--primary)]">Extra Donations :</p>
@@ -174,6 +182,19 @@ function MembershipFormEdit() {
                   className="w-full border rounded px-3 py-2"
                   value={membershipAmount}
                   onChange={(e) => setMembershipAmount(Number(e.target.value))}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={para}
+                  onChange={(e) => setPara(e.target.value)}
                   required
                   disabled={saving}
                 />

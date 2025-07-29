@@ -14,7 +14,6 @@ interface Props {
 function MembershipForm({ email, isChecked }: Props) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(0);
-  const [manuallyEnterAddress, setManuallyEnterAddress] = useState(false);
   const [popularMoney, setPopularMoney] = useState(0);
   const [paymentType, setPaymentType] = useState(0);
   const [membershipAmount, setMembershipAmount] = useState(0);
@@ -56,6 +55,7 @@ function MembershipForm({ email, isChecked }: Props) {
   const [extraMoney, setExtraMoney] = useState<number[]>([]);
 
   const [previousParty, setPreviousParty] = useState<string[]>([]);
+  const [para, setPara] = useState("Loading...");
 
   useEffect(() => {
     const getSectionData = async () => {
@@ -66,6 +66,7 @@ function MembershipForm({ email, isChecked }: Props) {
 
         if (docSnap.exists()) {
           const data = docSnap.data();
+          setPara(data.para || "Loading...");
           setMembershipAmount(data.membershipAmount || 0);
           setPopularMoney(data.popularExtraDonation || 0);
           setExtraMoney(
@@ -126,7 +127,7 @@ function MembershipForm({ email, isChecked }: Props) {
         ...prev,
         subscriptionType: 1,
         extraDonation: extraDonation,
-        membershipAmount:membershipAmount,
+        membershipAmount: membershipAmount,
       }));
     } else {
       setMembershipAmount(5);
@@ -135,7 +136,7 @@ function MembershipForm({ email, isChecked }: Props) {
         ...prev,
         subscriptionType: 0,
         extraDonation: extraDonation,
-        membershipAmount:membershipAmount,
+        membershipAmount: membershipAmount,
       }));
     }
   }, [paymentType]);
@@ -185,16 +186,13 @@ function MembershipForm({ email, isChecked }: Props) {
                 </span>{" "}
               </p>
               <p className="text-[var(--primary)] font-semibold text-lg">
-                Dia le hEireann Membership
+                Dia le hÉireann Membership
               </p>
               <p className="text-[var(--primary)]">Standard</p>
             </div>
           </div>
           <div className="absolute bottom-5 w-full px-5">
-            <p className="text-xs text-[var(--grey-300)]">
-              *Reduced rates are available for eligible individuals, including
-              students, young people, retirees, and those with limited income.
-            </p>
+            <p className="text-xs text-[var(--grey-300)]">{para}</p>
             <button
               type="submit"
               className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
@@ -492,181 +490,134 @@ function MembershipForm({ email, isChecked }: Props) {
       ) : step === 2 ? (
         <div className="px-5">
           <h2 className="font-bold text-center text-lg">Find your address</h2>
-          {!manuallyEnterAddress ? (
-            <form className="mt-12" onSubmit={handleSubmit}>
+
+          <form className="mt-12" onSubmit={handleSubmit}>
+            <div className="space-y-4">
               <div className="flex flex-col gap-y-2.5">
                 <label
                   className="text-sm font-semibold block text black"
-                  htmlFor="postalCode"
+                  htmlFor="addressLine1"
                 >
-                  Enter your postcode
+                  Address Line 1
                 </label>
                 <input
                   type="text"
-                  id="postalCode"
-                  name="postalCode"
-                  className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)]"
+                  id="addressLine1"
+                  name="addressLine1"
+                  className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
                   required
-                  placeholder="Enter your postcode"
+                  placeholder="Enter your address line 1"
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      postalCode: e.target.value,
+                      addressLineOne: e.target.value,
                     }))
                   }
                 />
+              </div>
+              <div className="flex flex-col gap-y-2.5">
+                <label
+                  className="text-sm font-semibold block text black"
+                  htmlFor="addressLine2"
+                >
+                  Address Line 2{" "}
+                  <span className="text-[var(--grey-300)] font-normal text-xs">
+                    (optional)
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="addressLine2"
+                  name="addressLine2"
+                  className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
+                  placeholder="Enter your address line 2"
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      addressLineTwo: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="flex gap-x-2">
+                <div className="flex flex-col gap-y-2.5 w-4/5">
+                  <label
+                    className="text-sm font-semibold block text black"
+                    htmlFor="city"
+                  >
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
+                    placeholder="Town or City"
+                    required
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        city: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="flex flex-col gap-y-2.5">
+                  <label
+                    className="text-sm font-semibold block text black"
+                    htmlFor="postalCode"
+                  >
+                    Postcode
+                  </label>
+                  <input
+                    type="text"
+                    id="postalCode"
+                    name="postalCode"
+                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
+                    placeholder="Postcode"
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        postalCode: e.target.value,
+                      }))
+                    }
+                    required
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-2.5">
+                <label
+                  className="text-sm font-semibold block text black"
+                  htmlFor="country"
+                >
+                  Country
+                </label>
+                <select
+                  id="country"
+                  name="country"
+                  className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
+                  required
+                  defaultValue={"ireland"}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      country: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="ireland">Ireland</option>
+                </select>
               </div>
               <button
                 type="submit"
                 className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={loading}
                 aria-busy={loading}
-                onClick={() => {
-                  setTimeout(() => {
-                    setStep(2);
-                  }, 2000);
-                }}
               >
                 {loading ? "Submitting..." : "Continue"}
               </button>
-              <button
-                className="mt-10 text-center underline w-full text-sm cursor-pointer"
-                onClick={() => {
-                  setManuallyEnterAddress(true);
-                }}
-              >
-                Manually enter your address
-              </button>
-            </form>
-          ) : (
-            <form className="mt-12" onSubmit={handleSubmit}>
-              <div className="space-y-4">
-                <div className="flex flex-col gap-y-2.5">
-                  <label
-                    className="text-sm font-semibold block text black"
-                    htmlFor="addressLine1"
-                  >
-                    Address Line 1
-                  </label>
-                  <input
-                    type="text"
-                    id="addressLine1"
-                    name="addressLine1"
-                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                    required
-                    placeholder="Enter your address line 1"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        addressLineOne: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="flex flex-col gap-y-2.5">
-                  <label
-                    className="text-sm font-semibold block text black"
-                    htmlFor="addressLine2"
-                  >
-                    Address Line 2{" "}
-                    <span className="text-[var(--grey-300)] font-normal text-xs">
-                      (optional)
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    id="addressLine2"
-                    name="addressLine2"
-                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                    placeholder="Enter your address line 2"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        addressLineTwo: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="flex gap-x-2">
-                  <div className="flex flex-col gap-y-2.5 w-4/5">
-                    <label
-                      className="text-sm font-semibold block text black"
-                      htmlFor="city"
-                    >
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                      placeholder="Town or City"
-                      required
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          city: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col gap-y-2.5">
-                    <label
-                      className="text-sm font-semibold block text black"
-                      htmlFor="postalCode"
-                    >
-                      Postcode
-                    </label>
-                    <input
-                      type="text"
-                      id="postalCode"
-                      name="postalCode"
-                      className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                      placeholder="Postcode"
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          postalCode: e.target.value,
-                        }))
-                      }
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-y-2.5">
-                  <label
-                    className="text-sm font-semibold block text black"
-                    htmlFor="country"
-                  >
-                    Country
-                  </label>
-                  <select
-                    id="country"
-                    name="country"
-                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                    required
-                    defaultValue={"ireland"}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        country: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="ireland">Ireland</option>
-                  </select>
-                </div>
-                <button
-                  type="submit"
-                  className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                  disabled={loading}
-                  aria-busy={loading}
-                >
-                  {loading ? "Submitting..." : "Continue"}
-                </button>
-              </div>
-            </form>
-          )}
+            </div>
+          </form>
         </div>
       ) : step === 3 ? (
         <div className="px-5">
