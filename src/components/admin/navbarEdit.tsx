@@ -93,7 +93,9 @@ function NavbarEdit() {
       </div>
       {loading ? (
         <div className="py-10">
-          <div className="h-6 text-center rounded mb-4 animate-pulse">Loading...</div>
+          <div className="h-6 text-center rounded mb-4 animate-pulse">
+            Loading...
+          </div>
         </div>
       ) : (
         <>
@@ -115,7 +117,7 @@ function NavbarEdit() {
           </div>
           <div className="flex items-start justify-between gap-1 mt-4">
             <p className="text-[var(--primary)]">Logo :</p>
-            <Image
+            <img
               src={logo}
               alt="logo"
               width={200}
