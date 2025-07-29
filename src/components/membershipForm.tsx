@@ -705,10 +705,17 @@ function MembershipForm({ email, isChecked }: Props) {
               <p className="font-bold mt-2">Total amount</p>
             </div>
             <div className="flex flex-col items-end">
-              <p>€{membershipAmount.toFixed(2)} / mo</p>
-              <p>€{extraDonation.toFixed(2)} / mo</p>
+              <p>
+                €{membershipAmount.toFixed(2)}
+                {paymentType === 0 && " / mo"}
+              </p>
+              <p>
+                €{extraDonation.toFixed(2)}
+                {paymentType === 0 && " / mo"}
+              </p>
               <p className="font-bold mt-2">
-                €{(membershipAmount + extraDonation).toFixed(2)} / mo
+                €{(membershipAmount + extraDonation).toFixed(2)}
+                {paymentType === 0 && " / mo"}
               </p>
             </div>
           </div>
