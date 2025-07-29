@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
+import countries from "world-countries";
 
 interface Props {
   email: string;
@@ -144,6 +145,11 @@ function MembershipForm({ email, isChecked }: Props) {
   const handleBack = (e: any) => {
     setStep((prevStep) => prevStep - 1);
   };
+
+  const formattedCountries = countries.map((country) => ({
+    label: country.name.common,
+    value: country.cca2,
+  }));
 
   return (
     <div className="min-h-[calc(100vh_-_170px)] relative">
@@ -598,7 +604,7 @@ function MembershipForm({ email, isChecked }: Props) {
                   name="country"
                   className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
                   required
-                  defaultValue={"ireland"}
+                  defaultValue={"select"}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -606,7 +612,12 @@ function MembershipForm({ email, isChecked }: Props) {
                     }))
                   }
                 >
-                  <option value="ireland">Ireland</option>
+                  {formattedCountries.map((country) => (
+                    <option key={country.value} value={country.value}>
+                      {country.label}
+                    </option>
+                  ))}
+                  <option value="select">select your country</option>
                 </select>
               </div>
               <button
