@@ -11,6 +11,12 @@ function MembershipFormEdit() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [membershipAmount, setMembershipAmount] = useState<number>();
   const [para, setPara] = useState("");
+  const [paraOne, setParaOne] = useState("Loading...");
+  const [paraTwo, setParaTwo] = useState("Loading...");
+  const [paraThree, setParaThree] = useState("Loading...");
+
+  const [paraFour, setParaFour] = useState("Loading...");
+  const [title, setTitle] = useState("Loading...");
   const [extraDonation, setExtraDonation] = useState<number[]>([]);
   const [previousParty, setPreviousParty] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +42,11 @@ function MembershipFormEdit() {
             Array.isArray(data.previousParty) ? data.previousParty : []
           );
           setPara(data.para || "");
+          setParaOne(data.paraOne || "");
+          setParaTwo(data.paraTwo || "");
+          setParaThree(data.paraThree || "");
+          setParaFour(data.paraFour || "");
+          setTitle(data.title || "");
         } else {
           toast.error("No such document!");
         }
@@ -82,6 +93,11 @@ function MembershipFormEdit() {
         extraDonation,
         previousParty,
         para,
+        paraOne,
+        paraTwo,
+        paraThree,
+        paraFour,
+        title,
       });
       toast.success("Form content updated!");
       setIsModalOpen(false);
@@ -131,6 +147,26 @@ function MembershipFormEdit() {
             <p className="text-[var(--primary)]">Para :</p>
             <p>{para}</p>
           </div>
+          <div className="grid grid-cols-2  gap-1 mt-4">
+            <p className="text-[var(--primary)]">Para One :</p>
+            <p>{paraOne}</p>
+          </div>
+          <div className="grid grid-cols-2  gap-1 mt-4">
+            <p className="text-[var(--primary)]">Para Two :</p>
+            <p>{paraTwo}</p>
+          </div>
+          <div className="grid grid-cols-2  gap-1 mt-4">
+            <p className="text-[var(--primary)]">Para Three :</p>
+            <p>{paraThree}</p>
+          </div>
+          <div className="grid grid-cols-2  gap-1 mt-4">
+            <p className="text-[var(--primary)]">Para Four :</p>
+            <p>{paraFour}</p>
+          </div>
+          <div className="grid grid-cols-2  gap-1 mt-4">
+            <p className="text-[var(--primary)]">Title :</p>
+            <p>{title}</p>
+          </div>
           <div className="grid grid-cols-2 gap-1 mt-4">
             <p className="text-[var(--primary)]">Extra Donations :</p>
             <div className="flex flex-col gap-2">
@@ -160,7 +196,7 @@ function MembershipFormEdit() {
           onClick={closeModal}
         >
           <div
-            className="bg-white rounded-lg shadow-lg p-8 max-w-[400px] w-[90%] relative"
+            className="bg-white rounded-lg shadow-lg p-8 max-w-[400px] max-h-[90%] w-[90%] relative overflow-y-scroll"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -195,6 +231,71 @@ function MembershipFormEdit() {
                   className="w-full border rounded px-3 py-2"
                   value={para}
                   onChange={(e) => setPara(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para One <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={paraOne}
+                  onChange={(e) => setParaOne(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para Two <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={paraTwo}
+                  onChange={(e) => setParaTwo(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para Three <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={paraThree}
+                  onChange={(e) => setParaThree(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para Four <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={paraFour}
+                  onChange={(e) => setParaFour(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   required
                   disabled={saving}
                 />

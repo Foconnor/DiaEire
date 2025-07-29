@@ -57,6 +57,11 @@ function MembershipForm({ email, isChecked }: Props) {
 
   const [previousParty, setPreviousParty] = useState<string[]>([]);
   const [para, setPara] = useState("Loading...");
+  const [paraOne, setParaOne] = useState("Loading...");
+  const [paraTwo, setParaTwo] = useState("Loading...");
+  const [paraThree, setParaThree] = useState("Loading...");
+  const [paraFour, setParaFour] = useState("Loading...");
+  const [title, setTitle] = useState("Loading...");
 
   useEffect(() => {
     const getSectionData = async () => {
@@ -68,6 +73,11 @@ function MembershipForm({ email, isChecked }: Props) {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setPara(data.para || "Loading...");
+          setParaOne(data.paraOne || "Loading...");
+          setParaTwo(data.paraTwo || "Loading...");
+          setParaThree(data.paraThree || "Loading...");
+          setParaFour(data.paraFour || "Loading...");
+          setTitle(data.title || "Loading...");
           setMembershipAmount(data.membershipAmount || 0);
           setPopularMoney(data.popularExtraDonation || 0);
           setExtraMoney(
@@ -378,11 +388,7 @@ function MembershipForm({ email, isChecked }: Props) {
                 </div>
               </div>
             </div>
-            <p className="text-sm text-[var(--grey-300)]">
-              We use your date of birth to conform you meet the conditions of
-              membership,to check eligibility to participate in young labour,and
-              to fulfil our safeguarding obligations.
-            </p>
+            <p className="text-sm text-[var(--grey-300)]">{paraOne}</p>
             <div className="flex flex-col gap-y-2.5">
               <label
                 className="text-sm font-semibold block text black"
@@ -405,11 +411,7 @@ function MembershipForm({ email, isChecked }: Props) {
                 required
               />
             </div>
-            <p className="text-sm text-[var(--grey-300)]">
-              We use your date of birth to conform you meet the conditions of
-              membership,to check eligibility to participate in young labour,and
-              to fulfil our safeguarding obligations.
-            </p>
+            <p className="text-sm text-[var(--grey-300)]">{paraTwo}</p>
             <div className="flex flex-col gap-y-2.5">
               <label
                 className="text-sm font-semibold block text black"
@@ -496,7 +498,7 @@ function MembershipForm({ email, isChecked }: Props) {
         </div>
       ) : step === 2 ? (
         <div className="px-5">
-          <h2 className="font-bold text-center text-lg">Find your address</h2>
+          <h2 className="font-bold text-center text-lg">Add your address</h2>
 
           <form className="mt-12" onSubmit={handleSubmit}>
             <div className="space-y-4">
@@ -633,12 +635,9 @@ function MembershipForm({ email, isChecked }: Props) {
         </div>
       ) : step === 3 ? (
         <div className="px-5">
-          <h2 className="font-bold text-center text-lg">
-            Boost your impact and supercharge our campaigning.
-          </h2>
+          <h2 className="font-bold text-center text-lg">{title}</h2>
           <p className="mt-4 text-center text-[var(--grey-300)] text-sm">
-            {formData.firstName}, thousands of members give a little extra each
-            month to power our campaigning —can we count on you to do the same?{" "}
+            {formData.firstName}, {paraThree}
           </p>
           <div className="mt-20 grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-4">
             {extraMoney.map((item, index) => (
@@ -683,7 +682,7 @@ function MembershipForm({ email, isChecked }: Props) {
         </div>
       ) : (
         <div className="px-5">
-          <h2 className="font-bold text-center text-lg">Pay by Direct Debit</h2>
+          <h2 className="font-bold text-center text-lg">Pay by Credit / Debit Card</h2>
           <div className="mt-8 rounded-lg bg-[var(--grey-300)] p-1 flex gap-x-1 sm:max-w-[500px] mx-auto">
             <div
               className={`h-full rounded flex-1 text-sm font-medium text-center p-1.5 cursor-pointer ${
@@ -719,15 +718,15 @@ function MembershipForm({ email, isChecked }: Props) {
             <div className="flex flex-col items-end">
               <p>
                 €{membershipAmount.toFixed(2)}
-                {paymentType === 0 && " / mo"}
+                {paymentType === 0 ? " / mo" : " / yr"}
               </p>
               <p>
                 €{extraDonation.toFixed(2)}
-                {paymentType === 0 && " / mo"}
+                {paymentType === 0 ? " / mo" : " / yr"}
               </p>
               <p className="font-bold mt-2">
                 €{(membershipAmount + extraDonation).toFixed(2)}
-                {paymentType === 0 && " / mo"}
+                {paymentType === 0 ? " / mo" : " / yr"}
               </p>
             </div>
           </div>
@@ -820,10 +819,7 @@ function MembershipForm({ email, isChecked }: Props) {
               >
                 {loading ? "Submitting..." : "Submit"}
               </button>
-              <p className="text-xs text-[var(--grey-300)] mt-10">
-                Your payments are protected by the stripe Your payment will be
-                processed by dia le heireann
-              </p>
+              <p className="text-xs text-[var(--grey-300)] mt-10">{paraFour}</p>
             </form>
           </div>
         </div>
