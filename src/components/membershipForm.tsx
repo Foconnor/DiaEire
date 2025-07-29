@@ -634,9 +634,9 @@ function MembershipForm({ email, isChecked }: Props) {
           </form>
         </div>
       ) : step === 3 ? (
-        <div className="px-5">
+        <div className="px-5 relative min-h-[500px]">
           <h2 className="font-bold text-center text-lg">{title}</h2>
-          <p className="mt-4 text-center text-[var(--grey-300)] text-sm">
+          <p className="mt-4 text-center text-[var(--grey-300)] text-sm ">
             {formData.firstName}, {paraThree}
           </p>
           <div className="mt-20 grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-4">
