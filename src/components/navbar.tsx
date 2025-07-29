@@ -7,17 +7,19 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 
-
-
 function Navbar({ buttons = true }: { buttons?: boolean }) {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [logo, setLogo] = React.useState<string>("");
-  const [leftSideButton, setLeftSideButton] = React.useState<string>("Loading...");
-  const [rightSideButton, setRightSideButton] = React.useState<string>("Loading...");
-  const [bottomLeftLink, setBottomLeftLink] = React.useState<string>("Loading...");
-  const [bottomRightLink, setBottomRightLink] = React.useState<string>("Loading...");
+  const [leftSideButton, setLeftSideButton] =
+    React.useState<string>("Loading...");
+  const [rightSideButton, setRightSideButton] =
+    React.useState<string>("Loading...");
+  const [bottomLeftLink, setBottomLeftLink] =
+    React.useState<string>("Loading...");
+  const [bottomRightLink, setBottomRightLink] =
+    React.useState<string>("Loading...");
 
-    useEffect(() => {
+  useEffect(() => {
     const getSectionData = async () => {
       setLoading(true);
       try {
@@ -48,13 +50,19 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
       <div className="border-b-[1px] border-[var(--line)] md:py-2 py-7">
         <div className="wrapper flex justify-between items-center relative">
           <Link href="/">
-            <Image
-              className="md:w-fit md:h-fit w-[160px]"
-              src={logo || "/images/logo.png"}
-              alt="logo"
-              width={350}
-              height={350}
-            />
+            {logo ? (
+              <img
+                className="md:w-fit md:h-fit w-[160px]"
+                src={logo}
+                alt="logo"
+                width={350}
+                height={350}
+              />
+            ) : (
+              <div className="animate-pulse h-[100px] leading-[100px]">
+                Loading...
+              </div>
+            )}
           </Link>
           <div className="flex gap-3">
             {buttons && (
