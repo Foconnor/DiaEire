@@ -46,10 +46,10 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       mode: 'subscription',
       line_items,
-      // success_url: 'http://localhost:3001/join',
-      success_url: 'https://dia-eire.vercel.app/join',
-      // cancel_url: 'http://localhost:3001/join',
-      cancel_url: 'https://dia-eire.vercel.app/join',
+      success_url: 'http://localhost:3001/join',
+      // success_url: 'https://dia-eire.vercel.app/join',
+      cancel_url: 'http://localhost:3001/join',
+      // cancel_url: 'https://dia-eire.vercel.app/join',
     });
 
     return NextResponse.json({ url: session.url });

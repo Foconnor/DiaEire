@@ -1,7 +1,7 @@
 "use client";
 import { addDoc, collection, doc, getDoc } from "firebase/firestore";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import Link from "next/link";
+// import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
@@ -21,7 +21,7 @@ function MembershipForm({ email, isChecked }: Props) {
   const [extraDonation, setExtraDonation] = useState(0);
   const [activeDonationValue, setActiveDonationValue] = useState(0);
   const [isCurrentlyMember, setIsCurrentlyMember] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: email,
@@ -99,17 +99,71 @@ function MembershipForm({ email, isChecked }: Props) {
     getSectionData();
   }, []);
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setStep((prevStep) => prevStep + 1);
-    }, 2000);
-  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+    setStep((prevStep) => prevStep + 1);
+  }, 2000);
+};
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     setStep((prevStep) => prevStep + 1);
+  //   }, 2000);
+  // };
+
+
 
   // stripe integration
-  const handleSubmitLastStep = async (e: any) => {
+//   const handleSubmitLastStep = async (e: any) => {
+//   e.preventDefault();
+//   setLoading(true);
+
+//   try {
+//     // 1. Save form data to Firestore
+//     await addDoc(collection(db, "members"), {
+//       ...formData,
+//       createdAt: new Date().toISOString(),
+//     });
+
+//     // 2. Create Stripe checkout session with dynamic amount
+//     const res = await fetch("/api/checkout", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         membershipAmount,
+//         extraDonation,
+//         paymentType,
+//       }),
+//     });
+
+//     const data = await res.json();
+//     console.log('data of stripe', data);
+    
+
+//     if (data?.url) {
+//       toast.success(
+//         `Redirecting to payment... Your total: €${membershipAmount + extraDonation}`
+//       );
+//       window.location.href = data.url;
+//     } else {
+//       toast.error("Failed to initiate payment.");
+//     }
+//   } catch (error: any) {
+//     console.error("Error submitting form:", error.message || error);
+//     toast.error("Submission failed. Please try again later.");
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+const handleSubmitLastStep = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setLoading(true);
 
@@ -135,7 +189,6 @@ function MembershipForm({ email, isChecked }: Props) {
 
     const data = await res.json();
     console.log('data of stripe', data);
-    
 
     if (data?.url) {
       toast.success(
@@ -145,12 +198,13 @@ function MembershipForm({ email, isChecked }: Props) {
     } else {
       toast.error("Failed to initiate payment.");
     }
-  } catch (error: any) {
-    console.error("Error submitting form:", error.message || error);
-    toast.error("Submission failed. Please try again later.");
-  } finally {
-    setLoading(false);
+ } catch (error) {
+  if (error instanceof Error) {
+    console.error("Error submitting form:", error.message);
+  } else {
+    console.error("Unknown error submitting form:", error);
   }
+}
 };
 
   // const handleSubmitLastStep = async (e: any) => {
@@ -197,9 +251,15 @@ function MembershipForm({ email, isChecked }: Props) {
     }
   }, [paymentType]);
 
-  const handleBack = (e: any) => {
-    setStep((prevStep) => prevStep - 1);
-  };
+  // const handleBack = (e: any) => {
+  //   setStep((prevStep) => prevStep - 1);
+  // };
+
+const handleBack = (e: React.MouseEvent<HTMLElement>) => {
+  e.preventDefault();
+  setStep((prevStep) => prevStep - 1);
+};
+
 
   const formattedCountries = countries.map((country) => ({
     label: country.name.common,
