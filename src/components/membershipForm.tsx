@@ -108,27 +108,72 @@ function MembershipForm({ email, isChecked }: Props) {
     }, 2000);
   };
 
+  // stripe integration
   const handleSubmitLastStep = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await addDoc(collection(db, "members"), {
-        ...formData,
-        createdAt: new Date().toISOString(),
-      });
-    } catch (error: any) {
-      console.error("Error saving form data:", error.message || error);
-      toast.error(
-        "There was an error submitting your form. Please try again later."
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    // 1. Save form data to Firestore
+    await addDoc(collection(db, "members"), {
+      ...formData,
+      createdAt: new Date().toISOString(),
+    });
+
+    // 2. Create Stripe checkout session with dynamic amount
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        membershipAmount,
+        extraDonation,
+        paymentType,
+      }),
+    });
+
+    const data = await res.json();
+    console.log('data of stripe', data);
+    
+
+    if (data?.url) {
+      toast.success(
+        `Redirecting to payment... Your total: €${membershipAmount + extraDonation}`
       );
-    } finally {
-      setLoading(false);
+      window.location.href = data.url;
+    } else {
+      toast.error("Failed to initiate payment.");
     }
-    setTimeout(() => {
-      router.back();
-      setLoading(false);
-    }, 2000);
-  };
+  } catch (error: any) {
+    console.error("Error submitting form:", error.message || error);
+    toast.error("Submission failed. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // const handleSubmitLastStep = async (e: any) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     await addDoc(collection(db, "members"), {
+  //       ...formData,
+  //       createdAt: new Date().toISOString(),
+  //     });
+  //   } catch (error: any) {
+  //     console.error("Error saving form data:", error.message || error);
+  //     toast.error(
+  //       "There was an error submitting your form. Please try again later."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  //   setTimeout(() => {
+  //     router.back();
+  //     setLoading(false);
+  //   }, 2000);
+  // };
 
   useEffect(() => {
     if (paymentType === 1) {
@@ -732,7 +777,7 @@ function MembershipForm({ email, isChecked }: Props) {
           </div>
           <div className="md:px-14 mt-10">
             <form onSubmit={handleSubmitLastStep}>
-              <div className="flex flex-col gap-y-2.5">
+              {/* <div className="flex flex-col gap-y-2.5">
                 <label className="text-sm font-semibold" htmlFor="accountName">
                   Account name
                 </label>
@@ -750,8 +795,8 @@ function MembershipForm({ email, isChecked }: Props) {
                   }
                   required
                 />
-              </div>
-              <div className="flex items-center gap-x-2.5 mt-5">
+              </div> */}
+              {/* <div className="flex items-center gap-x-2.5 mt-5">
                 <div className="flex flex-col gap-y-2.5">
                   <label
                     className="text-sm font-semibold"
@@ -793,7 +838,7 @@ function MembershipForm({ email, isChecked }: Props) {
                     required
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="flex gap-x-2 mt-3">
                 <input
                   type="checkbox"
@@ -808,7 +853,9 @@ function MembershipForm({ email, isChecked }: Props) {
                   }
                 />
                 <label htmlFor="person" className="text-sm cursor-pointer">
-                  More than one person is required to authorise direct debits.
+                  {/* More than one person is required to authorise direct debits. */}
+                   We use Sripe to ensure secure credit card payment.
+
                 </label>
               </div>
               <button
@@ -817,7 +864,9 @@ function MembershipForm({ email, isChecked }: Props) {
                 disabled={loading}
                 aria-busy={loading}
               >
-                {loading ? "Submitting..." : "Submit"}
+                {/* {loading ? "Submitting..." : "Submit"} */}
+               {loading ? "Submitting..." : "Continue to Payment"}
+
               </button>
               <p className="text-xs text-[var(--grey-300)] mt-10">{paraFour}</p>
             </form>
