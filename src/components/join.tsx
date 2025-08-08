@@ -101,7 +101,7 @@ function Join() {
                   aria-invalid={false}
                   disabled={loading}
                 />
-                <div className="mt-5 flex items-center gap-2">
+                {/* <div className="mt-5 flex items-center gap-2">
                   <input
                     checked={isChecked}
                     type="checkbox"
@@ -117,7 +117,7 @@ function Join() {
                   >
                     Are you an existing First Ireland member?
                   </label>
-                </div>
+                </div> */}
                 <button
                   type="submit"
                   className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"

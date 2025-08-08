@@ -899,7 +899,7 @@ const handleBack = (e: React.MouseEvent<HTMLElement>) => {
                   />
                 </div>
               </div> */}
-              <div className="flex gap-x-2 mt-3">
+              {/* <div className="flex gap-x-2 mt-3">
                 <input
                   type="checkbox"
                   id="person"
@@ -913,11 +913,10 @@ const handleBack = (e: React.MouseEvent<HTMLElement>) => {
                   }
                 />
                 <label htmlFor="person" className="text-sm cursor-pointer">
-                  {/* More than one person is required to authorise direct debits. */}
                    We use Sripe to ensure secure credit card payment.
 
                 </label>
-              </div>
+              </div> */}
               <button
                 type="submit"
                 className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"

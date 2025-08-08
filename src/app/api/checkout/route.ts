@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       mode: 'subscription',
       line_items,
       // success_url: 'http://localhost:3001/join',
-      success_url: 'https://dia-eire.vercel.app/join',
+      success_url: 'https://dia-eire.vercel.app/',
       // cancel_url: 'http://localhost:3001/join',
       cancel_url: 'https://dia-eire.vercel.app/join',
     });
