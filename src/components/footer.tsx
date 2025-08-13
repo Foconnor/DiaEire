@@ -37,7 +37,7 @@ function Footer() {
         <a href="" className="links">
           Terms and Conditions
         </a>
-        <a href="" className="links">
+        <a href="/privacy" className="links">
           Privacy
         </a>
         <a href="" className="links">
