@@ -1,7 +1,6 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import PreFooter from "@/components/pre-footer";
-import Privacy from "@/components/privacy";
 import Link from "next/link";
 import React from "react";
 
