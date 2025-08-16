@@ -18,7 +18,7 @@ function Privacy() {
     {
       title: "Your data",
       para: "Frequently asked questions about personal data",
-      link: "#",
+      link: "/privacy/frequently-asked-questions-about-personal-data",
     },
   ];
 
