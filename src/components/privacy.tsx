@@ -13,7 +13,7 @@ function Privacy() {
     {
       title: "Your rights",
       para: "Find out about your privacy rights and submit any rights requests you may have",
-      link: "#",
+      link: "/privacy/data-subject-rights",
     },
     {
       title: "Your data",
