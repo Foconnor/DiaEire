@@ -8,7 +8,7 @@ function Privacy() {
     {
       title: "Privacy notices",
       para: "find a collection of the labour Party's privacy notices",
-      link: "#",
+      link: "/privacy/privacy-notes",
     },
     {
       title: "Your rights",
