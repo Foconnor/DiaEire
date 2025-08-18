@@ -9,6 +9,11 @@ import Footer from "@/components/footer";
 
 function page() {
   const [logo, setLogo] = React.useState<string>("");
+  const [title, setTitle] = React.useState<string>("Loading...");
+  const [img, setImg] = React.useState<string>("Loading...");
+  const [paraOne, setParaOne] = React.useState<string>("Loading...");
+  const [paraTwo, setParaTwo] = React.useState<string>("Loading...");
+  const [formDes, setFormDes] = React.useState<string>("Loading...");
   useEffect(() => {
     const getSectionData = async () => {
       try {
@@ -28,6 +33,30 @@ function page() {
     };
     getSectionData();
   }, []);
+
+  useEffect(() => {
+    const getSectionData = async () => {
+      try {
+        const docRef = doc(db, "signup", "signupPage");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setTitle(data.title || "Loading...");
+          setImg(data.img || "Loading...");
+          setParaOne(data.paraOne || "Loading...");
+          setParaTwo(data.paraTwo || "Loading...");
+          setFormDes(data.formDes || "Loading...");
+        } else {
+          toast.error("No such document!");
+        }
+      } catch (error) {
+        toast.error("Error fetching signup page data");
+        console.error("Error fetching signup page data:", error);
+      }
+    };
+    getSectionData();
+  }, []);
   return (
     <>
       <div className="flex flex-col items-center justify-start w-[100vw_-_16px] md:h-screen pt-5 mx-4">
@@ -41,31 +70,29 @@ function page() {
               height={350}
             />
           ) : (
-            <div className="animate-pulse h-[100px] md:h-[85px] leading-[100px] md:leading-[85px]">
+            <div className="animate-pulse h-[35px] md:h-[85px] leading-[35px] md:leading-[85px]">
               Loading...
             </div>
           )}
         </Link>
         <h2 className="mt-5 font-bold md:text-5xl text-3xl leading-[48px] text-center">
-          Get the latest from Labour
+          {title}
         </h2>
         <div className="mt-5 flex gap-10 md:flex-row flex-col items-center md:items-start">
           <div className="w-full md:w-fit">
-            <img
-              className="rounded-md mb-6 w-full md:w-[500px]"
-              src="https://assets.movement.industries/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBc1FUIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--7a1a6b8fc97e529910a13e7b66d0a79ab7ccf8f4/image.png?client_id=34"
-              alt=""
-              width={500}
-              height={500}
-            />
-            <p className="mb-6">
-              The work of change has begun and you can be part of it.
-            </p>
-            <p>
-              Let's stay in touch. Sign up for regular updates, including the{" "}
-              <br />
-              Labour Rosette newsletter, today.
-            </p>
+            {img !== "Loading..." ? (
+              <img
+                className="rounded-md mb-6 w-full md:w-[500px]"
+                src={img}
+                alt="signup page image"
+                width={500}
+                height={500}
+              />
+            ) : (
+              <div className="md:w-[500px] md:h-[333px] w-[calc(100vw_-_40px)] h-[400px] bg-[var(--grey-300)] animate-pulse mb-6 rounded-md" />
+            )}
+            <p className="mb-6">{paraOne}</p>
+            <p className="md:max-w-[500px]">{paraTwo}</p>
           </div>
           <div className="p-8 md:w-[340px] w-full rounded-md shadow-[4px_16px_48px_0px_#19193629]">
             <form action="">
@@ -137,15 +164,7 @@ function page() {
               <button className="bg-[var(--primary)] py-2 w-full text-[var(--background)] font-semibold rounded-sm mt-6 text-sm">
                 Submit
               </button>
-              <p className="mt-2 text-[9px] text-center">
-                You can manage your preferences or unsubscribe at any time. If
-                you would like to know more about how we use your information
-                click here. When 'no' is selected, your data will be processed
-                with the express purpose of delivering the content you have
-                signed up for, for example, but not limited to: a manifesto, or
-                an event invitation - you will receive no further marketing
-                communications from the Labour Party.
-              </p>
+              <p className="mt-2 text-[9px] text-center">{formDes}</p>
             </form>
           </div>
         </div>
