@@ -12,6 +12,8 @@ import NavbarEdit from "@/components/admin/navbarEdit";
 import JoinEdit from "@/components/admin/joinEdit";
 import MembershipEdit from "@/components/admin/membershipEdit";
 import MembershipFormEdit from "@/components/admin/membershipFormEdit";
+import VisionEdit from "@/components/admin/visionEdit";
+import StrategyEdit from "@/components/admin/strategyEdit";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -51,6 +53,10 @@ export default function DashboardPage() {
       <MembershipEdit />
       <h2 className="text-4xl text-center mt-10">Membership Form</h2>
       <MembershipFormEdit />
+      <h2 className="text-4xl text-center mt-10">Vision</h2>
+      <VisionEdit />
+      <h2 className="text-4xl text-center mt-10">Strategy</h2>
+      <StrategyEdit />
     </div>
   );
 }

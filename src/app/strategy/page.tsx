@@ -24,7 +24,7 @@ function page() {
   useEffect(() => {
     const getSectionData = async () => {
       try {
-        const docRef = doc(db, "vision", "visionPage");
+        const docRef = doc(db, "strategy", "strategyPage");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -80,29 +80,19 @@ function page() {
         <p className="max-w-[1000px] mx-auto min-w-[1000px]">{paraThree}</p>
       </div>
       <div className="md:p-14 p-8 bg-[var(--primary)] text-white ">
-        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">
-          {hTextOne}
-        </p>
+        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">{hTextOne}</p>
       </div>
       <div className="md:p-14 p-8">
-        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">
-          {hTextTwo}
-        </p>
+        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">{hTextTwo}</p>
       </div>
       <div className="md:p-14 p-8 bg-[var(--primary)] text-white ">
-        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">
-          {hTextThree}
-        </p>
+        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">{hTextThree}</p>
       </div>
       <div className="md:p-14 p-8">
-        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">
-          {hTextFour}
-        </p>
+        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">{hTextFour}</p>
       </div>
       <div className="md:p-14 p-8 bg-[var(--primary)] text-white ">
-        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">
-          {hTextFive}
-        </p>
+        <p className="text-[calc(1.305rem_+_.55vw)] max-w-[1000px] mx-auto">{hTextFive}</p>
       </div>
       <div className="md:p-14 p-8 flex flex-col gap-6">
         <p className="max-w-[1000px] mx-auto">{paraFour}</p>
