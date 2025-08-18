@@ -63,7 +63,7 @@ function FundEdit() {
     try {
       const docRef = doc(db, "landingPage", "landingPageFund");
       await updateDoc(docRef, {
-        heroTitle: title.trim(),
+        title: title.trim(),
         buttonText: buttonText.trim(),
         image: image.trim(),
         tagline: tagline.trim(),
