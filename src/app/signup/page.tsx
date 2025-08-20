@@ -146,7 +146,7 @@ function page() {
                     {country.label}
                   </option>
                 ))}
-                <option value="select">select your country</option>
+                <option value="select">Choose country</option>
               </select>
               <div className="mt-4 mb-3">
                 <p className="font-semibold text-[var(--grey-300)] text-sm">
