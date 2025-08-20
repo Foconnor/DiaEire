@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { db } from "../../../firebase/firebaseConfig";
 import PreFooter from "@/components/pre-footer";
 import Footer from "@/components/footer";
+import countries from "world-countries";
 
 function page() {
   const [logo, setLogo] = React.useState<string>("");
@@ -57,6 +58,12 @@ function page() {
     };
     getSectionData();
   }, []);
+
+  const formattedCountries = countries.map((country) => ({
+    label: country.name.common,
+    value: country.cca2,
+  }));
+
   return (
     <>
       <div className="flex flex-col items-center justify-start w-[100vw_-_16px] md:h-screen pt-5 mx-4">
@@ -120,30 +127,27 @@ function page() {
                 placeholder="Email address"
                 id="email"
               />
+
               <label
-                htmlFor="phone"
+                htmlFor="country"
                 className="mb-1.5 font-semibold text-[var(--grey-300)] text-sm mt-4 block"
               >
-                Phone number
+                Outside Ireland?
               </label>
-              <input
-                type="number"
-                placeholder="Phone Number"
-                id="phone"
+              <select
+                id="country"
+                name="country"
                 className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full"
-              />
-              <label
-                htmlFor="postcode"
-                className="mb-1.5 font-semibold text-[var(--grey-300)] text-sm mt-4 block"
+                required
+                defaultValue={"select"}
               >
-                Postcode *
-              </label>
-              <input
-                type="number"
-                placeholder="Postcode"
-                id="postcode"
-                className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full block"
-              />
+                {formattedCountries.map((country) => (
+                  <option key={country.value} value={country.value}>
+                    {country.label}
+                  </option>
+                ))}
+                <option value="select">select your country</option>
+              </select>
               <div className="mt-4 mb-3">
                 <p className="font-semibold text-[var(--grey-300)] text-sm">
                   Join our email and SMS lists? *
