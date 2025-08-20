@@ -69,7 +69,7 @@ function page() {
     <>
       <Navbar buttons={false} />
       <div className="flex flex-col items-center justify-start pt-5 mx-4">
-        <h2 className="mt-5 font-bold md:text-5xl text-3xl leading-[48px] text-center">
+        <h2 className="text-[calc(1.305rem_+_.55vw)] mt-5 text-left md:min-w-[1039px] min-w-[calc(100vw_-_44px)]">
           {title}
         </h2>
         <div className="mt-5 flex gap-10 md:flex-row flex-col items-center md:items-start">
@@ -83,7 +83,7 @@ function page() {
                 height={500}
               />
             ) : (
-              <div className="md:w-[500px] md:h-[333px] w-[calc(100vw_-_40px)] h-[400px] bg-[var(--grey-300)] animate-pulse mb-6 rounded-md" />
+              <div className="md:w-[670px] md:h-[333px] w-[calc(100vw_-_40px)] h-[400px] bg-[var(--grey-300)] animate-pulse mb-6 rounded-md" />
             )}
             <p className="mb-6">{paraOne}</p>
             <p className="md:max-w-[500px]">{paraTwo}</p>
