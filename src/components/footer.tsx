@@ -40,7 +40,7 @@ function Footer() {
         <a href="/privacy" className="links">
           Privacy
         </a>
-        <a href="" className="links">
+        <a href="/privacy#cookies" className="links">
           Cookie Policy
         </a>
         <a href="" className="links">
