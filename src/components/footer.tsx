@@ -34,17 +34,11 @@ function Footer() {
         <p className="links hover:!no-underline">
           Copyright 2025 Dia le hÉireann All Rights Reserved
         </p>
-        <a href="" className="links">
-          Terms and Conditions
-        </a>
         <a href="/privacy" className="links">
           Privacy
         </a>
         <a href="/privacy#cookies" className="links">
           Cookie Policy
-        </a>
-        <a href="" className="links">
-          Cookie Preferences
         </a>
       </div>
     </div>

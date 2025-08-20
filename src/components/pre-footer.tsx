@@ -42,22 +42,6 @@ function PreFooter() {
             >
               Volunteer
             </a>
-            <a
-              href=""
-              className={`links  md:block ${
-                openIndex === 0 ? "block" : "hidden"
-              }`}
-            >
-              Learn about campaigning
-            </a>
-            <a
-              href=""
-              className={`links  md:block ${
-                openIndex === 0 ? "block" : "hidden"
-              }`}
-            >
-              Fund our campaign
-            </a>
           </div>
         </div>
         <div className="md:px-3">
@@ -106,22 +90,6 @@ function PreFooter() {
             >
               Latest from our campaign
             </a>
-            <a
-              href=""
-              className={`links  md:block ${
-                openIndex === 2 ? "block" : "hidden"
-              }`}
-            >
-              Members updates
-            </a>
-            <a
-              href=""
-              className={`links  md:block ${
-                openIndex === 2 ? "block" : "hidden"
-              }`}
-            >
-              Press releases
-            </a>
           </div>
         </div>
         <div className="md:px-3">
@@ -146,14 +114,6 @@ function PreFooter() {
               }`}
             >
               How we work
-            </a>
-            <a
-              href=""
-              className={`links  md:block ${
-                openIndex === 3 ? "block" : "hidden"
-              }`}
-            >
-              Groups
             </a>
           </div>
         </div>
@@ -188,7 +148,7 @@ function PreFooter() {
             onClick={() => setOpenIndex(openIndex === 5 ? null : 5)}
           >
             <div className="flex items-center justify-between">
-              <p className="link-heading">Others</p>
+              <p className="link-heading">Community Patriots</p>
               <FontAwesomeIcon
                 className={`text-[var(--grey-300)] md:!hidden ${
                   openIndex === 2 ? "rotate-180 " : ""
@@ -198,12 +158,12 @@ function PreFooter() {
               />
             </div>
             <a
-              href=""
+              href="https://sinnadaoine.ie/"
               className={`links  md:block ${
                 openIndex === 5 ? "block" : "hidden"
               }`}
             >
-              Shop
+              Sinn Na Daoine
             </a>
           </div>
         </div>
