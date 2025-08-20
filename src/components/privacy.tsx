@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebaseConfig";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import toast from "react-hot-toast";
-import CookieConsent from "./cookiesConsent";
 
 function Privacy() {
   const [title, setTitle] = useState("Loading...");
@@ -106,7 +105,6 @@ function Privacy() {
           </p>
         </div>
       </div>
-      <CookieConsent />
     </div>
   );
 }

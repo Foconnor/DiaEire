@@ -22,23 +22,23 @@ function CookieConsent() {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4 flex flex-col md:flex-row items-center justify-between z-50">
+    <div className="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-5 flex flex-col md:flex-row items-center justify-between z-50">
       <p className="text-sm mb-2 md:mb-0">
         This website uses cookies to improve your experience.{" "}
-        <a href="/privacy#cookies" className="underline">
+        <a href="/privacy#cookies" className="underline text-[var(--primary)]">
           Learn more
         </a>
       </p>
       <div className="flex gap-2">
         <button
           onClick={declineCookies}
-          className="bg-gray-700 px-3 py-1 rounded"
+          className="bg-[var(--grey-300)] px-3 py-1 rounded cursor-pointer hover:opacity-80 transition-all ease-in-out duration-200"
         >
           Decline
         </button>
         <button
           onClick={acceptCookies}
-          className="bg-blue-500 px-3 py-1 rounded"
+          className="bg-[var(--primary)] px-3 py-1 rounded cursor-pointer hover:bg-[var(--btn-hover-bg)] transition-all ease-in-out duration-200"
         >
           Accept
         </button>
