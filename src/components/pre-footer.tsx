@@ -158,12 +158,12 @@ function PreFooter() {
               />
             </div>
             <a
-              href="https://sinnadaoine.ie/"
+              href="https://sinneadaoine.ie/"
               className={`links  md:block ${
                 openIndex === 5 ? "block" : "hidden"
               }`}
             >
-              Sinn Na Daoine
+              Sinne Na Daoine
             </a>
           </div>
         </div>
