@@ -7,6 +7,7 @@ import { db } from "../../../firebase/firebaseConfig";
 import PreFooter from "@/components/pre-footer";
 import Footer from "@/components/footer";
 import countries from "world-countries";
+import Navbar from "@/components/navbar";
 
 function page() {
   const [logo, setLogo] = React.useState<string>("");
@@ -66,22 +67,8 @@ function page() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-start w-[100vw_-_16px] md:h-screen pt-5 mx-4">
-        <Link href="/">
-          {logo ? (
-            <img
-              className="md:w-fit md:h-fit w-[160px]"
-              src={logo}
-              alt="logo"
-              width={350}
-              height={350}
-            />
-          ) : (
-            <div className="animate-pulse h-[35px] md:h-[85px] leading-[35px] md:leading-[85px]">
-              Loading...
-            </div>
-          )}
-        </Link>
+      <Navbar buttons={false} />
+      <div className="flex flex-col items-center justify-start pt-5 mx-4">
         <h2 className="mt-5 font-bold md:text-5xl text-3xl leading-[48px] text-center">
           {title}
         </h2>
@@ -103,18 +90,36 @@ function page() {
           </div>
           <div className="p-8 md:w-[340px] w-full rounded-md shadow-[4px_16px_48px_0px_#19193629]">
             <form action="">
-              <label
-                htmlFor="name"
-                className="mb-1.5 font-semibold text-[var(--grey-300)] text-sm"
-              >
-                Name *
-              </label>
-              <input
-                className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full"
-                type="text"
-                placeholder="Name"
-                id="name"
-              />
+              <div className="flex gap-2">
+                <div>
+                  <label
+                    htmlFor="fname"
+                    className="mb-1.5 font-semibold text-[var(--grey-300)] text-sm"
+                  >
+                    First Name *
+                  </label>
+                  <input
+                    className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full"
+                    type="text"
+                    placeholder="First Name"
+                    id="fname"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="lname"
+                    className="mb-1.5 font-semibold text-[var(--grey-300)] text-sm"
+                  >
+                    Last Name *
+                  </label>
+                  <input
+                    className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full"
+                    type="text"
+                    placeholder="Last Name"
+                    id="lname"
+                  />
+                </div>
+              </div>
               <label
                 htmlFor="email"
                 className="mb-1.5 font-semibold text-[var(--grey-300)] text-sm mt-4 block"
