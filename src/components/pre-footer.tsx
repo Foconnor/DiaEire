@@ -158,7 +158,7 @@ function PreFooter() {
               />
             </div>
             <a
-              href="https://sinneadaoine.ie/"
+              href="https://sinnenadaoine.ie/"
               className={`links  md:block ${
                 openIndex === 5 ? "block" : "hidden"
               }`}
