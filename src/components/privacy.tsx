@@ -1,7 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebaseConfig";
-import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import toast from "react-hot-toast";
 
 function Privacy() {
@@ -84,24 +91,7 @@ function Privacy() {
             </ul>
           </div>
         ))}
-        <div id="cookies" className="mt-10">
-          <h2 className="font-bold text-xl mb-3">Cookies</h2>
-          <p>
-            We use cookies and similar technologies to enhance your experience,
-            analyze traffic, and personalize content. Cookies are small text
-            files stored on your device when you visit our website.
-          </p>
-          <ul className="ps-7 list-disc mt-4">
-            <li>Essential cookies – required for site functionality</li>
-            <li>Analytics cookies – help us understand usage patterns</li>
-            <li>Preference cookies – remember your choices/settings</li>
-            <li>Marketing cookies – used for personalized ads</li>
-          </ul>
-          <p className="mt-4">
-            You can manage or disable cookies through your browser settings.
-            Learn more in our full Privacy Policy.
-          </p>
-        </div>
+        <div id="cookies" className="mt-10"></div>
       </div>
     </div>
   );
