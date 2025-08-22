@@ -9,6 +9,9 @@ import {
   updateDoc,
   addDoc,
   deleteDoc,
+  query,
+  orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { db } from "../../../firebase/firebaseConfig";
@@ -96,11 +99,9 @@ function PrivacyEdit() {
     const fetchQuestions = async () => {
       setQuestionsLoading(true);
       try {
-        const questionColRef = collection(
-          db,
-          "privacy",
-          "privacyPage",
-          "questions"
+        const questionColRef = query(
+          collection(db, "privacy", "privacyPage", "questions"),
+          orderBy("createdAt", "asc")
         );
         const querySnapshot = await getDocs(questionColRef);
         const dropdownArr = querySnapshot.docs.map((doc) => ({
@@ -240,6 +241,7 @@ function PrivacyEdit() {
           question: questionForm.question.trim(),
           awnser: questionForm.awnser.trim(),
           points: questionForm.points.map((point) => point.trim()), // <-- array of strings
+          createdAt: serverTimestamp(),
         });
         toast.success("Question added!");
       } else if (activeQuestion) {

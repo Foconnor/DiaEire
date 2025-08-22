@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebaseConfig";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 function Privacy() {
@@ -35,11 +35,9 @@ function Privacy() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const questionColRef = collection(
-          db,
-          "privacy",
-          "privacyPage",
-          "questions"
+        const questionColRef = query(
+          collection(db, "privacy", "privacyPage", "questions"),
+          orderBy("createdAt", "asc")
         );
         const querySnapshot = await getDocs(questionColRef);
         const dropdownArr = querySnapshot.docs.map((doc) => ({
