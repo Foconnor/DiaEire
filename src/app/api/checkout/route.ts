@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
-    const { membershipAmount, extraDonation, paymentType } = await req.json();
+    const { membershipAmount, extraDonation, paymentType, formdata, } = await req.json();
 
     const interval = paymentType === 0 ? 'month' : 'year';
     const currency = 'eur';
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       mode: 'subscription',
       line_items,
+      customer_email: formdata.email, // <-- pre-fill email
       // success_url: 'http://localhost:3001/join',
       success_url: 'https://dia-eire.vercel.app/',
       // cancel_url: 'http://localhost:3001/join',

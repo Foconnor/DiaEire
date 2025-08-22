@@ -1,7 +1,5 @@
 "use client";
 import { addDoc, collection, doc, getDoc } from "firebase/firestore";
-// import Link from "next/link";
-// import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
@@ -21,7 +19,6 @@ function MembershipForm({ email, isChecked }: Props) {
   const [extraDonation, setExtraDonation] = useState(0);
   const [activeDonationValue, setActiveDonationValue] = useState(0);
   const [isCurrentlyMember, setIsCurrentlyMember] = useState(false);
-  // const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: email,
@@ -100,134 +97,60 @@ function MembershipForm({ email, isChecked }: Props) {
   }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setLoading(true);
-  setTimeout(() => {
-    setLoading(false);
-    setStep((prevStep) => prevStep + 1);
-  }, 2000);
-};
-  // const handleSubmit = (e: any) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     setStep((prevStep) => prevStep + 1);
-  //   }, 2000);
-  // };
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setStep((prevStep) => prevStep + 1);
+    }, 2000);
+  };
 
+  const handleSubmitLastStep = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
+    try {
+      // 1. Save form data to Firestore
+      await addDoc(collection(db, "members"), {
+        ...formData,
+        createdAt: new Date().toISOString(),
+      });
 
-  // stripe integration
-//   const handleSubmitLastStep = async (e: any) => {
-//   e.preventDefault();
-//   setLoading(true);
+      // 2. Create Stripe checkout session with dynamic amount
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          membershipAmount,
+          extraDonation,
+          paymentType,
+          formData,
+        }),
+      });
 
-//   try {
-//     // 1. Save form data to Firestore
-//     await addDoc(collection(db, "members"), {
-//       ...formData,
-//       createdAt: new Date().toISOString(),
-//     });
+      const data = await res.json();
+      console.log("data of stripe", data);
 
-//     // 2. Create Stripe checkout session with dynamic amount
-//     const res = await fetch("/api/checkout", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         membershipAmount,
-//         extraDonation,
-//         paymentType,
-//       }),
-//     });
-
-//     const data = await res.json();
-//     console.log('data of stripe', data);
-    
-
-//     if (data?.url) {
-//       toast.success(
-//         `Redirecting to payment... Your total: €${membershipAmount + extraDonation}`
-//       );
-//       window.location.href = data.url;
-//     } else {
-//       toast.error("Failed to initiate payment.");
-//     }
-//   } catch (error: any) {
-//     console.error("Error submitting form:", error.message || error);
-//     toast.error("Submission failed. Please try again later.");
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-
-const handleSubmitLastStep = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setLoading(true);
-
-  try {
-    // 1. Save form data to Firestore
-    await addDoc(collection(db, "members"), {
-      ...formData,
-      createdAt: new Date().toISOString(),
-    });
-
-    // 2. Create Stripe checkout session with dynamic amount
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        membershipAmount,
-        extraDonation,
-        paymentType,
-      }),
-    });
-
-    const data = await res.json();
-    console.log('data of stripe', data);
-
-    if (data?.url) {
-      toast.success(
-        `Redirecting to payment... Your total: €${membershipAmount + extraDonation}`
-      );
-      window.location.href = data.url;
-    } else {
-      toast.error("Failed to initiate payment.");
+      if (data?.url) {
+        toast.success(
+          `Redirecting to payment... Your total: €${
+            membershipAmount + extraDonation
+          }`
+        );
+        window.location.href = data.url;
+      } else {
+        toast.error("Failed to initiate payment.");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error submitting form:", error.message);
+      } else {
+        console.error("Unknown error submitting form:", error);
+      }
     }
- } catch (error) {
-  if (error instanceof Error) {
-    console.error("Error submitting form:", error.message);
-  } else {
-    console.error("Unknown error submitting form:", error);
-  }
-}
-};
-
-  // const handleSubmitLastStep = async (e: any) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     await addDoc(collection(db, "members"), {
-  //       ...formData,
-  //       createdAt: new Date().toISOString(),
-  //     });
-  //   } catch (error: any) {
-  //     console.error("Error saving form data:", error.message || error);
-  //     toast.error(
-  //       "There was an error submitting your form. Please try again later."
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  //   setTimeout(() => {
-  //     router.back();
-  //     setLoading(false);
-  //   }, 2000);
-  // };
+  };
 
   useEffect(() => {
     if (paymentType === 1) {
@@ -251,15 +174,10 @@ const handleSubmitLastStep = async (e: React.FormEvent<HTMLFormElement>) => {
     }
   }, [paymentType]);
 
-  // const handleBack = (e: any) => {
-  //   setStep((prevStep) => prevStep - 1);
-  // };
-
-const handleBack = (e: React.MouseEvent<HTMLElement>) => {
-  e.preventDefault();
-  setStep((prevStep) => prevStep - 1);
-};
-
+  const handleBack = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    setStep((prevStep) => prevStep - 1);
+  };
 
   const formattedCountries = countries.map((country) => ({
     label: country.name.common,
@@ -787,7 +705,9 @@ const handleBack = (e: React.MouseEvent<HTMLElement>) => {
         </div>
       ) : (
         <div className="px-5">
-          <h2 className="font-bold text-center text-lg">Pay by Credit / Debit Card</h2>
+          <h2 className="font-bold text-center text-lg">
+            Pay by Credit / Debit Card
+          </h2>
           <div className="mt-8 rounded-lg bg-[var(--grey-300)] p-1 flex gap-x-1 sm:max-w-[500px] mx-auto">
             <div
               className={`h-full rounded flex-1 text-sm font-medium text-center p-1.5 cursor-pointer ${
@@ -837,95 +757,13 @@ const handleBack = (e: React.MouseEvent<HTMLElement>) => {
           </div>
           <div className="md:px-14 mt-10">
             <form onSubmit={handleSubmitLastStep}>
-              {/* <div className="flex flex-col gap-y-2.5">
-                <label className="text-sm font-semibold" htmlFor="accountName">
-                  Account name
-                </label>
-                <input
-                  type="text"
-                  id="accountName"
-                  name="accountName"
-                  className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                  placeholder="Enter your account name"
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      accountName: e.target.value,
-                    }))
-                  }
-                  required
-                />
-              </div> */}
-              {/* <div className="flex items-center gap-x-2.5 mt-5">
-                <div className="flex flex-col gap-y-2.5">
-                  <label
-                    className="text-sm font-semibold"
-                    htmlFor="accountNumber"
-                  >
-                    Account number
-                  </label>
-                  <input
-                    type="text"
-                    id="accountNumber"
-                    name="accountNumber"
-                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                    placeholder="Enter your account number"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        accountNumber: e.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-y-2.5">
-                  <label className="text-sm font-semibold" htmlFor="sortCode">
-                    Sort code
-                  </label>
-                  <input
-                    type="text"
-                    id="sortCode"
-                    name="sortCode"
-                    className="w-full rounded-md border-[1px] border-[var(--line)] px-4 h-12 outline-none focus:border-[var(--primary)] bg-[var(--background)]"
-                    placeholder="Enter your sort code"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        sortCode: e.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-              </div> */}
-              {/* <div className="flex gap-x-2 mt-3">
-                <input
-                  type="checkbox"
-                  id="person"
-                  name="person"
-                  className="cursor-pointer"
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      moreThanOne: e.target.checked,
-                    }))
-                  }
-                />
-                <label htmlFor="person" className="text-sm cursor-pointer">
-                   We use Sripe to ensure secure credit card payment.
-
-                </label>
-              </div> */}
               <button
                 type="submit"
                 className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={loading}
                 aria-busy={loading}
               >
-                {/* {loading ? "Submitting..." : "Submit"} */}
-               {loading ? "Submitting..." : "Continue to Payment"}
-
+                {loading ? "Submitting..." : "Continue to Payment"}
               </button>
               <p className="text-xs text-[var(--grey-300)] mt-10">{paraFour}</p>
             </form>
