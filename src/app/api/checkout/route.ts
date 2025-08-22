@@ -5,10 +5,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
-    const { membershipAmount, extraDonation, paymentType, formdata, } = await req.json();
+    const { membershipAmount, extraDonation, paymentType, email } =
+      await req.json();
 
-    const interval = paymentType === 0 ? 'month' : 'year';
-    const currency = 'eur';
+    const interval = paymentType === 0 ? "month" : "year";
+    const currency = "eur";
 
     const line_items = [];
 
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
         unit_amount: Math.round(membershipAmount * 100),
         currency,
         recurring: { interval },
-        product_data: { name: 'Standard Rate' },
+        product_data: { name: "Standard Rate" },
       });
 
       line_items.push({
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
         unit_amount: Math.round(extraDonation * 100),
         currency,
         recurring: { interval },
-        product_data: { name: 'Donation Boost' },
+        product_data: { name: "Donation Boost" },
       });
 
       line_items.push({
@@ -43,21 +44,21 @@ export async function POST(req: NextRequest) {
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'subscription',
+      payment_method_types: ["card"],
+      mode: "subscription",
       line_items,
-      // customer_email: formdata.email, // <-- pre-fill email
+      customer_email: email, // <-- pre-fill email
       // success_url: 'http://localhost:3001/join',
-      success_url: 'https://dia-eire.vercel.app/',
+      success_url: "https://dia-eire.vercel.app/",
       // cancel_url: 'http://localhost:3001/join',
-      cancel_url: 'https://dia-eire.vercel.app/join',
+      cancel_url: "https://dia-eire.vercel.app/join",
     });
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
-    console.error('Stripe error:', err);
+    console.error("Stripe error:", err);
     return NextResponse.json(
-      { error: 'Something went wrong creating the session.' },
+      { error: "Something went wrong creating the session." },
       { status: 500 }
     );
   }

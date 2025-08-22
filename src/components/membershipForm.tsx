@@ -126,7 +126,7 @@ function MembershipForm({ email, isChecked }: Props) {
           membershipAmount,
           extraDonation,
           paymentType,
-          formData,
+          email: formData.email,
         }),
       });
 
