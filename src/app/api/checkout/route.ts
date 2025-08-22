@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       mode: 'subscription',
       line_items,
-      customer_email: formdata.email, // <-- pre-fill email
+      // customer_email: formdata.email, // <-- pre-fill email
       // success_url: 'http://localhost:3001/join',
       success_url: 'https://dia-eire.vercel.app/',
       // cancel_url: 'http://localhost:3001/join',
