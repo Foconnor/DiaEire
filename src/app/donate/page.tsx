@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { db } from "../../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
-import { PayPalButtons } from "@paypal/react-paypal-js";
 
 function DonatePage() {
   const [logo, setLogo] = useState<string>("");
@@ -12,8 +11,13 @@ function DonatePage() {
   const [customDonation, setCustomDonation] = useState<string>("5");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("Loading...");
+  const [img, setImg] = useState("Loading...");
+  const [copyright, setCopyright] = useState("Loading...");
+  const [donationTitle, setDonationTitle] = useState("Loading...");
+  const [donationType, setDonationType] = useState("Loading...");
 
-  const donationAmounts = [5, 70, 35, 15, 9, 7];
+  const [donationAmounts, setDonationAmounts] = useState([]);
 
   useEffect(() => {
     const getSectionData = async () => {
@@ -51,6 +55,30 @@ function DonatePage() {
   const handleContinue = () => setStep((prev) => prev + 1);
   const handleBack = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
 
+  useEffect(() => {
+    const getSectionData = async () => {
+      try {
+        const docRef = doc(db, "donation", "donationPage");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setTitle(data.title || "Loading...");
+          setImg(data.img || "Loading...");
+          setCopyright(data.copyright);
+          setDonationTitle(data.donationTitle || "Loading...");
+          setDonationType(data.donationType || "Loading...");
+          setDonationAmounts(data.donationAmounts || "Loading...");
+        } else {
+          toast.error("No such document!");
+        }
+      } catch (error) {
+        toast.error("Error fetching donation page data");
+        console.error("Error fetching donaiton page data:", error);
+      }
+    };
+    getSectionData();
+  }, []);
   return (
     <div className="wrapper grid grid-cols-1 md:grid-cols-2 gap-20">
       <div className="mt-5">
@@ -65,7 +93,7 @@ function DonatePage() {
                 height={350}
               />
             ) : (
-              <div className="animate-pulse h-[100px] leading-[100px]">
+              <div className="animate-pulse h-[85px] leading-[100px]">
                 Loading...
               </div>
             )}
@@ -97,17 +125,17 @@ function DonatePage() {
             Share
           </Link>
         </div>
-        <h2 className="font-bold text-4xl font-ibm mt-8">
-          Help build our fund
-        </h2>
-        <img
-          className="mt-7 rounded-2xl"
-          src="https://ucarecdn.com/67d7e611-5d07-478b-a525-7c59bb049914/-/resize/624x/-/format/auto/"
-          alt="image"
-        />
-        <p className="mt-7 font-ibm">
-          Copyright Dia le hÉirean. All rights reserved.
-        </p>
+        <h2 className="font-bold text-4xl font-ibm mt-8">{title}</h2>
+        {logo ? (
+          <img
+            className="mt-7 rounded-2xl"
+            src={img}
+            alt="donation page image"
+          />
+        ) : (
+          <div className="animate-pulse w-full h-[351px] bg-[var(--grey-200)] rounded-2xl mt-8" />
+        )}
+        <p className="mt-7 font-ibm">{copyright}</p>
         <div className="flex gap-3 mt-4">
           <Link href="/privacy" className="underline font-ibm">
             Privacy Policy
@@ -140,30 +168,37 @@ function DonatePage() {
                   <path d="m18.2906 11.75h-.2535v-1.1855c0-2.19278-1.7415-4.02451-3.9182-4.06361-.0595-.00107-.1783-.00107-.2378 0-2.1767.0391-3.91819 1.87083-3.91819 4.06361v1.1855h-.25354c-.39069 0-.70937.4028-.70937.9003v5.9463c0 .4969.31868.9035.7094.9035h8.5812c.3907 0 .7094-.4066.7094-.9035v-5.9463c0-.4974-.3187-.9003-.7094-.9003zm-3.4867 3.8674v1.7967c0 .2058-.1723.3799-.3784.3799h-.8509c-.2061 0-.3785-.1741-.3785-.3799v-1.7967c-.1999-.1966-.3162-.4684-.3162-.7691 0-.5698.4408-1.0594 1.0013-1.082.0594-.0024.1783-.0024.2377 0 .5605.0226 1.0013.5122 1.0013 1.082 0 .3007-.1164.5725-.3163.7691zm1.5623-3.8674h-4.7323v-1.1855c0-1.30621 1.0623-2.38623 2.3661-2.38623s2.3662 1.08002 2.3662 2.38623z"></path>
                 </g>
               </svg>
-              Secure donation
+              {donationTitle}
             </p>
             <div className="grid grid-cols-1 gap-3">
               <div className="py-2 flex items-center justify-center rounded-[10px] border-[var(--primary)] border-2">
-                Give once
+                {donationType}
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3 mt-5">
-              {donationAmounts.map((item, i) => (
-                <div
-                  key={i}
-                  className={`py-2 flex items-center justify-center rounded-[10px] cursor-pointer ${
-                    donationValue === item
-                      ? "border-2 border-[var(--primary)]"
-                      : "border border-[var(--line)]"
-                  }`}
-                  onClick={() => {
-                    setDonationValue(item);
-                    setCustomDonation(item.toString());
-                  }}
-                >
-                  €{item}
-                </div>
-              ))}
+              {donationAmounts.length > 0
+                ? donationAmounts.map((item, i) => (
+                    <div
+                      key={i}
+                      className={`py-2 flex items-center justify-center rounded-[10px] cursor-pointer ${
+                        donationValue === item
+                          ? "border-2 border-[var(--primary)]"
+                          : "border border-[var(--line)]"
+                      }`}
+                      onClick={() => {
+                        setDonationValue(item);
+                        setCustomDonation(item);
+                      }}
+                    >
+                      €{item}
+                    </div>
+                  ))
+                : Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="py-5 w-[121px] bg-[var(--grey-200)] animate-pulse rounded-[10px]"
+                    />
+                  ))}
             </div>
             <form onSubmit={handleContinue} className="w-full">
               <div className="relative mt-4">
@@ -287,9 +322,14 @@ function DonatePage() {
               href={`https://paypal.com/paypalme/Dialeheireann/${donationValue}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-[#0070ba] text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-[#005c9e] transition-colors"
+              className="rounded-sm bg-[#ffc439] h-[45px] w-full flex items-center justify-center hover:brightness-95 transition-all duration-200 ease-in-out"
             >
-              Donate with PayPal
+              <img
+                className=""
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAxcHgiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAxMDEgMzIiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaW5ZTWluIG1lZXQiIHhtbG5zPSJodHRwOiYjeDJGOyYjeDJGO3d3dy53My5vcmcmI3gyRjsyMDAwJiN4MkY7c3ZnIj48cGF0aCBmaWxsPSIjMDAzMDg3IiBkPSJNIDEyLjIzNyAyLjggTCA0LjQzNyAyLjggQyAzLjkzNyAyLjggMy40MzcgMy4yIDMuMzM3IDMuNyBMIDAuMjM3IDIzLjcgQyAwLjEzNyAyNC4xIDAuNDM3IDI0LjQgMC44MzcgMjQuNCBMIDQuNTM3IDI0LjQgQyA1LjAzNyAyNC40IDUuNTM3IDI0IDUuNjM3IDIzLjUgTCA2LjQzNyAxOC4xIEMgNi41MzcgMTcuNiA2LjkzNyAxNy4yIDcuNTM3IDE3LjIgTCAxMC4wMzcgMTcuMiBDIDE1LjEzNyAxNy4yIDE4LjEzNyAxNC43IDE4LjkzNyA5LjggQyAxOS4yMzcgNy43IDE4LjkzNyA2IDE3LjkzNyA0LjggQyAxNi44MzcgMy41IDE0LjgzNyAyLjggMTIuMjM3IDIuOCBaIE0gMTMuMTM3IDEwLjEgQyAxMi43MzcgMTIuOSAxMC41MzcgMTIuOSA4LjUzNyAxMi45IEwgNy4zMzcgMTIuOSBMIDguMTM3IDcuNyBDIDguMTM3IDcuNCA4LjQzNyA3LjIgOC43MzcgNy4yIEwgOS4yMzcgNy4yIEMgMTAuNjM3IDcuMiAxMS45MzcgNy4yIDEyLjYzNyA4IEMgMTMuMTM3IDguNCAxMy4zMzcgOS4xIDEzLjEzNyAxMC4xIFoiPjwvcGF0aD48cGF0aCBmaWxsPSIjMDAzMDg3IiBkPSJNIDM1LjQzNyAxMCBMIDMxLjczNyAxMCBDIDMxLjQzNyAxMCAzMS4xMzcgMTAuMiAzMS4xMzcgMTAuNSBMIDMwLjkzNyAxMS41IEwgMzAuNjM3IDExLjEgQyAyOS44MzcgOS45IDI4LjAzNyA5LjUgMjYuMjM3IDkuNSBDIDIyLjEzNyA5LjUgMTguNjM3IDEyLjYgMTcuOTM3IDE3IEMgMTcuNTM3IDE5LjIgMTguMDM3IDIxLjMgMTkuMzM3IDIyLjcgQyAyMC40MzcgMjQgMjIuMTM3IDI0LjYgMjQuMDM3IDI0LjYgQyAyNy4zMzcgMjQuNiAyOS4yMzcgMjIuNSAyOS4yMzcgMjIuNSBMIDI5LjAzNyAyMy41IEMgMjguOTM3IDIzLjkgMjkuMjM3IDI0LjMgMjkuNjM3IDI0LjMgTCAzMy4wMzcgMjQuMyBDIDMzLjUzNyAyNC4zIDM0LjAzNyAyMy45IDM0LjEzNyAyMy40IEwgMzYuMTM3IDEwLjYgQyAzNi4yMzcgMTAuNCAzNS44MzcgMTAgMzUuNDM3IDEwIFogTSAzMC4zMzcgMTcuMiBDIDI5LjkzNyAxOS4zIDI4LjMzNyAyMC44IDI2LjEzNyAyMC44IEMgMjUuMDM3IDIwLjggMjQuMjM3IDIwLjUgMjMuNjM3IDE5LjggQyAyMy4wMzcgMTkuMSAyMi44MzcgMTguMiAyMy4wMzcgMTcuMiBDIDIzLjMzNyAxNS4xIDI1LjEzNyAxMy42IDI3LjIzNyAxMy42IEMgMjguMzM3IDEzLjYgMjkuMTM3IDE0IDI5LjczNyAxNC42IEMgMzAuMjM3IDE1LjMgMzAuNDM3IDE2LjIgMzAuMzM3IDE3LjIgWiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMwMDMwODciIGQ9Ik0gNTUuMzM3IDEwIEwgNTEuNjM3IDEwIEMgNTEuMjM3IDEwIDUwLjkzNyAxMC4yIDUwLjczNyAxMC41IEwgNDUuNTM3IDE4LjEgTCA0My4zMzcgMTAuOCBDIDQzLjIzNyAxMC4zIDQyLjczNyAxMCA0Mi4zMzcgMTAgTCAzOC42MzcgMTAgQyAzOC4yMzcgMTAgMzcuODM3IDEwLjQgMzguMDM3IDEwLjkgTCA0Mi4xMzcgMjMgTCAzOC4yMzcgMjguNCBDIDM3LjkzNyAyOC44IDM4LjIzNyAyOS40IDM4LjczNyAyOS40IEwgNDIuNDM3IDI5LjQgQyA0Mi44MzcgMjkuNCA0My4xMzcgMjkuMiA0My4zMzcgMjguOSBMIDU1LjgzNyAxMC45IEMgNTYuMTM3IDEwLjYgNTUuODM3IDEwIDU1LjMzNyAxMCBaIj48L3BhdGg+PHBhdGggZmlsbD0iIzAwOWNkZSIgZD0iTSA2Ny43MzcgMi44IEwgNTkuOTM3IDIuOCBDIDU5LjQzNyAyLjggNTguOTM3IDMuMiA1OC44MzcgMy43IEwgNTUuNzM3IDIzLjYgQyA1NS42MzcgMjQgNTUuOTM3IDI0LjMgNTYuMzM3IDI0LjMgTCA2MC4zMzcgMjQuMyBDIDYwLjczNyAyNC4zIDYxLjAzNyAyNCA2MS4wMzcgMjMuNyBMIDYxLjkzNyAxOCBDIDYyLjAzNyAxNy41IDYyLjQzNyAxNy4xIDYzLjAzNyAxNy4xIEwgNjUuNTM3IDE3LjEgQyA3MC42MzcgMTcuMSA3My42MzcgMTQuNiA3NC40MzcgOS43IEMgNzQuNzM3IDcuNiA3NC40MzcgNS45IDczLjQzNyA0LjcgQyA3Mi4yMzcgMy41IDcwLjMzNyAyLjggNjcuNzM3IDIuOCBaIE0gNjguNjM3IDEwLjEgQyA2OC4yMzcgMTIuOSA2Ni4wMzcgMTIuOSA2NC4wMzcgMTIuOSBMIDYyLjgzNyAxMi45IEwgNjMuNjM3IDcuNyBDIDYzLjYzNyA3LjQgNjMuOTM3IDcuMiA2NC4yMzcgNy4yIEwgNjQuNzM3IDcuMiBDIDY2LjEzNyA3LjIgNjcuNDM3IDcuMiA2OC4xMzcgOCBDIDY4LjYzNyA4LjQgNjguNzM3IDkuMSA2OC42MzcgMTAuMSBaIj48L3BhdGg+PHBhdGggZmlsbD0iIzAwOWNkZSIgZD0iTSA5MC45MzcgMTAgTCA4Ny4yMzcgMTAgQyA4Ni45MzcgMTAgODYuNjM3IDEwLjIgODYuNjM3IDEwLjUgTCA4Ni40MzcgMTEuNSBMIDg2LjEzNyAxMS4xIEMgODUuMzM3IDkuOSA4My41MzcgOS41IDgxLjczNyA5LjUgQyA3Ny42MzcgOS41IDc0LjEzNyAxMi42IDczLjQzNyAxNyBDIDczLjAzNyAxOS4yIDczLjUzNyAyMS4zIDc0LjgzNyAyMi43IEMgNzUuOTM3IDI0IDc3LjYzNyAyNC42IDc5LjUzNyAyNC42IEMgODIuODM3IDI0LjYgODQuNzM3IDIyLjUgODQuNzM3IDIyLjUgTCA4NC41MzcgMjMuNSBDIDg0LjQzNyAyMy45IDg0LjczNyAyNC4zIDg1LjEzNyAyNC4zIEwgODguNTM3IDI0LjMgQyA4OS4wMzcgMjQuMyA4OS41MzcgMjMuOSA4OS42MzcgMjMuNCBMIDkxLjYzNyAxMC42IEMgOTEuNjM3IDEwLjQgOTEuMzM3IDEwIDkwLjkzNyAxMCBaIE0gODUuNzM3IDE3LjIgQyA4NS4zMzcgMTkuMyA4My43MzcgMjAuOCA4MS41MzcgMjAuOCBDIDgwLjQzNyAyMC44IDc5LjYzNyAyMC41IDc5LjAzNyAxOS44IEMgNzguNDM3IDE5LjEgNzguMjM3IDE4LjIgNzguNDM3IDE3LjIgQyA3OC43MzcgMTUuMSA4MC41MzcgMTMuNiA4Mi42MzcgMTMuNiBDIDgzLjczNyAxMy42IDg0LjUzNyAxNCA4NS4xMzcgMTQuNiBDIDg1LjczNyAxNS4zIDg1LjkzNyAxNi4yIDg1LjczNyAxNy4yIFoiPjwvcGF0aD48cGF0aCBmaWxsPSIjMDA5Y2RlIiBkPSJNIDk1LjMzNyAzLjMgTCA5Mi4xMzcgMjMuNiBDIDkyLjAzNyAyNCA5Mi4zMzcgMjQuMyA5Mi43MzcgMjQuMyBMIDk1LjkzNyAyNC4zIEMgOTYuNDM3IDI0LjMgOTYuOTM3IDIzLjkgOTcuMDM3IDIzLjQgTCAxMDAuMjM3IDMuNSBDIDEwMC4zMzcgMy4xIDEwMC4wMzcgMi44IDk5LjYzNyAyLjggTCA5Ni4wMzcgMi44IEMgOTUuNjM3IDIuOCA5NS40MzcgMyA5NS4zMzcgMy4zIFoiPjwvcGF0aD48L3N2Zz4"
+                alt="paypal logo"
+                width={80}
+              />
             </Link>
           </div>
         )}
