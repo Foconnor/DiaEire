@@ -3,8 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import CookieConsent from "@/components/cookiesConsent";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import ClientProviders from "./ClientProviders";
 
 const poppins = Poppins({
   variable: "--Poppins",
@@ -37,7 +35,8 @@ export default function RootLayout({
         ></link>
       </head>
       <body className={`${poppins.variable} antialiased`}>
-        <ClientProviders>{children}</ClientProviders>
+        {children}
+        <Toaster position="top-right" />
         <CookieConsent />
       </body>
     </html>

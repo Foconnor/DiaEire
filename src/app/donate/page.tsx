@@ -143,7 +143,7 @@ function DonatePage() {
               Secure donation
             </p>
             <div className="grid grid-cols-1 gap-3">
-              <div className="py-2 flex items-center justify-center rounded-[10px] cursor-pointer border-[var(--primary)] border-2">
+              <div className="py-2 flex items-center justify-center rounded-[10px] border-[var(--primary)] border-2">
                 Give once
               </div>
             </div>
@@ -245,19 +245,7 @@ function DonatePage() {
                 placeholder="Phone number (optional)"
                 className="py-3 px-3 border border-[var(--line)] rounded-[10px]"
               />
-              <div className="flex items-start gap-2 w-full mt-1">
-                <input
-                  type="checkbox"
-                  className="w-5 h-5 border border-[var(--line)] rounded-[10px] cursor-pointer"
-                  id="campaigns"
-                />
-                <label htmlFor="campaigns" className="cursor-pointer">
-                  Find out more about our crucial campaigns to win - with the
-                  contact details you have chosen to provide, the Labour Party
-                  can keep you updated via email and texts on the latest
-                  campaigns, events and opportunities to get involved.
-                </label>
-              </div>
+
               <button
                 type="submit"
                 className="mt-6 py-3 bg-[var(--primary)] text-[var(--background)] rounded-xl cursor-pointer hover:bg-[var(--btn-hover-bg)] transition-all duration-200 ease-in-out"
@@ -294,41 +282,7 @@ function DonatePage() {
             <p className="mt-3 mb-6 text-[21px] font-semibold">
               You donate €{donationValue}
             </p>
-            <PayPalButtons
-              style={{ layout: "vertical" }}
-              disabled={loading}
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        currency_code: "EUR",
-                        value: donationValue.toFixed(2),
-                      },
-                    },
-                  ],
-                });
-              }}
-              onApprove={async (data, actions) => {
-                setLoading(true);
-                try {
-                  const details = await actions.order.capture();
-                  toast.success(
-                    "Payment successful! Thank you " +
-                      details.payer.name.given_name
-                  );
-                } catch (error) {
-                  toast.error("Payment failed. Please try again.");
-                  console.error("PayPal capture error:", error);
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              onError={(err) => {
-                toast.error("PayPal payment error. Please try again.");
-                console.error("PayPal error:", err);
-              }}
-            />
+            
           </div>
         )}
         <div className="border-b border-[var(--line)] mt-12"></div>
