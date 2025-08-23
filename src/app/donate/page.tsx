@@ -282,7 +282,15 @@ function DonatePage() {
             <p className="mt-3 mb-6 text-[21px] font-semibold">
               You donate €{donationValue}
             </p>
-            
+
+            <Link
+              href={`https://paypal.com/paypalme/Dialeheireann/${donationValue}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-[#0070ba] text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-[#005c9e] transition-colors"
+            >
+              Donate with PayPal
+            </Link>
           </div>
         )}
         <div className="border-b border-[var(--line)] mt-12"></div>
