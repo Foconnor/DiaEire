@@ -95,31 +95,31 @@ function PrivacyEdit() {
     }
   }
 
+  const fetchQuestions = async () => {
+    setQuestionsLoading(true);
+    try {
+      const questionColRef = query(
+        collection(db, "privacy", "privacyPage", "questions"),
+        orderBy("createdAt", "asc")
+      );
+      const querySnapshot = await getDocs(questionColRef);
+      const dropdownArr = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as {
+          question: string;
+          awnser: string;
+          points: { text: string }[];
+        }),
+      }));
+      setQuestions(dropdownArr);
+    } catch (error) {
+      toast.error("Error fetching questions");
+      console.error("Error fetching questions:", error);
+    } finally {
+      setQuestionsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchQuestions = async () => {
-      setQuestionsLoading(true);
-      try {
-        const questionColRef = query(
-          collection(db, "privacy", "privacyPage", "questions"),
-          orderBy("createdAt", "asc")
-        );
-        const querySnapshot = await getDocs(questionColRef);
-        const dropdownArr = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as {
-            question: string;
-            awnser: string;
-            points: { text: string }[];
-          }),
-        }));
-        setQuestions(dropdownArr);
-      } catch (error) {
-        toast.error("Error fetching questions");
-        console.error("Error fetching questions:", error);
-      } finally {
-        setQuestionsLoading(false);
-      }
-    };
     fetchQuestions();
   }, []);
 
@@ -241,7 +241,7 @@ function PrivacyEdit() {
           question: questionForm.question.trim(),
           awnser: questionForm.awnser.trim(),
           points: questionForm.points.map((point) => point.trim()), // <-- array of strings
-          createdAt: serverTimestamp(),
+          createdAt: Date.now(),
         });
         toast.success("Question added!");
       } else if (activeQuestion) {
@@ -317,12 +317,22 @@ function PrivacyEdit() {
           <div className="mt-8">
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-2xl">Questions</h3>
-              <button
-                className="bg-[var(--primary)] text-white px-4 py-2 rounded font-semibold hover:bg-[var(--btn-hover-bg)] transition cursor-pointer"
-                onClick={handleAddQuestion}
-              >
-                Add Question
-              </button>
+              <div className="flex gap-5">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded font-semibold hover:bg-[var(--btn-hover-bg)] transition cursor-pointer"
+                  onClick={() => {
+                    fetchQuestions();
+                  }}
+                >
+                  Fix Order
+                </button>
+                <button
+                  className="bg-[var(--primary)] text-white px-4 py-2 rounded font-semibold hover:bg-[var(--btn-hover-bg)] transition cursor-pointer"
+                  onClick={handleAddQuestion}
+                >
+                  Add Question
+                </button>
+              </div>
             </div>
             {questionLoading ? (
               <div>Loading questions...</div>

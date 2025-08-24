@@ -14,7 +14,7 @@ import MembershipEdit from "@/components/admin/membershipEdit";
 import MembershipFormEdit from "@/components/admin/membershipFormEdit";
 import VisionEdit from "@/components/admin/visionEdit";
 import StrategyEdit from "@/components/admin/strategyEdit";
-import SignupEdit from "@/components/admin/signup";
+import SignupEdit from "@/components/admin/signupEdit";
 import PrivacyEdit from "@/components/admin/privacyEdit";
 import DonationEdit from "@/components/admin/donationEdit";
 
