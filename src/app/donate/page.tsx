@@ -354,7 +354,7 @@ function DonatePage() {
         {step === 2 && (
           <div>
             <button
-              className="opacity-70 text-sm flex items-center gap-1 mb-2"
+              className="opacity-70 text-sm flex items-center gap-1 mb-2 cursor-pointer"
               onClick={handleBack}
               aria-label="Back"
               disabled={donorSaving}
@@ -429,7 +429,7 @@ function DonatePage() {
         {step === 3 && (
           <div>
             <button
-              className="opacity-70 text-sm flex items-center gap-1 mb-2"
+              className="opacity-70 text-sm flex items-center gap-1 mb-2 cursor-pointer"
               onClick={handleBack}
               aria-label="Back"
             >
