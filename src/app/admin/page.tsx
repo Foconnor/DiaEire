@@ -16,6 +16,7 @@ import VisionEdit from "@/components/admin/visionEdit";
 import StrategyEdit from "@/components/admin/strategyEdit";
 import SignupEdit from "@/components/admin/signup";
 import PrivacyEdit from "@/components/admin/privacyEdit";
+import DonationEdit from "@/components/admin/donationEdit";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -63,6 +64,8 @@ export default function DashboardPage() {
       <SignupEdit />
       <h2 className="text-4xl text-center mt-10">Privacy</h2>
       <PrivacyEdit />
+      <h2 className="text-4xl text-center mt-10">Donation</h2>
+      <DonationEdit />
     </div>
   );
 }

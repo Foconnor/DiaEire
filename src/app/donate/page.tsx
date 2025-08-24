@@ -432,7 +432,7 @@ function DonatePage() {
               onClick={() => setShowSecurityDropdown((prev) => !prev)}
               type="button"
             >
-              Is my donation secure?
+              {popupQuestion}
             </button>
             {showSecurityDropdown && (
               <div className="absolute -left-[55px] bottom-7 w-[260px] bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-3 text-sm font-ibm">
