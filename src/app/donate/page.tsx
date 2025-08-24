@@ -455,7 +455,7 @@ function DonatePage() {
             </p>
 
             <Link
-              href={`https://paypal.com/paypalme/Dialeheireann/${donationValue}`}
+              href={`https://www.paypal.com/donate/?hosted_button_id=QA36YEGQF83H4`}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-sm bg-[#ffc439] h-[45px] w-full flex items-center justify-center hover:brightness-95 transition-all duration-200 ease-in-out"
