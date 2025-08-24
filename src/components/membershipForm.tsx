@@ -23,7 +23,7 @@ function MembershipForm({ email, isChecked }: Props) {
   const [formData, setFormData] = useState({
     email: email,
     isExistingMember: isChecked,
-    membershipAmount: 0,
+    membershipAmount: membershipAmount,
     title: "",
     firstName: "",
     lastName: "",
@@ -41,14 +41,15 @@ function MembershipForm({ email, isChecked }: Props) {
     city: "",
     country: "ireland",
     extraDonation: extraDonation,
-    accountName: "",
-    accountNumber: "",
-    sortCode: "",
-    moreThanOne: false,
     subscriptionType: 0,
   });
 
-  console.log(formData);
+  useEffect(() => {
+  setFormData((prev) => ({
+    ...prev,
+    membershipAmount,
+  }));
+}, [membershipAmount]);
 
   const [extraMoney, setExtraMoney] = useState<number[]>([]);
 
@@ -131,7 +132,6 @@ function MembershipForm({ email, isChecked }: Props) {
       });
 
       const data = await res.json();
-      console.log("data of stripe", data);
 
       if (data?.url) {
         toast.success(
