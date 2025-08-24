@@ -1,5 +1,5 @@
 "use client";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import React, { useRef, useState, useEffect } from "react";
 import { db } from "../../../firebase/firebaseConfig";
@@ -133,6 +133,43 @@ function DonatePage() {
     };
     getSectionData();
   }, []);
+
+  const [donorFirstName, setDonorFirstName] = useState("");
+  const [donorLastName, setDonorLastName] = useState("");
+  const [donorEmail, setDonorEmail] = useState("");
+  const [donorPhone, setDonorPhone] = useState("");
+  const [donorSaving, setDonorSaving] = useState(false);
+
+  async function handleDonorSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (
+      !donationValue ||
+      !donorFirstName.trim() ||
+      !donorLastName.trim() ||
+      !donorEmail.trim()
+    ) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+    setDonorSaving(true);
+    try {
+      await addDoc(collection(db, "donors"), {
+        amount: donationValue,
+        firstName: donorFirstName.trim(),
+        lastName: donorLastName.trim(),
+        email: donorEmail.trim(),
+        phone: donorPhone.trim(),
+        createdAt: new Date().toISOString(),
+      });
+      setStep(3);
+    } catch (error) {
+      toast.error("Failed to save donor info. Please try again.");
+      console.error("Donor save error:", error);
+    } finally {
+      setDonorSaving(false);
+    }
+  }
+
   return (
     <div className="wrapper grid grid-cols-1 md:grid-cols-2 md:gap-10 lg:gap-20">
       <div className="mt-5">
@@ -320,6 +357,7 @@ function DonatePage() {
               className="opacity-70 text-sm flex items-center gap-1 mb-2"
               onClick={handleBack}
               aria-label="Back"
+              disabled={donorSaving}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -341,42 +379,49 @@ function DonatePage() {
             <p className="mt-3 mb-6 text-[21px] font-semibold">
               Enter your details
             </p>
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleContinue();
-              }}
-            >
+            <form className="flex flex-col gap-4" onSubmit={handleDonorSubmit}>
               <input
                 type="text"
                 placeholder="First Name"
                 className="py-3 px-3 border border-[var(--line)] rounded-[10px]"
+                value={donorFirstName}
+                onChange={(e) => setDonorFirstName(e.target.value)}
                 required
+                disabled={donorSaving}
               />
               <input
                 type="text"
                 placeholder="Last Name"
                 className="py-3 px-3 border border-[var(--line)] rounded-[10px]"
+                value={donorLastName}
+                onChange={(e) => setDonorLastName(e.target.value)}
                 required
+                disabled={donorSaving}
               />
               <input
                 type="email"
                 placeholder="Email address"
                 className="py-3 px-3 border border-[var(--line)] rounded-[10px]"
+                value={donorEmail}
+                onChange={(e) => setDonorEmail(e.target.value)}
                 required
+                disabled={donorSaving}
               />
               <input
                 type="text"
                 placeholder="Phone number (optional)"
                 className="py-3 px-3 border border-[var(--line)] rounded-[10px]"
+                value={donorPhone}
+                onChange={(e) => setDonorPhone(e.target.value)}
+                disabled={donorSaving}
               />
 
               <button
                 type="submit"
                 className="mt-6 py-3 bg-[var(--primary)] text-[var(--background)] rounded-xl cursor-pointer hover:bg-[var(--btn-hover-bg)] transition-all duration-200 ease-in-out"
+                disabled={donorSaving}
               >
-                Continue
+                {donorSaving ? "Saving..." : "Continue"}
               </button>
             </form>
           </div>
