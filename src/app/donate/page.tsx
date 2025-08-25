@@ -226,29 +226,6 @@ function DonatePage() {
         <div className="flex flex-col w-full md:min-h-[calc(100vh_-_103px)] min-h-[60vh] sm:px-30 md:px-10 lg:px-30 justify-center md:border-l border-[var(--line)] font-ibm">
           {step === 1 && (
             <div>
-              <button
-                className="opacity-70 text-sm flex items-center gap-1 mb-2 cursor-pointer"
-                onClick={handleBack}
-                aria-label="Back"
-                disabled={donorSaving}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <line x1="19" y1="12" x2="5" y2="12"></line>
-                  <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                Back
-              </button>
               <p className="mt-3 mb-6 text-[21px] font-semibold">
                 Enter your details
               </p>
