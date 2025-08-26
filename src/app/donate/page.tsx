@@ -17,6 +17,8 @@ function DonatePage() {
   const [donationType, setDonationType] = useState("Loading...");
   const [popupQuestion, setPopupQuestion] = useState("Loading...");
   const [popupAnswer, setPopupAnswer] = useState("Loading...");
+  const [paraOne, setParaOne] = useState("Loading...");
+  const [paraTwo, setParaTwo] = useState("Loading...");
 
   const [donationAmounts, setDonationAmounts] = useState([]);
   const [showShareDropdown, setShowShareDropdown] = useState(false);
@@ -88,6 +90,8 @@ function DonatePage() {
           setDonationAmounts(data.donationAmounts || "Loading...");
           setPopupQuestion(data.popupQuestion || "Loading...");
           setPopupAnswer(data.popupAwnser || "Loading...");
+          setParaOne(data.paraOne || "Loading...");
+          setParaTwo(data.paraTwo || "Loading...");
         } else {
           toast.error("No such document!");
         }
@@ -304,8 +308,8 @@ function DonatePage() {
                 Back
               </button>
               <div className="min-h-[300px] flex flex-col justify-center px-4">
-                <p className="mb-1">We use PayPal for secure transactions.</p>
-                <p className="mb-8">Click the button to continue</p>
+                <p className="mb-1">{paraOne}</p>
+                <p className="mb-8">{paraTwo}</p>
                 <Link
                   href={
                     "https://www.paypal.com/donate/?hosted_button_id=QA36YEGQF83H4"
