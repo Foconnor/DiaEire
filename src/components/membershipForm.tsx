@@ -14,10 +14,10 @@ function MembershipForm({ email, isChecked }: Props) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(0);
   const [popularMoney, setPopularMoney] = useState(0);
-  const [paymentType, setPaymentType] = useState(0);
-  const [membershipAmount, setMembershipAmount] = useState(0);
+  const [paymentType, setPaymentType] = useState(1);
+  const [membershipAmount, setMembershipAmount] = useState(25);
   const [extraDonation, setExtraDonation] = useState(0);
-  const [activeDonationValue, setActiveDonationValue] = useState(0);
+  // const [activeDonationValue, setActiveDonationValue] = useState(0);
   const [isCurrentlyMember, setIsCurrentlyMember] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -40,16 +40,16 @@ function MembershipForm({ email, isChecked }: Props) {
     addressLineTwo: "",
     city: "",
     country: "ireland",
-    extraDonation: extraDonation,
-    subscriptionType: 0,
+    // extraDonation: extraDonation,
+    // subscriptionType: 0,
   });
 
   useEffect(() => {
-  setFormData((prev) => ({
-    ...prev,
-    membershipAmount,
-  }));
-}, [membershipAmount]);
+    setFormData((prev) => ({
+      ...prev,
+      membershipAmount,
+    }));
+  }, [membershipAmount]);
 
   const [extraMoney, setExtraMoney] = useState<number[]>([]);
 
@@ -118,31 +118,33 @@ function MembershipForm({ email, isChecked }: Props) {
       });
 
       // 2. Create Stripe checkout session with dynamic amount
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          membershipAmount,
-          extraDonation,
-          paymentType,
-          email: formData.email,
-        }),
-      });
+      // const res = await fetch("/api/checkout", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     membershipAmount,
+      //     extraDonation,
+      //     paymentType,
+      //     email: formData.email,
+      //   }),
+      // });
 
-      const data = await res.json();
+      // const data = await res.json();
 
-      if (data?.url) {
-        toast.success(
-          `Redirecting to payment... Your total: €${
-            membershipAmount + extraDonation
-          }`
-        );
-        window.location.href = data.url;
-      } else {
-        toast.error("Failed to initiate payment.");
-      }
+      // if (data?.url) {
+      //   toast.success(
+      //     `Redirecting to payment... Your total: €${
+      //       membershipAmount + extraDonation
+      //     }`
+      //   );
+      //   window.location.href = data.url;
+      // } else {
+      //   toast.error("Failed to initiate payment.");
+      // }
+      window.location.href =
+        "https://www.paypal.com/donate/?hosted_button_id=WT59E9ZPDKCY6";
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error submitting form:", error.message);
@@ -152,27 +154,27 @@ function MembershipForm({ email, isChecked }: Props) {
     }
   };
 
-  useEffect(() => {
-    if (paymentType === 1) {
-      setMembershipAmount(membershipAmount * 12);
-      setExtraDonation(extraDonation * 12);
-      setFormData((prev) => ({
-        ...prev,
-        subscriptionType: 1,
-        extraDonation: extraDonation,
-        membershipAmount: membershipAmount,
-      }));
-    } else {
-      setMembershipAmount(5);
-      setExtraDonation(activeDonationValue);
-      setFormData((prev) => ({
-        ...prev,
-        subscriptionType: 0,
-        extraDonation: extraDonation,
-        membershipAmount: membershipAmount,
-      }));
-    }
-  }, [paymentType]);
+  // useEffect(() => {
+  //   if (paymentType === 1) {
+  //     setMembershipAmount(membershipAmount * 12);
+  //     setExtraDonation(extraDonation * 12);
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       subscriptionType: 1,
+  //       extraDonation: extraDonation,
+  //       membershipAmount: membershipAmount,
+  //     }));
+  //   } else {
+  //     setMembershipAmount(5);
+  //     setExtraDonation(activeDonationValue);
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       subscriptionType: 0,
+  //       extraDonation: extraDonation,
+  //       membershipAmount: membershipAmount,
+  //     }));
+  //   }
+  // }, [paymentType]);
 
   const handleBack = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -221,7 +223,7 @@ function MembershipForm({ email, isChecked }: Props) {
               <p className="font-bold text-3xl">
                 €{membershipAmount}{" "}
                 <span className="text-xs font-bold uppercase text-[var(--link)]">
-                  /mo
+                  /yr
                 </span>{" "}
               </p>
               <p className="text-[var(--primary)] font-semibold text-lg">
@@ -656,60 +658,60 @@ function MembershipForm({ email, isChecked }: Props) {
             </div>
           </form>
         </div>
-      ) : step === 3 ? (
-        <div className="px-5">
-          <h2 className="font-bold text-center text-lg">{title}</h2>
-          <p className="mt-4 text-center text-[var(--grey-300)] text-sm ">
-            {formData.firstName}, {paraThree}
-          </p>
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-4">
-            {extraMoney.map((item, index) => (
-              <button
-                key={index}
-                className={`rounded-lg text-2xl font-bold py-5 flex items-center justify-center relative bg-[var(--background)] border border-[var(--line)] cursor-pointer ${
-                  popularMoney === item
-                    ? "bg-[var(--primary-light)]"
-                    : "bg-[var(--background)]"
-                } ${extraDonation === item ? "ring-[3px]" : ""}`}
-                onClick={() => {
-                  setExtraDonation(item);
-                  setActiveDonationValue(item);
-                }}
-              >
-                {popularMoney === item && (
-                  <span className="absolute bg-[var(--primary)] text-[var(--background)] text-xs rounded-full bottom-0 px-4 py-2 translate-y-1/2">
-                    Most popular
-                  </span>
-                )}
-                {item === 0 ? "no thanks" : `€${item}`}
-              </button>
-            ))}
-          </div>
-          <div className="absolute bottom-5 left-0 w-full px-5">
-            <button
-              type="submit"
-              className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-              onClick={() => {
-                setLoading(true);
-                setTimeout(() => {
-                  setStep(4);
-                  setLoading(false);
-                }, 2000);
-              }}
-              disabled={loading}
-              aria-busy={loading}
-            >
-              {loading ? "Submitting..." : "Continue"}
-            </button>
-          </div>
-        </div>
       ) : (
+        // ) : step === 3 ? (
+        // <div className="px-5">
+        //   <h2 className="font-bold text-center text-lg">{title}</h2>
+        //   <p className="mt-4 text-center text-[var(--grey-300)] text-sm ">
+        //     {formData.firstName}, {paraThree}
+        //   </p>
+        //   <div className="mt-20 grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-4">
+        //     {extraMoney.map((item, index) => (
+        //       <button
+        //         key={index}
+        //         className={`rounded-lg text-2xl font-bold py-5 flex items-center justify-center relative bg-[var(--background)] border border-[var(--line)] cursor-pointer ${
+        //           popularMoney === item
+        //             ? "bg-[var(--primary-light)]"
+        //             : "bg-[var(--background)]"
+        //         } ${extraDonation === item ? "ring-[3px]" : ""}`}
+        //         onClick={() => {
+        //           setExtraDonation(item);
+        //           setActiveDonationValue(item);
+        //         }}
+        //       >
+        //         {popularMoney === item && (
+        //           <span className="absolute bg-[var(--primary)] text-[var(--background)] text-xs rounded-full bottom-0 px-4 py-2 translate-y-1/2">
+        //             Most popular
+        //           </span>
+        //         )}
+        //         {item === 0 ? "no thanks" : `€${item}`}
+        //       </button>
+        //     ))}
+        //   </div>
+        //   <div className="absolute bottom-5 left-0 w-full px-5">
+        //     <button
+        //       type="submit"
+        //       className="mt-[30px] bg-[var(--primary)] text-[var(--background)] h-[50px] w-full rounded-full hover:bg-[var(--btn-hover-bg)] transition-all duration-300 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+        //       onClick={() => {
+        //         setLoading(true);
+        //         setTimeout(() => {
+        //           setStep(4);
+        //           setLoading(false);
+        //         }, 2000);
+        //       }}
+        //       disabled={loading}
+        //       aria-busy={loading}
+        //     >
+        //       {loading ? "Submitting..." : "Continue"}
+        //     </button>
+        //   </div>
+        // </div>
         <div className="px-5">
           <h2 className="font-bold text-center text-lg">
-            Pay by Credit / Debit Card
+            Pay by PayPal or Credit / Debit Card
           </h2>
           <div className="mt-8 rounded-lg bg-[var(--grey-300)] p-1 flex gap-x-1 sm:max-w-[500px] mx-auto">
-            <div
+            {/* <div
               className={`h-full rounded flex-1 text-sm font-medium text-center p-1.5 cursor-pointer ${
                 paymentType === 0
                   ? "bg-[var(--background)] text-[var(--foreground)]"
@@ -720,16 +722,16 @@ function MembershipForm({ email, isChecked }: Props) {
               }}
             >
               Monthly
-            </div>
+            </div> */}
             <div
               className={`h-full rounded flex-1 text-sm font-medium text-center p-1.5 cursor-pointer ${
                 paymentType === 1
                   ? "bg-[var(--background)] text-[var(--foreground)]"
                   : "bg-transparent text-[var(--background)]"
               }`}
-              onClick={() => {
-                setPaymentType(1);
-              }}
+              // onClick={() => {
+              //   setPaymentType(1);
+              // }}
             >
               Year
             </div>
@@ -737,7 +739,7 @@ function MembershipForm({ email, isChecked }: Props) {
           <div className="md:bg-[#F0EAEA] w-full sm:max-w-[500px] mx-auto my-4 md:p-4 rounded-lg flex justify-between">
             <div className="flex flex-col items-start">
               <p>Standard rate</p>
-              <p>Donation boost</p>
+              {/* <p>Donation boost</p> */}
               <p className="font-bold mt-2">Total amount</p>
             </div>
             <div className="flex flex-col items-end">
@@ -745,10 +747,10 @@ function MembershipForm({ email, isChecked }: Props) {
                 €{membershipAmount.toFixed(2)}
                 {paymentType === 0 ? " / mo" : " / yr"}
               </p>
-              <p>
+              {/* <p>
                 €{extraDonation.toFixed(2)}
                 {paymentType === 0 ? " / mo" : " / yr"}
-              </p>
+              </p> */}
               <p className="font-bold mt-2">
                 €{(membershipAmount + extraDonation).toFixed(2)}
                 {paymentType === 0 ? " / mo" : " / yr"}
