@@ -15,6 +15,8 @@ function DonationEdit() {
   const [donationType, setDonationType] = useState("Loading...");
   const [popupQuestion, setPopupQuestion] = useState("Loading...");
   const [popupAnswer, setPopupAnswer] = useState("Loading...");
+  const [paraOne, setParaOne] = useState("Loading...");
+  const [paraTwo, setParaTwo] = useState("Loading...");
 
   const [donationAmounts, setDonationAmounts] = useState<number[]>([]);
   const [saving, setSaving] = useState(false);
@@ -38,6 +40,8 @@ function DonationEdit() {
           setDonationAmounts(data.donationAmounts || "Loading...");
           setPopupQuestion(data.popupQuestion || "Loading...");
           setPopupAnswer(data.popupAwnser || "Loading...");
+          setParaOne(data.paraOne || "Loading...");
+          setParaTwo(data.paraTwo || "Loading...");
         } else {
           toast.error("No such document!");
         }
@@ -67,7 +71,9 @@ function DonationEdit() {
       !donationType.trim() ||
       !donationAmounts.length ||
       !popupQuestion.trim() ||
-      !popupAnswer.trim()
+      !popupAnswer.trim() ||
+      !paraOne.trim() ||
+      !paraTwo.trim()
     ) {
       toast.error("All fields are required.");
       return;
@@ -84,6 +90,8 @@ function DonationEdit() {
         donationAmounts: donationAmounts,
         popupQuestion: popupQuestion.trim(),
         popupAnswer: popupAnswer.trim(),
+        paraOne: paraOne.trim(),
+        paraTwo: paraTwo.trim(),
       });
       toast.success("donation Page updated!");
       setIsModalOpen(false);
@@ -132,6 +140,14 @@ function DonationEdit() {
           <div className="grid grid-cols-2 mt-4">
             <p className="text-[var(--primary)]">Popup Awnser</p>
             <p>{popupAnswer}</p>
+          </div>
+          <div className="grid grid-cols-2 mt-4">
+            <p className="text-[var(--primary)]">Para One</p>
+            <p>{paraOne}</p>
+          </div>
+          <div className="grid grid-cols-2 mt-4">
+            <p className="text-[var(--primary)]">Para Two</p>
+            <p>{paraTwo}</p>
           </div>
           <div className="grid grid-cols-2 gap-1 mt-4">
             <p className="text-[var(--primary)]">Donations Amounts :</p>
@@ -263,6 +279,32 @@ function DonationEdit() {
                   className="w-full border rounded px-3 py-2"
                   value={popupAnswer}
                   onChange={(e) => setPopupAnswer(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para One <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={paraOne}
+                  onChange={(e) => setParaOne(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Para Two <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={paraTwo}
+                  onChange={(e) => setParaTwo(e.target.value)}
                   required
                   disabled={saving}
                 />
