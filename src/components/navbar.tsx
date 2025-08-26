@@ -72,7 +72,7 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
                   className="!bg-[var(--btn-black)] hover:!bg-[var(--btn-hover-bg)]"
                   link="/join"
                 />
-                <Button content={rightSideButton} />
+                <Button content={rightSideButton} link="/donate" />
               </>
             )}
           </div>
@@ -83,7 +83,7 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
           <Link href="/join" className="hover:text-[var(--btn-black)]">
             {bottomLeftLink}
           </Link>
-          <Link href="/" className="hover:text-[var(--btn-black)]">
+          <Link href="/strategy" className="hover:text-[var(--btn-black)]">
             {bottomRightLink}
           </Link>
         </div>

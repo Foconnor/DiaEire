@@ -34,9 +34,8 @@ function PreFooter() {
                 size="sm"
               />
             </div>
-            <a
-              href=""
-              className={`links  md:block ${
+            <a href="#"
+              className={`links  md:block coming-soon ${
                 openIndex === 0 ? "block" : "hidden"
               }`}
             >
@@ -60,8 +59,8 @@ function PreFooter() {
               />
             </div>
             <a
-              href=""
-              className={`links  md:block ${
+              href="#"
+              className={`links  md:block coming-soon ${
                 openIndex === 1 ? "block" : "hidden"
               }`}
             >
@@ -83,8 +82,8 @@ function PreFooter() {
               />
             </div>
             <a
-              href=""
-              className={`links  md:block ${
+              href="#"
+              className={`links  md:block coming-soon ${
                 openIndex === 2 ? "block" : "hidden"
               }`}
             >
@@ -108,8 +107,8 @@ function PreFooter() {
               />
             </div>
             <a
-              href=""
-              className={`links  md:block ${
+              href="#"
+              className={`links  md:block coming-soon ${
                 openIndex === 3 ? "block" : "hidden"
               }`}
             >
@@ -133,8 +132,8 @@ function PreFooter() {
               />
             </div>
             <a
-              href=""
-              className={`links  md:block ${
+              href="#"
+              className={`links  md:block coming-soon ${
                 openIndex === 4 ? "block" : "hidden"
               }`}
             >

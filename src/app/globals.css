@@ -123,3 +123,29 @@ body {
 .links:hover {
   text-decoration: underline;
 }
+
+.coming-soon {
+  position: relative;
+  cursor: not-allowed;
+}
+
+.coming-soon::after {
+  content: "Coming Soon";
+  position: absolute;
+  bottom: 120%;
+  left: 50px;
+  transform: translateX(-50%);
+  background: black;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.coming-soon:hover::after {
+  opacity: 1;
+}

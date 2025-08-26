@@ -55,6 +55,7 @@ function Hero() {
             }
             className="!text-[1.125rem] px-[18px] py-[9px]"
             IconSize={15}
+            link="/join"
           />
         </div>
       </div>

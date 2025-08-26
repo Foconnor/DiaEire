@@ -69,6 +69,7 @@ function Fund() {
               }
               className="!text-xl md:absolute right-[30px] bottom-[30px] !px-[18px] !py-[9px]"
               IconSize={16}
+              link="/donate"
             />
           </div>
         </div>
