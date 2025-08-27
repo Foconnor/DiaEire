@@ -5,17 +5,25 @@ import {
   faXTwitter,
   faYoutube,
   faInstagram,
+  faLinkedin,
+  faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 function Footer() {
   const Icons = [
-    { icon: faSquareFacebook, link: "/" },
-    { icon: faInstagram, link: "/" },
-    { icon: faYoutube, link: "/" },
-    { icon: faXTwitter, link: "/" },
-    { icon: faLink, link: "/" },
+    {
+      icon: faSquareFacebook,
+      link: "https://www.facebook.com/search/top?q=dia%20le%20heireann",
+    },
+    { icon: faInstagram, link: "https://www.instagram.com/dia_leheireann/" },
+    { icon: faYoutube, link: "https://www.youtube.com/@Dialeh%C3%89ireann" },
+    { icon: faXTwitter, link: "https://x.com/Dia_Eire" },
+    {
+      icon: faLinkedin,
+      link: "https://www.linkedin.com/in/acaseypodcast/?originalSubdomain=ie",
+    },
+    { icon: faTiktok, link: "https://www.tiktok.com/@dia.le.heireann_" },
   ];
   return (
     <div className="max-w-[1200px] w-[95%] m-auto md:py-[30px] pb-5 md:pb-0">
