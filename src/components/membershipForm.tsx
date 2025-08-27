@@ -223,7 +223,7 @@ function MembershipForm({ email, isChecked }: Props) {
               <p className="font-bold text-3xl">
                 €{membershipAmount}{" "}
                 <span className="text-xs font-bold uppercase text-[var(--link)]">
-                  /yr
+                  /per year
                 </span>{" "}
               </p>
               <p className="text-[var(--primary)] font-semibold text-lg">
@@ -733,7 +733,7 @@ function MembershipForm({ email, isChecked }: Props) {
               //   setPaymentType(1);
               // }}
             >
-              Year
+              Party Membership
             </div>
           </div>
           <div className="md:bg-[#F0EAEA] w-full sm:max-w-[500px] mx-auto my-4 md:p-4 rounded-lg flex justify-between">
