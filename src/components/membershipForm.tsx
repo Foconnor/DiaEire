@@ -433,7 +433,6 @@ function MembershipForm({ email, isChecked }: Props) {
                     phoneNumber: e.target.value,
                   }))
                 }
-                required
               />
             </div>
             <p className="text-sm text-[var(--grey-300)]">{paraTwo}</p>
@@ -615,7 +614,6 @@ function MembershipForm({ email, isChecked }: Props) {
                         postalCode: e.target.value,
                       }))
                     }
-                    required
                   />
                 </div>
               </div>
