@@ -9,6 +9,7 @@ import {
   faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
+import Image from "next/image";
 
 function Footer() {
   const Icons = [
@@ -47,6 +48,12 @@ function Footer() {
         </a>
         <a href="/privacy#cookies" className="links">
           Cookie Policy
+        </a>
+      </div>
+      <div className="flex items-center gap-y-1 gap-x-1 md:justify-center justify-start pt-1 pb-1 flex-wrap">
+        <p className="links hover:!no-underline">Powered By</p>
+        <a href="https://workeye.ai" className="links">
+          Workeye
         </a>
       </div>
     </div>
