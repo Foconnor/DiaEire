@@ -22,6 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta name="apple-mobile-web-app-title" content="Dia le hÉireann" />
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
         <link
