@@ -17,6 +17,7 @@ import StrategyEdit from "@/components/admin/strategyEdit";
 import SignupEdit from "@/components/admin/signupEdit";
 import PrivacyEdit from "@/components/admin/privacyEdit";
 import DonationEdit from "@/components/admin/donationEdit";
+import PreFooterEdit from "@/components/admin/preFooterEdit";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -66,6 +67,8 @@ export default function DashboardPage() {
       <PrivacyEdit />
       <h2 className="text-4xl text-center mt-10">Donation</h2>
       <DonationEdit />
+      <h2 className="text-4xl text-center mt-10">Pre Footer</h2>
+      <PreFooterEdit />
     </div>
   );
 }
