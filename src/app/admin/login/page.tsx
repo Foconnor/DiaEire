@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../../firebase/firebaseConfig";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ const LoginForm = () => {
 
       toast.success("Logged in successfully!");
       router.push("/admin");
-    } catch (err : any) {
+    } catch (err: any) {
       const errorCode = err?.code || err?.error?.code || "";
 
       if (
@@ -79,12 +80,20 @@ const LoginForm = () => {
         </div>
 
         <div className="mb-7">
-          <label
-            className="block text-sm font-semibold text-[var(--primary)] mb-2"
-            htmlFor="password"
-          >
-            Password
-          </label>
+          <div className="flex items-center justify-between">
+            <label
+              className="block text-sm font-semibold text-[var(--primary)] mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <Link
+              href="/admin/forgot-password"
+              className="block text-sm text-right text-[var(--primary)] hover:underline underline tracking-wide"
+            >
+              Forgot Password?
+            </Link>
+          </div>
           <div className="relative">
             <input
               id="password"
