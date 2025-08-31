@@ -17,9 +17,10 @@ function FooterEdit() {
   const [XLink, setXLink] = useState("");
   const [LINLink, setLINLink] = useState("");
   const [TTLink, setTTLink] = useState("");
+  const [whatsappLink, setWhatsappLink] = useState("");
   const [copyright, setCopyright] = useState("");
   const [poweredText, setPoweredText] = useState("");
-    const [poweredLink, setPoweredLink] = useState("");
+  const [poweredLink, setPoweredLink] = useState("");
   const [pageLinks, setPageLinks] = useState([
     {
       name: "",
@@ -45,10 +46,11 @@ function FooterEdit() {
           setXLink(data.XLink || "");
           setLINLink(data.LINLink || "");
           setTTLink(data.TTLink || "");
+          setWhatsappLink(data.whatsappLink || "");
           setCopyright(data.copyright || "");
           setPoweredText(data.poweredText || "");
           setPageLinks(data.pageLinks || []);
-            setPoweredLink(data.poweredLink || "");
+          setPoweredLink(data.poweredLink || "");
         } else {
           toast.error("No such document!");
         }
@@ -77,9 +79,10 @@ function FooterEdit() {
       !XLink ||
       !LINLink ||
       !TTLink ||
+      !whatsappLink ||
       !copyright ||
       !poweredText ||
-        !poweredLink ||
+      !poweredLink ||
       pageLinks.some((link) => !link)
     ) {
       toast.error("All fields are required.");
@@ -95,6 +98,7 @@ function FooterEdit() {
         XLink: XLink.trim(),
         LINLink: LINLink.trim(),
         TTLink: TTLink.trim(),
+        whatsappLink: whatsappLink.trim(),
         copyright: copyright.trim(),
         poweredText: poweredText.trim(),
         poweredLink: poweredLink.trim(),
@@ -146,6 +150,10 @@ function FooterEdit() {
           <div className="grid grid-cols-2 mt-4">
             <p className="text-[var(--primary)]">LinkedIn Link:</p>
             <p>{LINLink}</p>
+          </div>
+          <div className="grid grid-cols-2 mt-4">
+            <p className="text-[var(--primary)]">Whatsapp Link:</p>
+            <p>{whatsappLink}</p>
           </div>
           <div className="grid grid-cols-2 mt-4">
             <p className="text-[var(--primary)]">TikTok Link:</p>
@@ -266,6 +274,19 @@ function FooterEdit() {
                   className="w-full border rounded px-3 py-2"
                   value={TTLink}
                   onChange={(e) => setTTLink(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Whatsapp Link <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={whatsappLink}
+                  onChange={(e) => setWhatsappLink(e.target.value)}
                   required
                   disabled={saving}
                 />

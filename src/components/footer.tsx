@@ -8,6 +8,7 @@ import {
   faInstagram,
   faLinkedin,
   faTiktok,
+  faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
 import { doc, getDoc } from "firebase/firestore";
@@ -24,6 +25,7 @@ function Footer() {
   const [copyright, setCopyright] = useState("Loading...");
   const [poweredText, setPoweredText] = useState("Loading...");
   const [poweredLink, setPoweredLink] = useState("");
+  const [whatsappLink, setWhatsappLink] = useState("");
   const [pageLinks, setPageLinks] = useState([
     {
       name: "",
@@ -43,6 +45,7 @@ function Footer() {
       link: LINLink,
     },
     { icon: faTiktok, link: TTLink },
+    { icon: faWhatsapp, link: whatsappLink },
   ];
 
   useEffect(() => {
@@ -59,6 +62,7 @@ function Footer() {
           setXLink(data.XLink || "");
           setLINLink(data.LINLink || "");
           setTTLink(data.TTLink || "");
+          setWhatsappLink(data.whatsappLink || "");
           setCopyright(data.copyright || "");
           setPoweredText(data.poweredText || "");
           setPoweredLink(data.poweredLink || "");
