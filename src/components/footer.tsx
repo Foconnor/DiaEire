@@ -1,5 +1,6 @@
+"use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   faSquareFacebook,
   faXTwitter,
@@ -9,23 +10,70 @@ import {
   faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
-import Image from "next/image";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
+import toast from "react-hot-toast";
 
 function Footer() {
+  const [fbookLink, setFbookLink] = useState("");
+  const [instaLink, setInstaLink] = useState("");
+  const [YTLink, setYTLink] = useState("");
+  const [XLink, setXLink] = useState("");
+  const [LINLink, setLINLink] = useState("");
+  const [TTLink, setTTLink] = useState("");
+  const [copyright, setCopyright] = useState("Loading...");
+  const [poweredText, setPoweredText] = useState("Loading...");
+  const [poweredLink, setPoweredLink] = useState("");
+  const [pageLinks, setPageLinks] = useState([
+    {
+      name: "",
+      url: "",
+    },
+  ]);
   const Icons = [
     {
       icon: faSquareFacebook,
-      link: "https://www.facebook.com/search/top?q=dia%20le%20heireann",
+      link: fbookLink,
     },
-    { icon: faInstagram, link: "https://www.instagram.com/dia_leheireann/" },
-    { icon: faYoutube, link: "https://www.youtube.com/@Dialeh%C3%89ireann" },
-    { icon: faXTwitter, link: "https://x.com/Dia_Eire" },
+    { icon: faInstagram, link: instaLink },
+    { icon: faYoutube, link: YTLink },
+    { icon: faXTwitter, link: XLink },
     {
       icon: faLinkedin,
-      link: "https://www.linkedin.com/in/acaseypodcast/?originalSubdomain=ie",
+      link: LINLink,
     },
-    { icon: faTiktok, link: "https://www.tiktok.com/@dia.le.heireann_" },
+    { icon: faTiktok, link: TTLink },
   ];
+
+  useEffect(() => {
+    const getSectionData = async () => {
+      try {
+        const docRef = doc(db, "footer", "footerContent");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setFbookLink(data.fbookLink || "");
+          setInstaLink(data.instaLink || "");
+          setYTLink(data.YTLink || "");
+          setXLink(data.XLink || "");
+          setLINLink(data.LINLink || "");
+          setTTLink(data.TTLink || "");
+          setCopyright(data.copyright || "");
+          setPoweredText(data.poweredText || "");
+          setPoweredLink(data.poweredLink || "");
+          setPageLinks(data.pageLinks || []);
+        } else {
+          toast.error("No such document!");
+        }
+      } catch (error) {
+        toast.error("Error fetching footer data");
+        console.error("Error fetching footer data:", error);
+      }
+    };
+    getSectionData();
+  }, []);
+
   return (
     <div className="max-w-[1200px] w-[95%] m-auto md:py-[30px] pb-5 md:pb-0">
       <div className="flex items-center gap-[1.33rem] text-[var(--grey-300)] md:justify-center">
@@ -40,20 +88,17 @@ function Footer() {
         ))}
       </div>
       <div className="flex items-center gap-x-[1.33rem] gap-y-1 md:justify-center justify-start pt-3 flex-wrap">
-        <p className="links hover:!no-underline">
-          Copyright 2025 Dia le hÉireann All Rights Reserved
-        </p>
-        <a href="/privacy" className="links">
-          Privacy
-        </a>
-        <a href="/privacy#cookies" className="links">
-          Cookie Policy
-        </a>
+        <p className="links hover:!no-underline">{copyright}</p>
+        {pageLinks.map((link, index) => (
+          <a key={index} href={link.url} className="links">
+            {link.name}
+          </a>
+        ))}
       </div>
       <div className="flex items-center gap-y-1 gap-x-1 md:justify-center justify-start pt-1 pb-1 flex-wrap">
         <p className="links hover:!no-underline">Powered By</p>
-        <a href="https://workeye.ai" className="links">
-          Workeye
+        <a href={poweredLink} className="links">
+          {poweredText}
         </a>
       </div>
     </div>

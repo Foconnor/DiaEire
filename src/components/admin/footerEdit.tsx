@@ -19,6 +19,7 @@ function FooterEdit() {
   const [TTLink, setTTLink] = useState("");
   const [copyright, setCopyright] = useState("");
   const [poweredText, setPoweredText] = useState("");
+    const [poweredLink, setPoweredLink] = useState("");
   const [pageLinks, setPageLinks] = useState([
     {
       name: "",
@@ -47,6 +48,7 @@ function FooterEdit() {
           setCopyright(data.copyright || "");
           setPoweredText(data.poweredText || "");
           setPageLinks(data.pageLinks || []);
+            setPoweredLink(data.poweredLink || "");
         } else {
           toast.error("No such document!");
         }
@@ -77,6 +79,7 @@ function FooterEdit() {
       !TTLink ||
       !copyright ||
       !poweredText ||
+        !poweredLink ||
       pageLinks.some((link) => !link)
     ) {
       toast.error("All fields are required.");
@@ -94,6 +97,7 @@ function FooterEdit() {
         TTLink: TTLink.trim(),
         copyright: copyright.trim(),
         poweredText: poweredText.trim(),
+        poweredLink: poweredLink.trim(),
         pageLinks: pageLinks.map((link) => ({
           name: link.name.trim(),
           url: link.url.trim(),
@@ -158,8 +162,12 @@ function FooterEdit() {
             </div>
           ))}
           <div className="grid grid-cols-2 mt-4">
-            <p className="text-[var(--primary)]">Powered Text</p>
+            <p className="text-[var(--primary)]">Powered by Name</p>
             <p>{poweredText}</p>
+          </div>
+          <div className="grid grid-cols-2 mt-4">
+            <p className="text-[var(--primary)]">Powered by Link</p>
+            <p>{poweredLink}</p>
           </div>
         </>
       )}
@@ -297,13 +305,26 @@ function FooterEdit() {
               ))}
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Powered Text <span className="text-red-500">*</span>
+                  Powered by Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   className="w-full border rounded px-3 py-2"
                   value={poweredText}
                   onChange={(e) => setPoweredText(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Powered by Link <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={poweredLink}
+                  onChange={(e) => setPoweredLink(e.target.value)}
                   required
                   disabled={saving}
                 />
