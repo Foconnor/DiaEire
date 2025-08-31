@@ -1,21 +1,32 @@
 "use client";
-import { doc, getDoc } from "firebase/firestore";
-import Link from "next/link";
-import React, { useEffect } from "react";
+import { doc, getDoc, collection, addDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { db } from "../../../firebase/firebaseConfig";
 import PreFooter from "@/components/pre-footer";
 import Footer from "@/components/footer";
 import countries from "world-countries";
 import Navbar from "@/components/navbar";
+import { useRouter } from "next/navigation";
 
-function page() {
-  const [logo, setLogo] = React.useState<string>("");
-  const [title, setTitle] = React.useState<string>("Loading...");
-  const [img, setImg] = React.useState<string>("Loading...");
-  const [paraOne, setParaOne] = React.useState<string>("Loading...");
-  const [paraTwo, setParaTwo] = React.useState<string>("Loading...");
-  const [formDes, setFormDes] = React.useState<string>("Loading...");
+function Page() {
+  const Router = useRouter();
+  const [logo, setLogo] = useState<string>("");
+  const [title, setTitle] = useState<string>("Loading...");
+  const [img, setImg] = useState<string>("Loading...");
+  const [paraOne, setParaOne] = useState<string>("Loading...");
+  const [paraTwo, setParaTwo] = useState<string>("Loading...");
+  const [formDes, setFormDes] = useState<string>("Loading...");
+
+  // 🔹 Form fields
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("Ireland");
+  const [emailLists, setEmailLists] = useState("no");
+  const [loading, setLoading] = useState(false); // loader state
+
+  // Fetch Navbar
   useEffect(() => {
     const getSectionData = async () => {
       try {
@@ -36,6 +47,7 @@ function page() {
     getSectionData();
   }, []);
 
+  // Fetch Signup Page Data
   useEffect(() => {
     const getSectionData = async () => {
       try {
@@ -65,6 +77,41 @@ function page() {
     value: country.cca2,
   }));
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!fname || !lname || !email || !country || !emailLists) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    setLoading(true); // start loader
+    try {
+      await addDoc(collection(db, "Users"), {
+        firstName: fname,
+        lastName: lname,
+        email,
+        country,
+        emailLists,
+        createdAt: new Date(),
+      });
+
+      toast.success("Signup successful!");
+      setFname("");
+      setLname("");
+      setEmail("");
+      setCountry("");
+      setEmailLists("");
+
+      Router.push("/");
+    } catch (error) {
+      console.error("Error saving user:", error);
+      toast.error("Failed to submit form");
+    } finally {
+      setLoading(false); // stop loader
+    }
+  };
+
   return (
     <>
       <Navbar buttons={false} />
@@ -85,11 +132,11 @@ function page() {
             ) : (
               <div className="md:w-[500px] md:h-[281px] w-[calc(100vw_-_40px)] h-[400px] bg-[var(--grey-300)] animate-pulse mb-6 rounded-md" />
             )}
-            <p className="mb-6">{paraOne}</p>
+            <p className="mb-6 max-w-[500px]">{paraOne}</p>
             <p className="md:max-w-[500px]">{paraTwo}</p>
           </div>
           <div className="p-8 md:w-[340px] w-full rounded-md shadow-[4px_16px_48px_0px_#19193629]">
-            <form action="">
+            <form onSubmit={handleSubmit}>
               <div className="flex gap-2">
                 <div>
                   <label
@@ -103,6 +150,9 @@ function page() {
                     type="text"
                     placeholder="First Name"
                     id="fname"
+                    required
+                    value={fname}
+                    onChange={(e) => setFname(e.target.value)}
                   />
                 </div>
                 <div>
@@ -117,6 +167,9 @@ function page() {
                     type="text"
                     placeholder="Last Name"
                     id="lname"
+                    required
+                    value={lname}
+                    onChange={(e) => setLname(e.target.value)}
                   />
                 </div>
               </div>
@@ -130,7 +183,10 @@ function page() {
                 className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full"
                 type="email"
                 placeholder="Email address"
+                required
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <label
@@ -143,36 +199,64 @@ function page() {
                 id="country"
                 name="country"
                 className="py-1 px-1.5 border border-[var(--line)] rounded-sm w-full"
-                required
-                defaultValue={"select"}
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
               >
+                <option value="">Choose country</option>
                 {formattedCountries.map((country) => (
-                  <option key={country.value} value={country.value}>
+                  <option key={country.value} value={country.label}>
                     {country.label}
                   </option>
                 ))}
-                <option value="select">Choose country</option>
               </select>
+
               <div className="mt-4 mb-3">
                 <p className="font-semibold text-[var(--grey-300)] text-sm">
                   Join our email and SMS lists? *
                 </p>
               </div>
               <div className="flex gap-2">
-                <input type="radio" name="emailLists" id="yes" />
+                <input
+                  type="radio"
+                  name="emailLists"
+                  id="yes"
+                  value="yes"
+                  checked={emailLists === "yes"}
+                  onChange={(e) => setEmailLists(e.target.value)}
+                />
                 <label htmlFor="yes" className="text-[15px]">
                   Yes
                 </label>
               </div>
               <div className="flex gap-2 mt-2">
-                <input type="radio" name="emailLists" id="no" />
+                <input
+                  type="radio"
+                  name="emailLists"
+                  id="no"
+                  value="no"
+                  checked={emailLists === "no"}
+                  onChange={(e) => setEmailLists(e.target.value)}
+                />
                 <label htmlFor="no" className="text-[15px]">
                   No
                 </label>
               </div>
-              <button className="bg-[var(--primary)] py-2 w-full text-[var(--background)] font-semibold rounded-sm mt-6 text-sm">
-                Submit
+
+              {/* 🔹 Submit button with loader */}
+              <button
+                type="submit"
+                disabled={loading}
+                className={`bg-[var(--primary)] py-2 w-full cursor-pointer text-[var(--background)] font-semibold rounded-sm mt-6 text-sm flex items-center justify-center ${
+                  loading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
+              >
+                {loading ? (
+                  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  "Submit"
+                )}
               </button>
+
               <p className="mt-2 text-[9px] text-center">{formDes}</p>
             </form>
           </div>
@@ -184,4 +268,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
