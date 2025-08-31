@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Ireland's Christian conservative party | Dia le hÉireann",
+  title: "Christian National Party | Dia le hÉireann",
   description:
     "The Irish Christian conservative party with a plan to halt cultural, economic and social collapse and restore Éire's sovereignty. The people's voice matters.",
 };
