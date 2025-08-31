@@ -65,7 +65,7 @@ function PreFooter() {
           <div className="md:px-3" key={cat.id}>
             {/* Main category */}
             <div
-              className="flex flex-col border-y-[1px] border-[var(--line)] py-2 md:py-0 md:border-none mt-5 md:mt-0 cursor-pointer md:cursor-default"
+              className="flex flex-col border-b-[1px] border-[var(--line)] py-2 md:py-0 md:border-none cursor-pointer md:cursor-default"
               onClick={() => toggleCategory(catIndex)}
             >
               <div className="flex items-center justify-between">
