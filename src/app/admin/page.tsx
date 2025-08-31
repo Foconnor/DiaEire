@@ -19,6 +19,7 @@ import PrivacyEdit from "@/components/admin/privacyEdit";
 import DonationEdit from "@/components/admin/donationEdit";
 import PreFooterEdit from "@/components/admin/preFooterEdit";
 import FooterEdit from "@/components/admin/footerEdit";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -46,6 +47,12 @@ export default function DashboardPage() {
   return (
     <div>
       <Navbar buttons={false} />
+      <Link
+        href="/admin/forgot-password"
+        className="block bg-[var(--primary)] text-white px-4 py-2 rounded-md w-max ml-auto mt-4 mr-4 hover:bg-[var(--btn-hover-bg)] transition-all ease-in-out duration-200"
+      >
+        Reset Password
+      </Link>
       <h2 className="text-4xl text-center mt-10">Navbar</h2>
       <NavbarEdit />
       <h2 className="text-4xl text-center mt-10">Landing Page</h2>
