@@ -18,6 +18,10 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
     React.useState<string>("Loading...");
   const [bottomRightLink, setBottomRightLink] =
     React.useState<string>("Loading...");
+  const [bottomLeftLinkText, setBottomLeftLinkText] =
+    React.useState<string>("Loading...");
+  const [bottomRightLinkText, setBottomRightLinkText] =
+    React.useState<string>("Loading...");
 
   useEffect(() => {
     const getSectionData = async () => {
@@ -33,6 +37,8 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
           setRightSideButton(data.rightSideButton || "");
           setBottomLeftLink(data.bottomLeftLink || "");
           setBottomRightLink(data.bottomRightLink || "");
+          setBottomLeftLinkText(data.bottomLeftLinkText || "");
+          setBottomRightLinkText(data.bottomRightLinkText || "");
         } else {
           toast.error("No such document!");
         }
@@ -80,11 +86,11 @@ function Navbar({ buttons = true }: { buttons?: boolean }) {
       </div>
       {buttons && (
         <div className="wrapper flex py-3 items-center gap-9 text-[14.4px] text-[var(--link)] font-semibold">
-          <Link href="/join" className="hover:text-[var(--btn-black)]">
-            {bottomLeftLink}
+          <Link href={bottomLeftLink} className="hover:text-[var(--btn-black)]">
+            {bottomLeftLinkText}
           </Link>
-          <Link href="/strategy" className="hover:text-[var(--btn-black)]">
-            {bottomRightLink}
+          <Link href={bottomRightLink} className="hover:text-[var(--btn-black)]">
+            {bottomRightLinkText}
           </Link>
         </div>
       )}

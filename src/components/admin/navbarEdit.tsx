@@ -16,6 +16,8 @@ function NavbarEdit() {
   const [rightSideButton, setRightSideButton] = useState("");
   const [bottomLeftLink, setBottomLeftLink] = useState("");
   const [bottomRightLink, setBottomRightLink] = useState("");
+  const [bottomLeftLinkText, setBottomLeftLinkText] = useState("");
+  const [bottomRightLinkText, setBottomRightLinkText] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,6 +35,8 @@ function NavbarEdit() {
           setLeftSideButton(data.leftSideButton || "");
           setRightSideButton(data.rightSideButton || "");
           setBottomLeftLink(data.bottomLeftLink || "");
+          setBottomLeftLinkText(data.bottomLeftLinkText || "");
+          setBottomRightLinkText(data.bottomRightLinkText || "");
           setBottomRightLink(data.bottomRightLink || "");
         } else {
           toast.error("No such document!");
@@ -60,6 +64,8 @@ function NavbarEdit() {
       !leftSideButton.trim() ||
       !rightSideButton.trim() ||
       !bottomLeftLink.trim() ||
+      !bottomRightLinkText.trim() ||
+      !bottomLeftLinkText.trim() ||
       !bottomRightLink.trim()
     ) {
       toast.error("All fields are required.");
@@ -74,6 +80,8 @@ function NavbarEdit() {
         rightSideButton: rightSideButton.trim(),
         bottomLeftLink: bottomLeftLink.trim(),
         bottomRightLink: bottomRightLink.trim(),
+        bottomLeftLinkText: bottomLeftLinkText.trim(),
+        bottomRightLinkText: bottomRightLinkText.trim(),
       });
       toast.success("Navbar updated!");
       setIsModalOpen(false);
@@ -109,10 +117,18 @@ function NavbarEdit() {
           </div>
           <div className="grid grid-cols-2 mt-4">
             <p className="text-[var(--primary)]">Button Right Link Text :</p>
+            <p>{bottomRightLinkText}</p>
+          </div>
+          <div className="grid grid-cols-2 mt-4">
+            <p className="text-[var(--primary)]">Button Right Link :</p>
             <p>{bottomRightLink}</p>
           </div>
           <div className="grid grid-cols-2 mt-4">
             <p className="text-[var(--primary)]">Button Left Link Text :</p>
+            <p>{bottomLeftLinkText}</p>
+          </div>
+          <div className="grid grid-cols-2 mt-4">
+            <p className="text-[var(--primary)]">Button Left Link :</p>
             <p>{bottomLeftLink}</p>
           </div>
           <div className="flex items-start justify-between gap-1 mt-4">
@@ -189,6 +205,19 @@ function NavbarEdit() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">
+                  Button Left Link Text <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={bottomLeftLinkText}
+                  onChange={(e) => setBottomLeftLinkText(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
                   Button Left Link <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -196,6 +225,19 @@ function NavbarEdit() {
                   className="w-full border rounded px-3 py-2"
                   value={bottomLeftLink}
                   onChange={(e) => setBottomLeftLink(e.target.value)}
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Button Right Link Text <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={bottomRightLinkText}
+                  onChange={(e) => setBottomRightLinkText(e.target.value)}
                   required
                   disabled={saving}
                 />
