@@ -5,11 +5,18 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import Navbar from "@/components/navbar";
-
+import Header from "../../components/shop-admin/header";
+import Products from "@/components/shop-admin/products";
+import Orders from "@/components/shop-admin/orders";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [isSelected, setSelected] = useState(0);
+
+  const handleValueChange = (newValue: number) => {
+    setSelected(newValue);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -33,7 +40,8 @@ export default function DashboardPage() {
   return (
     <div>
       <Navbar buttons={false} />
-      
+      <Header handleValueChange={handleValueChange} value={isSelected} />
+      {!isSelected ? <Products /> : <Orders />}
     </div>
   );
 }

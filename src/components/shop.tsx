@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import Pagination from "./shop/pagination";
+import Pagination from "./common/pagination";
 
 const Shop = () => {
   const router = useRouter();
