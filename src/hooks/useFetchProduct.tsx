@@ -27,7 +27,7 @@ interface Product {
 }
 
 export function useFetchProducts(
-  pageSize: number = 10,
+  pageSize: number = 9,
   filterCategory: string | null = null,
   searchQuery: string = ""
 ) {

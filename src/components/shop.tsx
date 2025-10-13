@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Pagination from "./common/pagination";
 import { useFetchProducts } from "@/hooks/useFetchProduct";
-import { Product as ProductType } from "@/types/types";
 
 const Shop = () => {
   const router = useRouter();
@@ -91,7 +90,7 @@ const Shop = () => {
       <div className="wrapper py-14">
         {loading && (
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 mb-20">
-            {Array.from({ length: 10 }).map((_, index) => (
+            {Array.from({ length: 9 }).map((_, index) => (
               <div
                 key={index}
                 className="border border-[var(--line)] rounded-xl overflow-hidden bg-white animate-pulse flex flex-col justify-between items-center"
@@ -170,7 +169,7 @@ const Shop = () => {
         {products.length > 0 && (
           <Pagination
             totalItems={totalCount}
-            itemsPerPage={10}
+            itemsPerPage={9}
             currentPage={currentPage}
             onPageChange={setCurrentPage}
           />
