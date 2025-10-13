@@ -23,7 +23,8 @@ const Shop = () => {
   const [selected, setSelected] = useState("All");
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { products, error, loading } = useFetchProducts();
+  const { products, error, loading, totalCount, fetchProductsPage } =
+    useFetchProducts();
 
   const [shopItems, setShopItems] = useState([] as ProductsProps[]);
 
@@ -57,6 +58,15 @@ const Shop = () => {
       style: "currency",
       currency: "EUR",
     }).format(value);
+
+  useEffect(() => {
+    const fetchPage = async () => {
+      const offset = (currentPage - 1) * 10;
+      await fetchProductsPage(currentPage);
+    };
+
+    fetchPage();
+  }, [currentPage]);
 
   return (
     <div>
@@ -107,8 +117,27 @@ const Shop = () => {
         </div>
       </div>
       <div className="wrapper py-14">
-        {filteredItems.length > 0 ? (
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
+        {loading && (
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 mb-20">
+            {Array.from({ length: 10 }).map((_, index) => (
+              <div
+                key={index}
+                className="border border-[var(--line)] rounded-xl overflow-hidden bg-white animate-pulse flex flex-col justify-between items-center"
+              >
+                <div className="h-96 bg-[var(--grey)] w-full"></div>
+                <div className="p-4 w-full space-y-4">
+                  <div className="h-6 bg-[var(--grey)] w-3/4 rounded"></div>
+                  <div className="h-4 bg-[var(--grey)] w-full rounded"></div>
+                  <div className="h-4 bg-[var(--grey)] w-full rounded"></div>
+                  <div className="h-4 bg-[var(--grey)] w-1/2 rounded"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredItems.length > 0 ? (
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 mb-20">
             {filteredItems.map((item) => (
               <div
                 key={item.id}
@@ -160,16 +189,20 @@ const Shop = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500 py-20">
-            No products found.
-          </div>
+          !loading && (
+            <div className="text-center text-gray-500 py-20">
+              No products found.
+            </div>
+          )
         )}
-        <Pagination
-          totalItems={shopItems.length}
-          itemsPerPage={10}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+        {filteredItems.length > 0 && (
+          <Pagination
+            totalItems={totalCount}
+            itemsPerPage={10}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
     </div>
   );

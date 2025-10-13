@@ -35,7 +35,8 @@ interface ProductsProps {
 
 function Products() {
   const { handleAdd, success } = useAddProduct();
-  const { products, error, loading } = useFetchProducts();
+  const { products, error, loading, totalCount, fetchProductsPage } =
+    useFetchProducts();
   const {
     handleEdit,
     success: editSuccess,
@@ -131,6 +132,22 @@ function Products() {
     () => ["All", ...Array.from(new Set(shopItems.map((i) => i.category)))],
     [shopItems]
   );
+
+  const formatPrice = (value: number) =>
+    new Intl.NumberFormat("en-EU", {
+      style: "currency",
+      currency: "EUR",
+    }).format(value);
+
+  useEffect(() => {
+    const fetchPage = async () => {
+      const offset = (currentPage - 1) * 10;
+      await fetchProductsPage(currentPage);
+    };
+
+    fetchPage();
+  }, [currentPage]);
+
   return (
     <div className="wrapper">
       <h1 className="mt-10 text-3xl text-center mb-10">Products</h1>
@@ -200,7 +217,7 @@ function Products() {
         <Table>
           <TableCaption>
             <Pagination
-              totalItems={shopItems.length}
+              totalItems={totalCount}
               itemsPerPage={10}
               currentPage={currentPage}
               onPageChange={setCurrentPage}
@@ -212,66 +229,80 @@ function Products() {
               <TableHead className="text-center">image</TableHead>
               <TableHead className="text-start">Name</TableHead>
               <TableHead className="text-start">category</TableHead>
-              <TableHead className="text-start">price</TableHead>
               <TableHead className="text-start">discount price</TableHead>
+              <TableHead className="text-start">price</TableHead>
               <TableHead className="text-start">stock</TableHead>
               <TableHead className="text-start">description</TableHead>
               <TableHead className="text-start">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredItems.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="text-start">{index + 1}</TableCell>
-                <TableCell className="text-center">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    width={100}
-                    height={100}
-                  />
-                </TableCell>
-                <TableCell className="text-start">{item.name}</TableCell>
-                <TableCell className="text-start">{item.category}</TableCell>
-                <TableCell className="text-start">{item.price}</TableCell>
-                <TableCell className="text-start">
-                  {item.discountPrice}
-                </TableCell>
-                <TableCell className="text-start">{item.stock}</TableCell>
-                <TableCell className="text-start max-w-[200px] truncate">
-                  {item.description}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-start gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleOpenModel();
-                        setIsEditing(true);
-                        setFormValue({
-                          id: item.id,
-                          image: item.image === null ? "" : item.image,
-                          name: item.name,
-                          category: item.category,
-                          price: item.price?.toString(),
-                          discountPrice: item.discountPrice?.toString(),
-                          stock: item.stock?.toString(),
-                          description: item.description,
-                        });
-                      }}
-                      className="bg-[var(--primary)] text-white px-4 py-2 rounded hover:bg-[var(--btn-hover-bg)] transition-all ease-in-out duration-300 cursor-pointer flex items-center gap-3"
-                    >
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                      Edit
-                    </button>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded hover:opacity-80 transition-all ease-in-out duration-300 cursor-pointer flex items-center gap-3">
-                      Delete
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell className="text-start">{index + 1}</TableCell>
+                  <TableCell className="text-center">
+                    <img
+                      className="w-16 h-16 object-contain mx-auto"
+                      src={item.image}
+                      alt={item.name}
+                      width={100}
+                      height={100}
+                    />
+                  </TableCell>
+                  <TableCell className="text-start">{item.name}</TableCell>
+                  <TableCell className="text-start">{item.category}</TableCell>
+                  <TableCell className="text-start">
+                    {formatPrice(Number(item.discountPrice))}
+                  </TableCell>
+                  <TableCell className="text-start">
+                    {formatPrice(Number(item.price))}
+                  </TableCell>
+                  <TableCell className="text-start">{item.stock}</TableCell>
+                  <TableCell className="text-start max-w-[200px] truncate">
+                    {item.description}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-start gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleOpenModel();
+                          setIsEditing(true);
+                          setFormValue({
+                            id: item.id,
+                            image: item.image === null ? "" : item.image,
+                            name: item.name,
+                            category: item.category,
+                            price: item.price?.toString(),
+                            discountPrice: item.discountPrice?.toString(),
+                            stock: item.stock?.toString(),
+                            description: item.description,
+                          });
+                        }}
+                        className="bg-[var(--primary)] text-white px-4 py-2 rounded hover:bg-[var(--btn-hover-bg)] transition-all ease-in-out duration-300 cursor-pointer flex items-center gap-3"
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                        Edit
+                      </button>
+                      <button className="bg-red-500 text-white px-4 py-2 rounded hover:opacity-80 transition-all ease-in-out duration-300 cursor-pointer flex items-center gap-3">
+                        Delete
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={9}
+                  className="text-center text-gray-500 py-10"
+                >
+                  {loading ? "Loading products..." : "No products found."}
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
