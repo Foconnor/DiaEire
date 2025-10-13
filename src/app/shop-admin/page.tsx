@@ -8,6 +8,8 @@ import Navbar from "@/components/navbar";
 import Header from "../../components/shop-admin/header";
 import Products from "@/components/shop-admin/products";
 import Orders from "@/components/shop-admin/orders";
+import Footer from "@/components/footer";
+import PreFooter from "@/components/pre-footer";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -42,6 +44,8 @@ export default function DashboardPage() {
       <Navbar buttons={false} />
       <Header handleValueChange={handleValueChange} value={isSelected} />
       {!isSelected ? <Products /> : <Orders />}
+      <PreFooter />
+      <Footer />
     </div>
   );
 }
