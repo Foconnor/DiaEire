@@ -1,6 +1,39 @@
 import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import EditButton from "../common/editButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 function Products() {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [saving, setSaving] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+  };
+
+  const [formValue, setFormValue] = React.useState({
+    img: "",
+    name: "",
+    category: "",
+    price: "",
+    discountPrice: "",
+    stock: "",
+    description: "",
+  });
+
   const shopItems = [
     {
       id: 1,
@@ -174,11 +207,192 @@ function Products() {
     <div className="wrapper">
       <h1 className="mt-10 text-3xl text-center">Products</h1>
       <div className="">
-        {shopItems.map((item, index) => (
-          <div key={index}>products</div>
-
-        ))}
+        <Table>
+          <TableCaption>A list of your products</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-center">image</TableHead>
+              <TableHead className="text-start">Name</TableHead>
+              <TableHead className="text-start">category</TableHead>
+              <TableHead className="text-start">price</TableHead>
+              <TableHead className="text-start">discount price</TableHead>
+              <TableHead className="text-start">stock</TableHead>
+              <TableHead className="text-start">description</TableHead>
+              <TableHead className="text-start">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {shopItems.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell className="text-center">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    width={100}
+                    height={100}
+                  />
+                </TableCell>
+                <TableCell className="text-start">{item.name}</TableCell>
+                <TableCell className="text-start">{item.category}</TableCell>
+                <TableCell className="text-start">{item.price}</TableCell>
+                <TableCell className="text-start">
+                  {item.discountPrice}
+                </TableCell>
+                <TableCell className="text-start">{item.stock}</TableCell>
+                <TableCell className="text-start max-w-[100px] truncate">
+                  {item.description}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex items-start gap-3">
+                    <EditButton onClick={() => {}} />
+                    <button className="w-full bg-red-500 text-white py-2 rounded hover:opacity-80 transition-all ease-in-out duration-200 cursor-pointer px-1">
+                      Delete
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg p-8 max-w-[400px] w-[90%] max-h-[80vh] relative overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeModal}
+              disabled={saving}
+              className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold cursor-pointer disabled:opacity-50"
+              aria-label="Close"
+            >
+              <FontAwesomeIcon icon={faClose} />
+            </button>
+            <h3 className="text-xl font-semibold mb-4">Edit Signup Page</h3>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Img <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.img}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, img: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.name}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, name: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Category <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.category}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, category: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Price <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.price}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, price: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Discount Price <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.discountPrice}
+                  onChange={(e) =>
+                    setFormValue({
+                      ...formValue,
+                      discountPrice: e.target.value,
+                    })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Stock <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.stock}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, stock: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Description <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.description}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, description: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full bg-[var(--primary)] text-white py-2 rounded font-semibold hover:bg-[var(--btn-hover-bg)] transition cursor-pointer disabled:opacity-60"
+              >
+                {saving ? "Saving..." : "Save"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
