@@ -5,53 +5,27 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Pagination from "./common/pagination";
 import { useFetchProducts } from "@/hooks/useFetchProduct";
-
-interface ProductsProps {
-  id: string;
-  image: string;
-  name: string;
-  category: string;
-  price: string;
-  discountPrice: string;
-  stock: string;
-  description: string;
-}
+import { Product as ProductType } from "@/types/types";
 
 const Shop = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selected, setSelected] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { products, error, loading, totalCount, fetchProductsPage } =
+  const { products, error, loading, totalCount, fetchProductsPage, categories } =
     useFetchProducts();
 
-  const [shopItems, setShopItems] = useState([] as ProductsProps[]);
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    setOpen(false);
+  };
 
-  useEffect(() => {
-    if (products && Array.isArray(products)) {
-      setShopItems(products);
-    }
-  }, [products]);
-
-  const categories = useMemo(
-    () => ["All", ...Array.from(new Set(shopItems.map((i) => i.category)))],
-    [shopItems]
-  );
-
-  const filteredItems = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    let result =
-      selected === "All"
-        ? shopItems
-        : shopItems.filter((item) => item.category === selected);
-
-    if (query) {
-      result = result.filter((item) => item.name.toLowerCase().includes(query));
-    }
-
-    return result;
-  }, [selected, searchQuery, shopItems]);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
 
   const formatPrice = (value: number) =>
     new Intl.NumberFormat("en-EU", {
@@ -61,12 +35,11 @@ const Shop = () => {
 
   useEffect(() => {
     const fetchPage = async () => {
-      const offset = (currentPage - 1) * 10;
-      await fetchProductsPage(currentPage);
+      await fetchProductsPage(currentPage, selectedCategory, searchQuery);
     };
 
     fetchPage();
-  }, [currentPage]);
+  }, [currentPage, selectedCategory, searchQuery]);
 
   return (
     <div>
@@ -82,7 +55,7 @@ const Shop = () => {
           type="text"
           placeholder="Search products..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleSearch}
           className="w-full md:w-[400px] border-b border-[var(--line)] h-10 px-2 text-sm outline-none text-gray-700"
         />
         <div className="relative w-full md:w-48">
@@ -90,7 +63,7 @@ const Shop = () => {
             onClick={() => setOpen((prev) => !prev)}
             className="w-full flex items-center justify-between border cursor-pointer border-gray-300 bg-white rounded-md px-3 py-2 shadow-sm hover:bg-gray-50"
           >
-            <span className="text-gray-700">{selected}</span>
+            <span className="text-gray-700">{selectedCategory}</span>
             <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
 
@@ -100,11 +73,10 @@ const Shop = () => {
                 <li
                   key={category}
                   onClick={() => {
-                    setSelected(category);
-                    setOpen(false);
+                    handleCategoryChange(category);
                   }}
                   className={`px-3 py-2 text-sm cursor-pointer ${
-                    selected === category
+                    selectedCategory === category
                       ? "bg-gray-100 text-[var(--primary)] font-medium"
                       : "hover:bg-gray-100 text-gray-700"
                   }`}
@@ -136,9 +108,9 @@ const Shop = () => {
           </div>
         )}
 
-        {!loading && filteredItems.length > 0 ? (
+        {!loading && products.length > 0 ? (
           <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 mb-20">
-            {filteredItems.map((item) => (
+            {products.map((item) => (
               <div
                 key={item.id}
                 onClick={() => router.push(`/shop/${item.id}`)}
@@ -195,7 +167,7 @@ const Shop = () => {
             </div>
           )
         )}
-        {filteredItems.length > 0 && (
+        {products.length > 0 && (
           <Pagination
             totalItems={totalCount}
             itemsPerPage={10}

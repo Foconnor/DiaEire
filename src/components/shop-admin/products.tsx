@@ -35,8 +35,14 @@ interface ProductsProps {
 
 function Products() {
   const { handleAdd, success } = useAddProduct();
-  const { products, error, loading, totalCount, fetchProductsPage } =
-    useFetchProducts();
+  const {
+    products,
+    error,
+    loading,
+    totalCount,
+    categories,
+    fetchProductsPage,
+  } = useFetchProducts();
   const {
     handleEdit,
     success: editSuccess,
@@ -45,7 +51,7 @@ function Products() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selected, setSelected] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
@@ -106,33 +112,6 @@ function Products() {
     description: "",
   });
 
-  const [shopItems, setShopItems] = useState([] as ProductsProps[]);
-
-  useEffect(() => {
-    if (products && Array.isArray(products)) {
-      setShopItems(products);
-    }
-  }, [products]);
-
-  const filteredItems = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    let result =
-      selected === "All"
-        ? shopItems
-        : shopItems.filter((item) => item.category === selected);
-
-    if (query) {
-      result = result.filter((item) => item.name.toLowerCase().includes(query));
-    }
-
-    return result;
-  }, [selected, searchQuery, shopItems]);
-
-  const categories = useMemo(
-    () => ["All", ...Array.from(new Set(shopItems.map((i) => i.category)))],
-    [shopItems]
-  );
-
   const formatPrice = (value: number) =>
     new Intl.NumberFormat("en-EU", {
       style: "currency",
@@ -141,12 +120,11 @@ function Products() {
 
   useEffect(() => {
     const fetchPage = async () => {
-      const offset = (currentPage - 1) * 10;
-      await fetchProductsPage(currentPage);
+      await fetchProductsPage(currentPage, selectedCategory, searchQuery);
     };
 
     fetchPage();
-  }, [currentPage]);
+  }, [currentPage, selectedCategory, searchQuery]);
 
   return (
     <div className="wrapper">
@@ -164,7 +142,7 @@ function Products() {
             onClick={() => setOpen((prev) => !prev)}
             className="w-full flex items-center justify-between border cursor-pointer border-gray-300 bg-white rounded-md px-3 py-2 shadow-sm hover:bg-gray-50"
           >
-            <span className="text-gray-700">{selected}</span>
+            <span className="text-gray-700">{selectedCategory}</span>
             <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
 
@@ -174,11 +152,11 @@ function Products() {
                 <li
                   key={category}
                   onClick={() => {
-                    setSelected(category);
+                    setSelectedCategory(category);
                     setOpen(false);
                   }}
                   className={`px-3 py-2 text-sm cursor-pointer ${
-                    selected === category
+                    selectedCategory === category
                       ? "bg-gray-100 text-[var(--primary)] font-medium"
                       : "hover:bg-gray-100 text-gray-700"
                   }`}
@@ -237,8 +215,8 @@ function Products() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item, index) => (
+            {products.length > 0 ? (
+              products.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell className="text-start">{index + 1}</TableCell>
                   <TableCell className="text-center">
