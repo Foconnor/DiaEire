@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useCart } from "@/store/cartStore";
 import { formatPrice } from "@/lib/formatPrice";
+import Link from "next/link";
 
 const Cart = () => {
   const {
@@ -40,10 +41,10 @@ const Cart = () => {
 
       <div className="border-t flex items-center justify-between py-2 absolute bottom-0 w-[88%]">
         <h2 className="text-xl">Total : {formatPrice(totalPrice)}</h2>
-        <button className="px-2 py-1 bg-[var(--primary)] text-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-[var(--btn-hover-bg)]">
+        <Link href="/checkout" className="px-2 py-1 bg-[var(--primary)] text-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-[var(--btn-hover-bg)]">
           <FontAwesomeIcon icon={faCartShopping} className="mr-2" />
           Checkout
-        </button>
+        </Link>
       </div>
 
       {items ? (
