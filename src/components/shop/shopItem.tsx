@@ -5,8 +5,13 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useFetchProducts } from "@/hooks/useFetchProduct";
 import { Product as ShopItemType } from "@/types/types";
+import { formatPrice } from "@/lib/formatPrice";
+import { useCart } from "@/store/cartStore";
+import Cart from "./cart";
 
 export default function ShopItem() {
+  const addItem = useCart((state) => state.addItem);
+  const setIsCartOpen = useCart((state) => state.openCart);
   const { products, loading } = useFetchProducts();
   const pathname = usePathname();
   const itemId = pathname.split("/").pop();
@@ -20,12 +25,6 @@ export default function ShopItem() {
   }, [products]);
 
   const item = shopItems.find((i) => i.id === itemId);
-
-  const formatPrice = (value: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "EUR",
-    }).format(value);
 
   return (
     <>
@@ -111,7 +110,12 @@ export default function ShopItem() {
               </div>
 
               <div className="flex items-center gap-5">
-                <button className="bg-[var(--btn-black)] text-white px-6 py-3 rounded-lg hover:opacity-80 cursor-pointer transition-all ease-in-out duration-300">
+                <button
+                  className="bg-[var(--btn-black)] text-white px-6 py-3 rounded-lg hover:opacity-80 cursor-pointer transition-all ease-in-out duration-300"
+                  onClick={() => {
+                    addItem(item), setIsCartOpen(true);
+                  }}
+                >
                   Add to Cart
                 </button>
                 <button className="bg-[var(--primary)] text-white px-6 py-3 rounded-lg hover:bg-[var(--btn-hover-bg)] cursor-pointer transition-all ease-in-out duration-300">
@@ -121,6 +125,7 @@ export default function ShopItem() {
             </div>
           </div>
         )}
+        <Cart />
       </div>
     </>
   );

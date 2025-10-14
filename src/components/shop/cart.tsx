@@ -1,67 +1,30 @@
 "use client";
 import { faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React from "react";
+import { useCart } from "@/store/cartStore";
+import { formatPrice } from "@/lib/formatPrice";
 
-interface CartProps {
-  handleCart: () => void;
-  isCartOpen: boolean;
-}
+const Cart = () => {
+  const {
+    items,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+    toggleCart,
+    isCartOpen,
+  } = useCart();
 
-const Cart: React.FC<CartProps> = ({ handleCart, isCartOpen }) => {
-  const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
-  const [cartItems, setCartItems] = React.useState<any[]>(existingCart);
-
-  console.log(cartItems);
-
-  const formatPrice = (value: number) =>
-    new Intl.NumberFormat("en-EU", {
-      style: "currency",
-      currency: "EUR",
-    }).format(value);
-
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.quantity * Number(item.discountPrice),
+  const totalPrice = (items || []).reduce(
+    (total: number, item: any) =>
+      total +
+      (Number(item.qty ?? 0) || 0) * (Number(item.discountPrice ?? 0) || 0),
     0
   );
 
-  const handleRemoveItem = (ItemId: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== ItemId));
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cartItems.filter((item) => item.id !== ItemId))
-    );
-  };
-
-  function handleQuantityPlus(itemId: string) {
-    setCartItems(
-      cartItems.map((item: any) => {
-        if (item.id === itemId) {
-          item.quantity += 1;
-          item.discountPrice *= item.quantity;
-        }
-        return item;
-      })
-    );
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }
-
-  function handleQuantityMinus(itemId: string) {
-    setCartItems(
-      cartItems.map((item: any) => {
-        if (item.id === itemId) {
-          item.quantity -= 1;
-          item.discountPrice /= item.quantity;
-        }
-        return item;
-      })
-    );
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }
-
   return (
     <div
-      className={`fixed right-0 top-0 w-[350px] h-[100vh] bg-white shadow-lg z-50 p-5 transition-all ease-in-out duration-300 ${
+      className={`fixed right-0 top-0 w-[350px] h-[100vh] bg-white shadow-2xl z-50 p-5 transition-all ease-in-out duration-300 ${
         isCartOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -71,7 +34,7 @@ const Cart: React.FC<CartProps> = ({ handleCart, isCartOpen }) => {
           icon={faXmark}
           className="cursor-pointer hover:opacity-70 transition"
           size="lg"
-          onClick={handleCart}
+          onClick={toggleCart}
         />
       </div>
 
@@ -83,9 +46,9 @@ const Cart: React.FC<CartProps> = ({ handleCart, isCartOpen }) => {
         </button>
       </div>
 
-      {existingCart ? (
-        <div className="py-5 text-gray-500 text-center">
-          {cartItems.map((item: any) => (
+      {items ? (
+        <div className="py-5 text-gray-500 text-center overflow-auto h-[88vh]">
+          {items.map((item: any) => (
             <div
               key={item.id}
               className="border border-[var(--line)] rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white flex justify-between items-center mb-2 relative"
@@ -95,7 +58,7 @@ const Cart: React.FC<CartProps> = ({ handleCart, isCartOpen }) => {
                 className="absolute top-3 right-3 cursor-pointer"
                 size="lg"
                 onClick={() => {
-                  handleRemoveItem(item.id);
+                  removeItem(item.id);
                 }}
               />
               <img
@@ -122,20 +85,20 @@ const Cart: React.FC<CartProps> = ({ handleCart, isCartOpen }) => {
                       className="flex items-center justify-center hover:bg-gray-300 border-r border-gray-300 px-2 text-xl border rounded-l-2xl cursor-pointer bg-gray-200 text-black transition-all duration-200 ease-in-out"
                       type="button"
                       onClick={() => {
-                        handleQuantityMinus(item.id);
+                        decreaseQty(item.id);
                       }}
                     >
                       &minus;
                     </button>
 
                     <span className="text-center px-3 text-black font-medium border border-gray-300 py-1 border-x-0 outline-none">
-                      {item.quantity}
+                      {item.qty}
                     </span>
 
                     <button
                       className="flex items-center justify-center text-black hover:bg-gray-300 border-l border-gray-300 px-2 text-xl border rounded-r-2xl cursor-pointer bg-gray-200 transition-all duration-200 ease-in-out"
                       onClick={() => {
-                        handleQuantityPlus(item.id);
+                        increaseQty(item.id);
                       }}
                       type="button"
                     >

@@ -21,6 +21,7 @@ import Pagination from "../common/pagination";
 import { useAddProduct } from "@/hooks/useAddProduct";
 import { useFetchProducts } from "@/hooks/useFetchProduct";
 import { useEditProduct } from "@/hooks/useEditProduct";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface ProductsProps {
   id: string;
@@ -111,12 +112,6 @@ function Products() {
     stock: "",
     description: "",
   });
-
-  const formatPrice = (value: number) =>
-    new Intl.NumberFormat("en-EU", {
-      style: "currency",
-      currency: "EUR",
-    }).format(value);
 
   useEffect(() => {
     const fetchPage = async () => {
