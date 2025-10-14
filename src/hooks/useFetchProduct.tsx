@@ -14,17 +14,7 @@ import {
   Query,
 } from "firebase/firestore";
 import { db } from "@/../firebase/firebaseConfig";
-
-interface Product {
-  id: string;
-  image: string;
-  name: string;
-  category: string;
-  price: string;
-  discountPrice: string;
-  stock: string;
-  description: string;
-}
+import { Product } from "@/types/types";
 
 export function useFetchProducts(
   pageSize: number = 9,

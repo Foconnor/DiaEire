@@ -1,19 +1,29 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Pagination from "./common/pagination";
 import { useFetchProducts } from "@/hooks/useFetchProduct";
+import Cart from "./shop/cart";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 
 const Shop = () => {
   const router = useRouter();
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { products, error, loading, totalCount, fetchProductsPage, categories } =
-    useFetchProducts();
+  const {
+    products,
+    error,
+    loading,
+    totalCount,
+    fetchProductsPage,
+    categories,
+  } = useFetchProducts();
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -40,6 +50,21 @@ const Shop = () => {
     fetchPage();
   }, [currentPage, selectedCategory, searchQuery]);
 
+  const handleAddToCart = (product: any) => {
+    const existingCart = localStorage.getItem("cart");
+    let cart = existingCart ? JSON.parse(existingCart) : [];
+    const productIndex = cart.findIndex((item: any) => item.id === product.id);
+    if (productIndex > -1) {
+      cart[productIndex].quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`${product.name} has been added to your cart.`);
+  };
+
+  const handleCart = () => setIsCartOpen((prev) => !prev);
+
   return (
     <div>
       <div className="md:h-[220px] h-[100px] flex items-center bg-[var(--grey)]">
@@ -57,34 +82,44 @@ const Shop = () => {
           onChange={handleSearch}
           className="w-full md:w-[400px] border-b border-[var(--line)] h-10 px-2 text-sm outline-none text-gray-700"
         />
-        <div className="relative w-full md:w-48">
+        <div className="flex items-center gap-4 w-full md:w-auto">
           <button
-            onClick={() => setOpen((prev) => !prev)}
-            className="w-full flex items-center justify-between border cursor-pointer border-gray-300 bg-white rounded-md px-3 py-2 shadow-sm hover:bg-gray-50"
+            className="px-4 py-2 bg-[var(--primary)] text-white flex items-center gap-2 transition-all duration-200 hover:bg-[var(--btn-hover-bg)] cursor-pointer"
+            onClick={handleCart}
           >
-            <span className="text-gray-700">{selectedCategory}</span>
-            <ChevronDown className="w-4 h-4 text-gray-500" />
+            <FontAwesomeIcon icon={faShoppingBag} />
+            <span>Cart</span>
           </button>
 
-          {open && (
-            <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
-              {categories.map((category) => (
-                <li
-                  key={category}
-                  onClick={() => {
-                    handleCategoryChange(category);
-                  }}
-                  className={`px-3 py-2 text-sm cursor-pointer ${
-                    selectedCategory === category
-                      ? "bg-gray-100 text-[var(--primary)] font-medium"
-                      : "hover:bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {category}
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="relative w-full md:w-48">
+            <button
+              onClick={() => setOpen((prev) => !prev)}
+              className="w-full flex items-center justify-between border cursor-pointer border-gray-300 bg-white rounded-md px-3 py-2 shadow-sm hover:bg-gray-50"
+            >
+              <span className="text-gray-700">{selectedCategory}</span>
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            </button>
+
+            {open && (
+              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
+                {categories.map((category) => (
+                  <li
+                    key={category}
+                    onClick={() => {
+                      handleCategoryChange(category);
+                    }}
+                    className={`px-3 py-2 text-sm cursor-pointer ${
+                      selectedCategory === category
+                        ? "bg-gray-100 text-[var(--primary)] font-medium"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {category}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
       <div className="wrapper py-14">
@@ -151,7 +186,12 @@ const Shop = () => {
                         ? `In Stock: ${item.stock}`
                         : "Out of Stock"}
                     </span>
-                    <button className="bg-[var(--btn-black)] cursor-pointer text-white px-3 py-2 rounded-md hover:opacity-80 transition-all duration-200">
+                    <button
+                      className="bg-[var(--btn-black)] cursor-pointer text-white px-3 py-2 rounded-md hover:opacity-80 transition-all duration-200"
+                      onClick={() => {
+                        handleAddToCart(item);
+                      }}
+                    >
                       Add to Cart
                     </button>
                   </div>
@@ -175,6 +215,7 @@ const Shop = () => {
           />
         )}
       </div>
+      <Cart handleCart={handleCart} isCartOpen={isCartOpen} />
     </div>
   );
 };
