@@ -39,16 +39,22 @@ const Cart = () => {
         />
       </div>
 
-      <div className="border-t flex items-center justify-between py-2 absolute bottom-0 w-[88%]">
-        <h2 className="text-xl">Total : {formatPrice(totalPrice)}</h2>
-        <Link href="/checkout" className="px-2 py-1 bg-[var(--primary)] text-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-[var(--btn-hover-bg)]">
+      <div className="border-t flex flex-col items-center justify-between py-2 absolute bottom-0 w-[88%]">
+        <div className="flex items-center justify-between w-full mb-5">
+          <h2 className="text-xl">Total :</h2>
+          <p className="text-lg">{formatPrice(totalPrice)}</p>
+        </div>
+        <Link
+          href="/checkout"
+          className="px-3 py-2 bg-[var(--primary)] text-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-[var(--btn-hover-bg)]"
+        >
           <FontAwesomeIcon icon={faCartShopping} className="mr-2" />
-          Checkout
+          Proceed To Checkout
         </Link>
       </div>
 
       {items ? (
-        <div className="py-5 text-gray-500 text-center overflow-auto h-[88vh]">
+        <div className="py-5 text-gray-500 text-center overflow-auto h-[80vh] my-2">
           {items.map((item: any) => (
             <div
               key={item.id}

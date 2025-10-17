@@ -49,6 +49,7 @@ const Shop = () => {
   const addItem = useCart((state) => state.addItem);
   const toggleCart = useCart((state) => state.toggleCart);
   const setIsCartOpen = useCart((state) => state.openCart);
+  const { items } = useCart();
 
   return (
     <div>
@@ -73,7 +74,7 @@ const Shop = () => {
             onClick={toggleCart}
           >
             <FontAwesomeIcon icon={faShoppingBag} />
-            <span>Cart</span>
+            <span>Cart ({items.length}) </span>
           </button>
 
           <div className="relative w-full md:w-48">
@@ -200,7 +201,7 @@ const Shop = () => {
           />
         )}
       </div>
-      <Cart  />
+      <Cart />
     </div>
   );
 };
