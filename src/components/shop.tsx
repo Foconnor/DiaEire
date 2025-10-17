@@ -12,7 +12,7 @@ import { useCart } from "@/store/cartStore";
 import { formatPrice } from "@/lib/formatPrice";
 import Link from "next/link";
 
-const Shop = () => {
+const Shop = ({ hideHeader = false }) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
