@@ -15,6 +15,7 @@ import { ChevronDown } from "lucide-react";
 import Pagination from "../common/pagination";
 import { useFetchOrders } from "@/hooks/useFetchOrders";
 import { useEditOrder } from "@/hooks/useEditOrder";
+import { statusColors } from "@/lib/statusColors";
 
 function Orders() {
   const { orders, error, loading, totalCount, fetchOrdersPage } =
@@ -27,15 +28,6 @@ function Orders() {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
-
-  const statusColors: Record<string, string> = {
-    processing: "bg-blue-400",
-    shipped: "bg-indigo-400",
-    out_for_delivery: "bg-yellow-400",
-    delivered: "bg-green-400",
-    cancelled: "bg-red-400",
-    refunded: "bg-gray-400",
-  };
 
   const status = [
     "All",
@@ -145,7 +137,9 @@ function Orders() {
             {orders.length > 0 ? (
               orders.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-start">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell className="text-start">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </TableCell>
                   <TableCell className="text-start max-w-[200px] truncate">
                     {item.firstName} {item.lastName}
                   </TableCell>
