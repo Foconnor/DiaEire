@@ -14,15 +14,14 @@ import {
   Query,
 } from "firebase/firestore";
 import { db } from "@/../firebase/firebaseConfig";
-import { Product } from "@/types/types";
+import { Order } from "@/types/types";
 
-export function useFetchProducts(
+export function useFetchOrders(
   pageSize: number = 9,
-  filterCategory: string | null = null,
+  filterStatus: string | null = null,
   searchQuery: string = ""
 ) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastDoc, setLastDoc] =
@@ -30,28 +29,16 @@ export function useFetchProducts(
   const [hasMore, setHasMore] = useState(true);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [currentFilter, setCurrentFilter] = useState<string | null>(
-    filterCategory
+    filterStatus
   );
   const [currentSearch, setCurrentSearch] = useState<string>(searchQuery);
-
-  const fetchCategories = async () => {
-    try {
-      const snapshot = await getDocs(collection(db, "products"));
-      const allCategories = Array.from(
-        new Set(snapshot.docs.map((doc) => (doc.data() as any).category))
-      );
-      setCategories(["All", ...allCategories]);
-    } catch (err: any) {
-      console.error("Error fetching categories:", err);
-    }
-  };
 
   const fetchTotalCount = async () => {
     try {
       let q: CollectionReference<DocumentData> | Query<DocumentData> =
-        collection(db, "products");
+        collection(db, "orders");
       if (currentFilter && currentFilter !== "All") {
-        q = query(q, where("category", "==", currentFilter));
+        q = query(q, where("status", "==", currentFilter));
       }
       const snapshot = await getCountFromServer(q as Query<DocumentData>);
       setTotalCount(snapshot.data().count);
@@ -60,7 +47,7 @@ export function useFetchProducts(
     }
   };
 
-  const fetchProductsPage = async (
+  const fetchOrdersPage = async (
     page: number = 1,
     filter: string | null = currentFilter,
     search: string = currentSearch
@@ -74,12 +61,12 @@ export function useFetchProducts(
 
       if (isFilterChanged) {
         setLastDoc(null);
-        setProducts([]);
+        setOrders([]);
         setCurrentFilter(filter);
         setCurrentSearch(search);
       }
 
-      let q: Query<DocumentData> = collection(db, "products");
+      let q: Query<DocumentData> = collection(db, "orders");
 
       if (filter && filter !== "All") {
         q = query(q, where("category", "==", filter));
@@ -102,24 +89,30 @@ export function useFetchProducts(
 
       const snapshot = await getDocs(q);
 
-      const list: Product[] = snapshot.docs.map((doc) => {
+      const list: Order[] = snapshot.docs.map((doc) => {
         const data = doc.data() as Record<string, any>;
         return {
           id: doc.id,
-          image: data.image || "",
-          name: data.name || "",
-          category: data.category || "",
-          price: data.price || "",
-          discountPrice: data.discountPrice || "",
-          stock: data.stock || "",
-          description: data.description || "",
+          country: data.country || "",
+          createdAt: data.createdAt || "",
+          email: data.email || "",
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          orderNotes: data.orderNotes || "",
+          phone: data.phone || "",
+          postcode: data.postcode || "",
+          productsIds: data.productsIds || [],
+          paymentStatus: data.paymentStatus || "",
+          streetAddress: data.streetAddress || "",
+          townCity: data.townCity || "",
+          status: data.status || "",
         };
       });
 
       if (page > 1) {
-        setProducts(list);
+        setOrders(list);
       } else {
-        setProducts(list);
+        setOrders(list);
       }
 
       setLastDoc(snapshot.docs[snapshot.docs.length - 1] || null);
@@ -133,17 +126,15 @@ export function useFetchProducts(
   };
 
   useEffect(() => {
-    fetchCategories();
     fetchTotalCount();
-    fetchProductsPage(1, currentFilter, currentSearch);
+    fetchOrdersPage(1, currentFilter, currentSearch);
   }, [currentFilter, currentSearch]);
 
   return {
-    products,
-    categories,
+    orders,
     loading,
     error,
-    fetchProductsPage,
+    fetchOrdersPage,
     hasMore,
     totalCount,
   };

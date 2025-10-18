@@ -87,6 +87,7 @@ function Products() {
     setSaving(true);
     const formattedFormValue = {
       ...formValue,
+      nameLowerCase: formValue.name.toLowerCase(),
       price: Number(formValue.price),
       discountPrice: Number(formValue.discountPrice),
       stock: Number(formValue.stock),

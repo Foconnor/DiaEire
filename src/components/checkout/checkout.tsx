@@ -118,8 +118,11 @@ function Checkout() {
         try {
           await addDoc(collection(db, "orders"), {
             ...billingDetails,
+            nameLowerCase:
+              `${billingDetails.firstName} ${billingDetails.lastName}`.toLowerCase(),
             productsIds: items.map((item: any) => item.id),
             paymentStatus: "Paid",
+            status: "Processing",
             createdAt: new Date().toISOString(),
           });
           clearCart();
