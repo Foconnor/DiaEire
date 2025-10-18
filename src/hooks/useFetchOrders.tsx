@@ -69,7 +69,7 @@ export function useFetchOrders(
       let q: Query<DocumentData> = collection(db, "orders");
 
       if (filter && filter !== "All") {
-        q = query(q, where("category", "==", filter));
+        q = query(q, where("status", "==", filter));
       }
 
       if (search.trim()) {

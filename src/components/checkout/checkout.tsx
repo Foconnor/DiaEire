@@ -121,8 +121,8 @@ function Checkout() {
             nameLowerCase:
               `${billingDetails.firstName} ${billingDetails.lastName}`.toLowerCase(),
             productsIds: items.map((item: any) => item.id),
-            paymentStatus: "Paid",
-            status: "Processing",
+            paymentStatus: "paid",
+            status: "processing",
             createdAt: new Date().toISOString(),
           });
           clearCart();

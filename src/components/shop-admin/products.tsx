@@ -73,6 +73,8 @@ function Products() {
 
     await handleEdit(formattedFormValue);
 
+    fetchProductsPage();
+
     if (editSuccess) {
       setSaving(false);
       closeModal();

@@ -14,10 +14,12 @@ import { faClose, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { ChevronDown } from "lucide-react";
 import Pagination from "../common/pagination";
 import { useFetchOrders } from "@/hooks/useFetchOrders";
+import { useEditOrder } from "@/hooks/useEditOrder";
 
 function Orders() {
   const { orders, error, loading, totalCount, fetchOrdersPage } =
     useFetchOrders();
+  const { handleEdit } = useEditOrder();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,7 +28,17 @@ function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
 
+  const statusColors: Record<string, string> = {
+    processing: "bg-blue-400",
+    shipped: "bg-indigo-400",
+    out_for_delivery: "bg-yellow-400",
+    delivered: "bg-green-400",
+    cancelled: "bg-red-400",
+    refunded: "bg-gray-400",
+  };
+
   const status = [
+    "All",
     "processing",
     "shipped",
     "out_for_delivery",
@@ -38,15 +50,22 @@ function Orders() {
   const handleOpenModel = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const [formValue, setFormValue] = React.useState({
+    id: "",
+    status: "",
+  });
+
   const handleEditOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-  };
 
-  const [formValue, setFormValue] = React.useState({
-    id:"",
-    status: "",
-  });
+    await handleEdit(formValue);
+
+    fetchOrdersPage();
+
+    setSaving(false);
+    closeModal();
+  };
 
   useEffect(() => {
     const fetchPage = async () => {
@@ -77,7 +96,7 @@ function Orders() {
           </button>
 
           {open && (
-            <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
+            <ul className="absolute z-10 mt-1 w-full bg-white border bg-in border-gray-200 rounded-md shadow-lg">
               {status.map((status) => (
                 <li
                   key={status}
@@ -110,11 +129,11 @@ function Orders() {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-start">S.no</TableHead>
+              <TableHead className="text-start">Date</TableHead>
               <TableHead className="text-start">Name</TableHead>
               <TableHead className="text-start">Email</TableHead>
               <TableHead className="text-start">Payment Status</TableHead>
-              <TableHead className="text-start">Status</TableHead>
+              <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-start">Phone</TableHead>
               <TableHead className="text-start">Postal Code</TableHead>
               <TableHead className="text-start ">Street Address</TableHead>
@@ -126,17 +145,27 @@ function Orders() {
             {orders.length > 0 ? (
               orders.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-start">{index + 1}</TableCell>
-                  <TableCell className="text-start">
+                  <TableCell className="text-start">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell className="text-start max-w-[200px] truncate">
                     {item.firstName} {item.lastName}
                   </TableCell>
-                  <TableCell className="text-start">{item.email}</TableCell>
+                  <TableCell className="text-start max-w-[200px] truncate">
+                    {item.email}
+                  </TableCell>
                   <TableCell className="text-center">
-                    <span className="px-3 py-1 bg-green-400 rounded-full text-white">
+                    <span className="px-3 py-1 bg-green-400 capitalize rounded-full text-white">
                       {item.paymentStatus}
                     </span>
                   </TableCell>
-                  <TableCell className="text-start">{item.status}</TableCell>
+                  <TableCell className="text-center">
+                    <span
+                      className={`px-3 py-1 ${
+                        statusColors[item.status]
+                      } rounded-full text-white capitalize`}
+                    >
+                      {item.status.replaceAll("_", " ")}
+                    </span>
+                  </TableCell>
                   <TableCell className="text-start">{item.phone}</TableCell>
                   <TableCell className="text-start">{item.postcode}</TableCell>
                   <TableCell className="text-start max-w-[200px] truncate ">
@@ -151,7 +180,7 @@ function Orders() {
                           handleOpenModel();
                           setIsEditing(true);
                           setFormValue({
-                            id:item.id,
+                            id: item.id,
                             status: item.status,
                           });
                         }}
@@ -200,7 +229,16 @@ function Orders() {
                 <label className="block text-sm font-medium mb-1">
                   Status <span className="text-red-500">*</span>
                 </label>
-                <select className="w-full px-2 py-3 border border-[var(--line)] outline-1 outline-[var(--primary)]" defaultValue={formValue.status}>
+                <select
+                  className="w-full px-2 py-3 border border-[var(--line)] outline-1 outline-[var(--primary)]"
+                  value={formValue.status}
+                  onChange={(e) => {
+                    setFormValue((prev) => ({
+                      ...prev,
+                      status: e.target.value,
+                    }));
+                  }}
+                >
                   {status.map((item, index) => (
                     <option key={index} value={item}>
                       {item}
