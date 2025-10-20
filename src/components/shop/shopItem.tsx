@@ -40,7 +40,7 @@ export default function ShopItem() {
     <>
       <div className="md:h-[220px] h-[100px] flex items-center justify-start bg-[var(--grey)]">
         <div className="wrapper">
-          <h1 className="text-[calc(1.475rem_+_1.9vw)] text-[var(--primary)] max-w-full">
+          <h1 className="text-[calc(1rem_+_1.9vw)] md:text-[calc(1.475rem_+_1.9vw)] text-[var(--primary)] max-w-full">
             <Link href="/shop" className="underline">
               Shop
             </Link>{" "}
@@ -78,16 +78,16 @@ export default function ShopItem() {
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-8 py-14 items-center border-b border-[var(--line)] mb-10">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-8 py-14 items-center border-b border-black mb-10">
             <img
               src={item?.image}
               alt={item?.name}
               height={300}
-              className="max-w-[400px] h-[300px] object-contain mx-auto"
+              className="max-w-[400px] h-[200px] md:h-[300px] object-contain mx-auto"
             />
 
             <div className="flex-1 space-y-4">
-              <h1 className="text-3xl font-bold text-[var(--primary)]">
+              <h1 className="text-xl md:text-3xl font-semibold md:font-bold text-[var(--primary)]">
                 {item?.name}
               </h1>
               <p className="text-gray-600">{item?.description}</p>
@@ -162,7 +162,7 @@ export default function ShopItem() {
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="h-96 object-contain p-5"
+                    className="h-56 md:h-96 object-contain p-5"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "/fallback.jpg";
                     }}

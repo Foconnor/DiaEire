@@ -12,7 +12,7 @@ import { useCart } from "@/store/cartStore";
 import { formatPrice } from "@/lib/formatPrice";
 import Link from "next/link";
 
-const Shop = ({ hideHeader = false }) => {
+const Shop = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -68,21 +68,24 @@ const Shop = ({ hideHeader = false }) => {
           onChange={handleSearch}
           className="w-full md:w-[400px] border-b border-[var(--line)] h-10 px-2 text-sm outline-none text-gray-700"
         />
-        <div className="flex items-center gap-4 w-full md:w-auto">
+        <div className="flex items-center flex-wrap md:flex-nowrap gap-4 w-full md:w-auto">
           <Link
             href="/track-your-order"
             className="px-4 py-2 bg-black text-white flex items-center gap-2 transition-all duration-200 hover:opacity-50 cursor-pointer"
           >
             <FontAwesomeIcon icon={faTruck} />
-            <span>Track Your Order</span>
+            <span className="whitespace-nowrap">Track Your Order</span>
           </Link>
+
+          <div className="w-full flex gap-2">
+
 
           <button
             className="px-4 py-2 bg-[var(--primary)] text-white flex items-center gap-2 transition-all duration-200 hover:bg-[var(--btn-hover-bg)] cursor-pointer"
             onClick={toggleCart}
           >
             <FontAwesomeIcon icon={faShoppingBag} />
-            <span>Cart ({items.length}) </span>
+            <span className="whitespace-nowrap">Cart ({items.length}) </span>
           </button>
 
           <div className="relative w-full md:w-48">
@@ -93,6 +96,7 @@ const Shop = ({ hideHeader = false }) => {
               <span className="text-gray-700">{selectedCategory}</span>
               <ChevronDown className="w-4 h-4 text-gray-500" />
             </button>
+                </div>
 
             {open && (
               <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
@@ -147,7 +151,7 @@ const Shop = ({ hideHeader = false }) => {
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="h-96 object-contain p-5"
+                    className="h-56 md:h-96 object-contain p-5"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "/fallback.jpg";
                     }}

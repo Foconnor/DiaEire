@@ -27,7 +27,6 @@ function Orders() {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isEditing, setIsEditing] = useState(false);
 
   const status = [
     "All",
@@ -172,7 +171,6 @@ function Orders() {
                         type="button"
                         onClick={() => {
                           handleOpenModel();
-                          setIsEditing(true);
                           setFormValue({
                             id: item.id,
                             status: item.status,

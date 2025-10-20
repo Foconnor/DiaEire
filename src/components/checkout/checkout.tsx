@@ -126,7 +126,7 @@ function Checkout() {
             createdAt: new Date().toISOString(),
           });
           clearCart();
-          router.push("/shop");
+          router.push("/track-your-order");
           toast.success("Order placed successfull 🎉");
         } catch (error) {
           if (error instanceof Error) {
@@ -380,7 +380,7 @@ function Checkout() {
         <div className="h-full">
           <h2 className="text-2xl my-5">Your Order</h2>
           {items && items.length ? (
-            <div className="pt-5 text-gray-500 text-center overflow-auto h-[550px]">
+            <div className="pt-5 text-gray-500 text-center overflow-auto md:h-[550px]">
               {items.map((item: any) => (
                 <div
                   key={item.id}
