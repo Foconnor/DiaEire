@@ -94,7 +94,11 @@ export function useFetchProducts(
         );
       }
 
-      q = query(q, orderBy("createdAt", "desc"), limit(pageSize));
+      q = query(q, orderBy("createdAt", "desc"));
+
+      if (pageSize > 0) {
+        q = query(q, limit(pageSize));
+      }
 
       if (page > 1 && lastDoc && !isFilterChanged) {
         q = query(q, startAfter(lastDoc), limit(pageSize));
