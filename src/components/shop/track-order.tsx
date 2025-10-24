@@ -211,6 +211,12 @@ function TrackOrder() {
                     </span>
                   </p>
                   <p>
+                    <strong>Total Weight:</strong>
+                    <span className={`ml-2 font-medium rounded-full`}>
+                      {order.totalWeight}g
+                    </span>
+                  </p>
+                  <p>
                     <strong>Order Date:</strong>{" "}
                     {new Date(order.createdAt).toLocaleDateString()}
                   </p>
