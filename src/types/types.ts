@@ -6,11 +6,12 @@ export interface Product {
   price: string;
   discountPrice: string;
   stock: string;
+  weight: string;
   description: string;
 }
 
 export interface Order {
-  id:string;
+  id: string;
   country: string;
   createdAt: string;
   email: string;
@@ -23,5 +24,5 @@ export interface Order {
   paymentStatus: string;
   streetAddress: string;
   townCity: string;
-  status:string;
+  status: string;
 }

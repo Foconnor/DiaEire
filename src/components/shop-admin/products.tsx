@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -23,16 +23,6 @@ import { useFetchProducts } from "@/hooks/useFetchProduct";
 import { useEditProduct } from "@/hooks/useEditProduct";
 import { formatPrice } from "@/lib/formatPrice";
 
-interface ProductsProps {
-  id: string;
-  image: string;
-  name: string;
-  category: string;
-  price: string;
-  discountPrice: string;
-  stock: string;
-  description: string;
-}
 
 function Products() {
   const { handleAdd, success } = useAddProduct();
@@ -69,6 +59,7 @@ function Products() {
       price: Number(formValue.price),
       discountPrice: Number(formValue.discountPrice),
       stock: Number(formValue.stock),
+      weight: Number(formValue.weight),
     };
 
     await handleEdit(formattedFormValue);
@@ -93,6 +84,7 @@ function Products() {
       price: Number(formValue.price),
       discountPrice: Number(formValue.discountPrice),
       stock: Number(formValue.stock),
+      weight: Number(formValue.weight),
     };
     await handleAdd(formattedFormValue);
 
@@ -114,6 +106,7 @@ function Products() {
     discountPrice: "",
     stock: "",
     description: "",
+    weight:"",
   });
 
   useEffect(() => {
@@ -181,6 +174,7 @@ function Products() {
               discountPrice: "",
               stock: "",
               description: "",
+              weight:"",
             });
           }}
           className="bg-[var(--primary)] text-white px-4 py-2 rounded hover:bg-[var(--btn-hover-bg)] transition-all ease-in-out duration-300 cursor-pointer flex items-center gap-3"
@@ -206,7 +200,8 @@ function Products() {
               <TableHead className="text-start">Name</TableHead>
               <TableHead className="text-start">category</TableHead>
               <TableHead className="text-start">discount price</TableHead>
-              <TableHead className="text-start">price</TableHead>
+              <TableHead className="text-start">price</TableHead> 
+              <TableHead className="text-start">weight</TableHead> 
               <TableHead className="text-start">stock</TableHead>
               <TableHead className="text-start">description</TableHead>
               <TableHead className="text-start">Actions</TableHead>
@@ -234,6 +229,9 @@ function Products() {
                   <TableCell className="text-start">
                     {formatPrice(Number(item.price))}
                   </TableCell>
+                  <TableCell className="text-start">
+                    {item.weight}g
+                  </TableCell>
                   <TableCell className="text-start">{item.stock}</TableCell>
                   <TableCell className="text-start max-w-[200px] truncate">
                     {item.description}
@@ -254,6 +252,7 @@ function Products() {
                             discountPrice: item.discountPrice?.toString(),
                             stock: item.stock?.toString(),
                             description: item.description,
+                            weight:item.weight,
                           });
                         }}
                         className="bg-[var(--primary)] text-white px-4 py-2 rounded hover:bg-[var(--btn-hover-bg)] transition-all ease-in-out duration-300 cursor-pointer flex items-center gap-3"
@@ -394,6 +393,21 @@ function Products() {
                   value={formValue.stock}
                   onChange={(e) =>
                     setFormValue({ ...formValue, stock: e.target.value })
+                  }
+                  required
+                  disabled={saving}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Weight (in gram) <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  className="w-full border rounded px-3 py-2"
+                  value={formValue.weight}
+                  onChange={(e) =>
+                    setFormValue({ ...formValue, weight: e.target.value })
                   }
                   required
                   disabled={saving}

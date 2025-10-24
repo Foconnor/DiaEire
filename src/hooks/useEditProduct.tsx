@@ -11,6 +11,7 @@ interface ProductFormValue {
   price: number;
   discountPrice: number;
   stock: number;
+  weight:number;
   description: string;
 }
 
@@ -33,6 +34,7 @@ export function useEditProduct() {
         discountPrice: formValue.discountPrice,
         stock: formValue.stock,
         image: formValue.image,
+        weight: formValue.weight,
         description: formValue.description,
       });
 

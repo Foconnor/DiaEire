@@ -115,6 +115,7 @@ export function useFetchProducts(
           category: data.category || "",
           price: data.price || "",
           discountPrice: data.discountPrice || "",
+          weight:data.weight || "",
           stock: data.stock || "",
           description: data.description || "",
         };
