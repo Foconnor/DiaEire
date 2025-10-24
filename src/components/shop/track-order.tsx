@@ -69,9 +69,10 @@ function OrderProducts({ ids }: { ids: string[] }) {
           />
           <div>
             <p className="font-medium text-gray-800">{p.name}</p>
-            <p className="text-[var(--primary)] font-semibold">
+            <p className="text-[var(--primary)] font-semibold text-lg">
               {formatPrice(Number(p.discountPrice))}
             </p>
+            <p>{p.weight}g</p>
           </div>
         </div>
       ))}
