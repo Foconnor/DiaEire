@@ -462,10 +462,11 @@ function Checkout() {
         </div>
       </div>
       <div className="wrapper">
-        <div className="border-t flex items-center justify-between py-2 w-full md:mt-0 mt-5">
+        <div className="border-t flex items-start justify-between py-2 w-full md:mt-0 mt-5">
           <div className="flex flex-col gap-1">
           <h2 className="text-lg"> <strong>Total Price :</strong> {formatPrice(totalPrice)}</h2>
           <h2 className="text-lg"><strong>Total Weight :</strong> {totalWeight}g</h2>
+          <h2 className="text-lg"><strong>Shipping Fee :</strong> {formatPrice(100)}</h2>
           </div>
           <button
             className="px-3 py-2 bg-[var(--primary)] text-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-[var(--btn-hover-bg)]"
