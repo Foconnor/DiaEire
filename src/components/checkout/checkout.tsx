@@ -26,19 +26,6 @@ function Checkout() {
   const [loading, setLoading] = React.useState(false);
   const [isBorderRed, setBorderRed] = useState(false);
   const closeModal = () => setIsModalOpen(false);
-  const [billingDetails, setBillingDetails] = React.useState({
-    firstName: "",
-    lastName: "",
-    country: "IE",
-    townCity: "",
-    postcode: "",
-    streetAddress: "",
-    phone: "",
-    email: "",
-    orderNotes: "",
-  });
-
-  console.log(items);
 
   const totalPrice = (items || []).reduce(
     (total: number, item: any) =>
@@ -46,6 +33,27 @@ function Checkout() {
       (Number(item.qty ?? 0) || 0) * (Number(item.discountPrice ?? 0) || 0),
     0
   );
+
+  const totalWeight = (items || []).reduce(
+    (total: number, item: any) =>
+      total + (Number(item.qty ?? 0) || 0) * (Number(item.weight ?? 0) || 0),
+    0
+  );
+
+  const [billingDetails, setBillingDetails] = React.useState({
+    firstName: "",
+    lastName: "",
+    country: "IE",
+    townCity: "",
+    postcode: "",
+    streetAddress: "",
+    phone: "", 
+    email: "",
+    orderNotes: "",
+    weight: "",
+    totalWeight: totalWeight,
+    totalPrice: totalPrice,
+  });
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();

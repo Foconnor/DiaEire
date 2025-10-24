@@ -118,6 +118,8 @@ export function useFetchProducts(
           weight:data.weight || "",
           stock: data.stock || "",
           description: data.description || "",
+          totalWeight:data.totalWeight || "",
+          totalPrice:data.totalPrice || "",
         };
       });
 

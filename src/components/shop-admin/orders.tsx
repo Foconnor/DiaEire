@@ -275,6 +275,8 @@ function Orders() {
               <p><strong>Address:</strong> {order.streetAddress}, {order.townCity}</p>
               <p><strong>Postcode:</strong> {order.postcode}</p>
               <p><strong>Country:</strong> {order.country}</p>
+              <p><strong>Total Weight:</strong> {order.totalWeight}g</p>
+              <p><strong>Total Price:</strong> {formatPrice(order.totalPrice)}</p>
               <p>
                 <strong>Payment:</strong>{" "}
                 <span className="ml-2 bg-green-400 rounded-full px-3 py-1 text-white capitalize">

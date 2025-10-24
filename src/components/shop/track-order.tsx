@@ -18,11 +18,16 @@ function OrderProducts({ ids }: { ids: string[] }) {
   useEffect(() => {
     const getProductDetails = async (ids: string[]) => {
       const available = products.filter((p) => ids.includes(p.id));
-      const missingIds = ids.filter((id) => !available.some((p) => p.id === id));
+      const missingIds = ids.filter(
+        (id) => !available.some((p) => p.id === id)
+      );
 
       if (missingIds.length === 0) return available;
 
-      const q = query(collection(db, "products"), where("__name__", "in", missingIds));
+      const q = query(
+        collection(db, "products"),
+        where("__name__", "in", missingIds)
+      );
       const snapshot = await getDocs(q);
       const fetched = snapshot.docs.map((doc: any) => ({
         id: doc.id,
@@ -141,7 +146,15 @@ function TrackOrder() {
             </p>
           </div>
         ) : loading ? (
-          <div className="border border-gray-200 rounded-2xl p-6 shadow-sm bg-white space-y-4 mt-10 animate-pulse">
+          <div className="border border-gray-200 rounded-2xl p-6 shadow-sm bg-white space-y-4 grid md:grid-cols-2 gap-4 mt-10">
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
+            <div className="h-6 w-40 bg-gray-200 rounded"></div>
             <div className="h-6 w-40 bg-gray-200 rounded"></div>
           </div>
         ) : foundOrders.length > 0 ? (
@@ -184,9 +197,17 @@ function TrackOrder() {
                   <p>
                     <strong>Order Status:</strong>
                     <span
-                      className={`ml-2 font-medium text-white px-3 py-1 rounded-full capitalize ${statusColors[order.status]}`}
+                      className={`ml-2 font-medium text-white px-3 py-1 rounded-full capitalize ${
+                        statusColors[order.status]
+                      }`}
                     >
                       {order.status.replaceAll("_", " ")}
+                    </span>
+                  </p>
+                  <p>
+                    <strong>Total Price:</strong>
+                    <span className={`ml-2 font-medium rounded-full`}>
+                      {formatPrice(Number(order.totalPrice))}
                     </span>
                   </p>
                   <p>

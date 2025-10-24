@@ -106,6 +106,8 @@ export function useFetchOrders(
           streetAddress: data.streetAddress || "",
           townCity: data.townCity || "",
           status: data.status || "",
+          totalWeight: data.totalWeight || "",
+          totalPrice: data.totalPrice || "",
         };
       });
 

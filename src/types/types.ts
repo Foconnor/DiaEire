@@ -24,5 +24,7 @@ export interface Order {
   paymentStatus: string;
   streetAddress: string;
   townCity: string;
+  totalWeight:string;
+  totalPrice:string;
   status: string;
 }
