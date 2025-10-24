@@ -463,7 +463,10 @@ function Checkout() {
       </div>
       <div className="wrapper">
         <div className="border-t flex items-center justify-between py-2 w-full md:mt-0 mt-5">
-          <h2 className="text-xl">Total : {formatPrice(totalPrice)}</h2>
+          <div className="flex flex-col gap-1">
+          <h2 className="text-lg"> <strong>Total Price :</strong> {formatPrice(totalPrice)}</h2>
+          <h2 className="text-lg"><strong>Total Weight :</strong> {totalWeight}g</h2>
+          </div>
           <button
             className="px-3 py-2 bg-[var(--primary)] text-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-[var(--btn-hover-bg)]"
             onClick={handleOpenModel}
@@ -479,7 +482,7 @@ function Checkout() {
           onClick={closeModal}
         >
           <div
-            className="bg-white rounded-3xl shadow-lg p-8 max-w-[400px] w-[90%] relative overflow-auto"
+            className="bg-white rounded-2xl shadow-lg p-8 max-w-[400px] w-[90%] relative overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -496,6 +499,7 @@ function Checkout() {
             <div className="border border-[var(--line)] rounded-md p-2 mb-6">
               <CardElement
                 options={{
+                  hidePostalCode: true,
                   style: {
                     base: {
                       fontSize: "16px",
