@@ -57,7 +57,7 @@ const LoginForm = () => {
         className="w-full max-w-md bg-white/90 backdrop-blur-md shadow-2xl rounded-2xl px-8 py-10 border border-[var(--line)]"
       >
         <h2 className="text-3xl font-bold text-center text-[var(--primary)] mb-6 tracking-tight drop-shadow">
-          Admin Login
+          Shop Admin Login
         </h2>
 
         <div className="mb-5">
