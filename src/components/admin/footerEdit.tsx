@@ -167,6 +167,11 @@ function FooterEdit() {
             <div className="grid grid-cols-2 mt-4" key={index}>
               <p className="text-[var(--primary)]">Page Link {index + 1}:</p>
               <p>{link.name}</p>
+
+              <p className="text-[var(--primary)] mt-1">
+                Page Url {index + 1}:
+              </p>
+              <p>{link.url}</p>
             </div>
           ))}
           <div className="grid grid-cols-2 mt-4">
@@ -317,6 +322,21 @@ function FooterEdit() {
                     onChange={(e) => {
                       const newLinks = [...pageLinks];
                       newLinks[index].name = e.target.value;
+                      setPageLinks(newLinks);
+                    }}
+                    required
+                    disabled={saving}
+                  />
+                  <label className="block text-sm font-medium mb-1">
+                    Page Url {index + 1} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-3 py-2"
+                    value={link.url}
+                    onChange={(e) => {
+                      const newLinks = [...pageLinks];
+                      newLinks[index].url = e.target.value;
                       setPageLinks(newLinks);
                     }}
                     required
